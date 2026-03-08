@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import { computed } from 'vue';
   import type { Difficulty } from '@/types/quiz';
+  import type { ThemePerformanceStatistic } from '@/types/history';
   import { themes } from '@/data/questions/index';
   import { useQuestionBank } from '@/composables/useQuestionBank';
 
   const props = defineProps<{
     modelValue: string[];
     difficulty: Difficulty;
+    themeStats?: Record<string, ThemePerformanceStatistic>;
   }>();
 
   const emit = defineEmits<{
@@ -20,6 +22,13 @@
   function isDisabled(themeId: string): boolean {
     const entry = availableCounts.value.find((c) => c.themeId === themeId);
     return (entry?.count ?? 0) === 0;
+  }
+
+  function getThemeStatLabel(themeId: string): string {
+    if (!props.themeStats) return '';
+    const stat = props.themeStats[themeId];
+    if (!stat || stat.totalAnswers === 0) return 'No history';
+    return `${Math.round(stat.correctnessRate * 100).toString()}% correct`;
   }
 
   function isSelected(themeId: string): boolean {
@@ -65,6 +74,9 @@
         theme.icon
       }}</span>
       <span class="theme-selector__name">{{ theme.name }}</span>
+      <span v-if="themeStats" class="theme-selector__stat">{{
+        getThemeStatLabel(theme.id)
+      }}</span>
       <span v-if="isDisabled(theme.id)" class="theme-selector__badge"
         >Coming soon</span
       >
@@ -120,6 +132,12 @@
   .theme-selector__name {
     font-size: 0.75rem;
     font-weight: 500;
+  }
+
+  .theme-selector__stat {
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+    opacity: 0.8;
   }
 
   .theme-selector__badge {

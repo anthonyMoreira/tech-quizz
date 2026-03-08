@@ -17,9 +17,13 @@ test.describe('Home Page', () => {
   });
 
   test('displays the app title and subtitle', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Tech Quiz App' })).toBeVisible();
     await expect(
-      page.getByText('Test your knowledge of software engineering best practices'),
+      page.getByRole('heading', { name: 'Tech Quiz App' }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        'Test your knowledge of software engineering best practices',
+      ),
     ).toBeVisible();
   });
 
@@ -30,10 +34,14 @@ test.describe('Home Page', () => {
   });
 
   test('renders all 8 theme cards with correct names', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Available Themes' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Available Themes' }),
+    ).toBeVisible();
 
     for (const themeName of THEME_NAMES) {
-      await expect(page.getByRole('heading', { name: themeName })).toBeVisible();
+      await expect(
+        page.getByRole('heading', { name: themeName }),
+      ).toBeVisible();
     }
   });
 
@@ -50,6 +58,8 @@ test.describe('Home Page', () => {
   test('clicking Start Quiz navigates to quiz setup page', async ({ page }) => {
     await page.getByRole('link', { name: 'Start Quiz' }).click();
     await expect(page).toHaveURL(/quiz\/setup/);
-    await expect(page.getByRole('heading', { name: 'Set Up Your Quiz' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Set Up Your Quiz' }),
+    ).toBeVisible();
   });
 });

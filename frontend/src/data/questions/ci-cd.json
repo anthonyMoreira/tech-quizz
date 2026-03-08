@@ -7,10 +7,26 @@
     "prompt": "What does Continuous Integration (CI) primarily refer to?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Deploying code to production servers on every commit", "isCorrect": false },
-      { "id": "b", "text": "Frequently merging code changes into a shared repository with automated builds and tests", "isCorrect": true },
-      { "id": "c", "text": "Manually reviewing all pull requests before merging", "isCorrect": false },
-      { "id": "d", "text": "Running performance benchmarks on every release candidate", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Deploying code to production servers on every commit",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Frequently merging code changes into a shared repository with automated builds and tests",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Manually reviewing all pull requests before merging",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Running performance benchmarks on every release candidate",
+        "isCorrect": false
+      }
     ],
     "explanation": "Continuous Integration (CI) is the practice of frequently merging developer code changes into a shared repository, where automated builds and tests verify each integration. It does not mean deploying to production, which falls under Continuous Deployment. Manual code reviews, while valuable, are a separate practice from CI. Performance benchmarking may be part of a pipeline but is not the core definition of CI.",
     "bonusFact": "Martin Fowler popularized CI in his 2006 article on the practice."
@@ -23,10 +39,26 @@
     "prompt": "What is the key difference between Continuous Delivery and Continuous Deployment?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Continuous Delivery uses containers while Continuous Deployment does not", "isCorrect": false },
-      { "id": "b", "text": "Continuous Deployment requires manual approval while Continuous Delivery does not", "isCorrect": false },
-      { "id": "c", "text": "Continuous Delivery requires manual approval before production, while Continuous Deployment is fully automated", "isCorrect": true },
-      { "id": "d", "text": "They are exactly the same thing with different names", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Continuous Delivery uses containers while Continuous Deployment does not",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Continuous Deployment requires manual approval while Continuous Delivery does not",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Continuous Delivery requires manual approval before production, while Continuous Deployment is fully automated",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "They are exactly the same thing with different names",
+        "isCorrect": false
+      }
     ],
     "explanation": "Continuous Delivery ensures that code is always in a deployable state but requires a manual approval step before releasing to production. Continuous Deployment goes further by automatically deploying every change that passes the pipeline to production without human intervention. Neither term is specific to container technology, and they are definitively not the same practice. The reversal of which requires manual approval in option B is a common misconception.",
     "bonusFact": null
@@ -39,10 +71,26 @@
     "prompt": "What is the typical order of stages in a basic CI/CD build pipeline?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Deploy → Test → Build → Checkout", "isCorrect": false },
-      { "id": "b", "text": "Checkout → Build → Test → Deploy", "isCorrect": true },
-      { "id": "c", "text": "Test → Checkout → Deploy → Build", "isCorrect": false },
-      { "id": "d", "text": "Build → Checkout → Deploy → Test", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Deploy → Test → Build → Checkout",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Checkout → Build → Test → Deploy",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Test → Checkout → Deploy → Build",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Build → Checkout → Deploy → Test",
+        "isCorrect": false
+      }
     ],
     "explanation": "A standard CI/CD pipeline follows the logical sequence of first checking out source code, then building it into artifacts, running tests against those artifacts, and finally deploying them. You cannot build without first having the source code, and deploying before testing defeats the purpose of the pipeline. Testing before building is also not feasible since there would be no compiled artifact to test against.",
     "bonusFact": "Some pipelines add linting before the build step."
@@ -55,10 +103,26 @@
     "prompt": "What is the primary role of automated testing in a CI/CD pipeline?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "To replace all manual QA testers entirely", "isCorrect": false },
-      { "id": "b", "text": "To catch bugs and regressions early before code reaches production", "isCorrect": true },
-      { "id": "c", "text": "To generate documentation for the codebase", "isCorrect": false },
-      { "id": "d", "text": "To measure developer productivity metrics", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "To replace all manual QA testers entirely",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To catch bugs and regressions early before code reaches production",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To generate documentation for the codebase",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To measure developer productivity metrics",
+        "isCorrect": false
+      }
     ],
     "explanation": "Automated testing in CI/CD serves to detect bugs, regressions, and integration issues as early as possible in the development lifecycle. While automated tests reduce the burden on QA, they do not fully replace manual and exploratory testing. Documentation generation and productivity metrics are separate concerns that are not the core purpose of automated testing in a pipeline.",
     "bonusFact": null
@@ -71,10 +135,26 @@
     "prompt": "Why is version control integration essential for CI/CD?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "It allows the CI server to track developer work hours", "isCorrect": false },
-      { "id": "b", "text": "It provides the source of truth that triggers automated builds and tracks changes", "isCorrect": true },
-      { "id": "c", "text": "It encrypts the source code during transit", "isCorrect": false },
-      { "id": "d", "text": "It replaces the need for a build tool like Webpack or Gradle", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It allows the CI server to track developer work hours",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It provides the source of truth that triggers automated builds and tracks changes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It encrypts the source code during transit",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It replaces the need for a build tool like Webpack or Gradle",
+        "isCorrect": false
+      }
     ],
     "explanation": "Version control systems like Git serve as the single source of truth for code changes and are the entry point for CI/CD pipelines, triggering builds when new commits are pushed. Version control does not track work hours; that is a project management function. While VCS connections may use encrypted transport, encryption is not the primary reason for integration. Build tools like Webpack or Gradle serve a completely different purpose from version control.",
     "bonusFact": "Git hooks can trigger CI pipelines locally before pushing."
@@ -87,10 +167,26 @@
     "prompt": "What is a build artifact in the context of CI/CD?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "A log file generated by the CI server during a failed build", "isCorrect": false },
-      { "id": "b", "text": "A packaged output of the build process, such as a compiled binary, Docker image, or JAR file", "isCorrect": true },
-      { "id": "c", "text": "The original source code stored in version control", "isCorrect": false },
-      { "id": "d", "text": "A configuration file used to define the pipeline", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "A log file generated by the CI server during a failed build",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A packaged output of the build process, such as a compiled binary, Docker image, or JAR file",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The original source code stored in version control",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A configuration file used to define the pipeline",
+        "isCorrect": false
+      }
     ],
     "explanation": "A build artifact is a deployable output produced by the build stage of a CI/CD pipeline, such as a compiled binary, Docker image, WAR/JAR file, or bundled JavaScript. Log files are byproducts of the build process, not artifacts intended for deployment. Source code is the input to the pipeline, not an output. Pipeline configuration files define how the pipeline runs but are not artifacts produced by it.",
     "bonusFact": null
@@ -103,10 +199,26 @@
     "prompt": "What is the main benefit of integrating code changes frequently in CI?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "It eliminates the need for code reviews", "isCorrect": false },
-      { "id": "b", "text": "It reduces integration conflicts and makes bugs easier to isolate", "isCorrect": true },
-      { "id": "c", "text": "It guarantees zero downtime deployments", "isCorrect": false },
-      { "id": "d", "text": "It automatically scales the application infrastructure", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It eliminates the need for code reviews",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It reduces integration conflicts and makes bugs easier to isolate",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It guarantees zero downtime deployments",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It automatically scales the application infrastructure",
+        "isCorrect": false
+      }
     ],
     "explanation": "Frequent integration reduces the scope of changes in each merge, making merge conflicts smaller and bugs easier to trace to a specific change. Code reviews are still a best practice even with CI in place. Zero downtime deployments require specific deployment strategies and are not guaranteed by CI alone. Infrastructure scaling is handled by orchestration tools, not by the practice of frequent integration.",
     "bonusFact": "Teams practicing CI typically integrate at least once per day."
@@ -123,9 +235,21 @@
     },
     "options": [
       { "id": "a", "text": "Only on pushes to any branch", "isCorrect": false },
-      { "id": "b", "text": "On pushes to main and pull requests targeting main", "isCorrect": true },
-      { "id": "c", "text": "Only on manual workflow dispatch", "isCorrect": false },
-      { "id": "d", "text": "On a scheduled cron timer every hour", "isCorrect": false }
+      {
+        "id": "b",
+        "text": "On pushes to main and pull requests targeting main",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Only on manual workflow dispatch",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "On a scheduled cron timer every hour",
+        "isCorrect": false
+      }
     ],
     "explanation": "The 'on' section defines two triggers: pushes to the main branch and pull requests that target the main branch. It is not triggered on pushes to any branch, only main. There is no 'workflow_dispatch' key defined, so manual triggering is not configured. Similarly, no 'schedule' key with a cron expression is present, ruling out timed execution.",
     "bonusFact": "GitHub Actions supports over 30 different event triggers."
@@ -138,10 +262,26 @@
     "prompt": "What are the typical environments in a deployment pipeline from least to most production-like?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Production → Staging → Development", "isCorrect": false },
-      { "id": "b", "text": "Staging → Development → Production", "isCorrect": false },
-      { "id": "c", "text": "Development → Staging → Production", "isCorrect": true },
-      { "id": "d", "text": "Development → Production → Staging", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Production → Staging → Development",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Staging → Development → Production",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Development → Staging → Production",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Development → Production → Staging",
+        "isCorrect": false
+      }
     ],
     "explanation": "The standard environment progression goes from Development (for active coding and initial testing), to Staging (a production-like environment for final validation), to Production (the live environment serving users). Reversing this order makes no sense because each stage serves as a progressively more rigorous gate. Deploying to production before staging would defeat the purpose of having a pre-production validation step.",
     "bonusFact": null
@@ -157,10 +297,26 @@
       "code": "jobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm run build\n\n  test:\n    needs: build\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm test"
     },
     "options": [
-      { "id": "a", "text": "It shares environment variables between the two jobs", "isCorrect": false },
-      { "id": "b", "text": "It ensures the test job only runs after the build job completes successfully", "isCorrect": true },
-      { "id": "c", "text": "It merges the steps of both jobs into a single job", "isCorrect": false },
-      { "id": "d", "text": "It runs both jobs simultaneously on the same runner", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It shares environment variables between the two jobs",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It ensures the test job only runs after the build job completes successfully",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It merges the steps of both jobs into a single job",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It runs both jobs simultaneously on the same runner",
+        "isCorrect": false
+      }
     ],
     "explanation": "The 'needs' keyword in GitHub Actions creates a dependency between jobs, ensuring that the test job only starts after the build job has completed successfully. It does not share environment variables; that requires explicit output/artifact passing. Jobs with 'needs' remain separate jobs and are not merged. The 'needs' keyword enforces sequential execution rather than parallel, since the dependent job waits for its dependency to finish.",
     "bonusFact": "Without 'needs', GitHub Actions jobs run in parallel by default."
@@ -173,10 +329,26 @@
     "prompt": "What is a blue-green deployment strategy?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Running two identical production environments and switching traffic from the old (blue) to the new (green) version", "isCorrect": true },
-      { "id": "b", "text": "Gradually rolling out a new version to a small percentage of users first", "isCorrect": false },
-      { "id": "c", "text": "Deploying to development and staging environments simultaneously", "isCorrect": false },
-      { "id": "d", "text": "Using two different cloud providers for redundancy", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Running two identical production environments and switching traffic from the old (blue) to the new (green) version",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Gradually rolling out a new version to a small percentage of users first",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Deploying to development and staging environments simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Using two different cloud providers for redundancy",
+        "isCorrect": false
+      }
     ],
     "explanation": "Blue-green deployment maintains two identical production environments: the current live version (blue) and the new version (green). Once the green environment is validated, traffic is switched from blue to green in one step. Gradually rolling out to a percentage of users describes canary deployment, not blue-green. Deploying to dev and staging is part of a normal pipeline flow, not a deployment strategy. Using two cloud providers is a multi-cloud strategy, which is unrelated.",
     "bonusFact": "Blue-green allows instant rollback by switching back to blue."
@@ -189,10 +361,26 @@
     "prompt": "How does a canary release differ from a blue-green deployment?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Canary releases do not require load balancers", "isCorrect": false },
-      { "id": "b", "text": "Canary releases gradually shift traffic to the new version in increments rather than all at once", "isCorrect": true },
-      { "id": "c", "text": "Canary releases always use feature flags to toggle functionality", "isCorrect": false },
-      { "id": "d", "text": "Canary releases deploy to staging only, never production", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Canary releases do not require load balancers",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Canary releases gradually shift traffic to the new version in increments rather than all at once",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Canary releases always use feature flags to toggle functionality",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Canary releases deploy to staging only, never production",
+        "isCorrect": false
+      }
     ],
     "explanation": "A canary release routes a small percentage of production traffic to the new version, gradually increasing it as confidence grows, unlike blue-green which switches all traffic at once. Canary releases typically do require load balancers or service meshes to manage traffic splitting. Feature flags are a separate technique and are not a requirement for canary releases. Canary releases are specifically a production deployment strategy and are not limited to staging.",
     "bonusFact": null
@@ -205,10 +393,26 @@
     "prompt": "What is the primary purpose of feature flags (feature toggles) in a CI/CD workflow?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "To encrypt sensitive configuration values in the pipeline", "isCorrect": false },
-      { "id": "b", "text": "To decouple code deployment from feature release, allowing incomplete features to be merged safely", "isCorrect": true },
-      { "id": "c", "text": "To automatically scale infrastructure based on feature usage", "isCorrect": false },
-      { "id": "d", "text": "To replace environment variables in different deployment stages", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "To encrypt sensitive configuration values in the pipeline",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To decouple code deployment from feature release, allowing incomplete features to be merged safely",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To automatically scale infrastructure based on feature usage",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To replace environment variables in different deployment stages",
+        "isCorrect": false
+      }
     ],
     "explanation": "Feature flags allow teams to merge and deploy code for incomplete or experimental features while keeping them hidden from users until they are ready, decoupling deployment from release. Encrypting configuration values is handled by secrets management tools, not feature flags. Auto-scaling is an infrastructure concern managed by orchestrators like Kubernetes. Feature flags serve a different purpose from environment variables, which manage stage-specific configuration.",
     "bonusFact": "LaunchDarkly and Unleash are popular feature flag services."
@@ -224,10 +428,26 @@
       "code": "jobs:\n  test:\n    runs-on: ubuntu-latest\n    strategy:\n      matrix:\n        node-version: [16, 18, 20]\n        os: [ubuntu-latest, windows-latest]\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: ${{ matrix.node-version }}\n      - run: npm test"
     },
     "options": [
-      { "id": "a", "text": "It runs tests sequentially for each Node version, then each OS", "isCorrect": false },
-      { "id": "b", "text": "It creates parallel jobs for every combination of Node versions and operating systems", "isCorrect": true },
-      { "id": "c", "text": "It picks one random combination of Node version and OS for each run", "isCorrect": false },
-      { "id": "d", "text": "It installs all three Node versions simultaneously in a single job", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It runs tests sequentially for each Node version, then each OS",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It creates parallel jobs for every combination of Node versions and operating systems",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It picks one random combination of Node version and OS for each run",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It installs all three Node versions simultaneously in a single job",
+        "isCorrect": false
+      }
     ],
     "explanation": "The matrix strategy creates a Cartesian product of all specified values, resulting in 6 parallel jobs (3 Node versions x 2 operating systems) that run concurrently. The jobs are not sequential; the whole point of a matrix is parallel execution across combinations. GitHub Actions does not randomly select a combination; it runs all of them. Each job uses exactly one Node version, not all three installed together in a single environment.",
     "bonusFact": null
@@ -240,10 +460,26 @@
     "prompt": "What is the main purpose of caching dependencies in a CI pipeline?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "To prevent developers from adding new dependencies", "isCorrect": false },
-      { "id": "b", "text": "To reduce build times by reusing previously downloaded packages across pipeline runs", "isCorrect": true },
-      { "id": "c", "text": "To store build artifacts for deployment", "isCorrect": false },
-      { "id": "d", "text": "To version-lock dependencies so they never update", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "To prevent developers from adding new dependencies",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To reduce build times by reusing previously downloaded packages across pipeline runs",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To store build artifacts for deployment",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To version-lock dependencies so they never update",
+        "isCorrect": false
+      }
     ],
     "explanation": "Caching dependencies like node_modules or Maven caches avoids re-downloading packages on every pipeline run, significantly reducing build times. Caching does not restrict developers from adding dependencies; it simply reuses what was already downloaded. Storing build artifacts for deployment is handled by artifact repositories, not dependency caches. Version locking is managed by lock files like package-lock.json, which is a separate mechanism from CI caching.",
     "bonusFact": "GitHub Actions caches are scoped to a branch and its base."
@@ -256,10 +492,26 @@
     "prompt": "What is a key advantage of trunk-based development over GitFlow in a CI/CD context?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "It uses more long-lived branches for better isolation", "isCorrect": false },
-      { "id": "b", "text": "It enables faster integration cycles with short-lived branches merged frequently into the main branch", "isCorrect": true },
-      { "id": "c", "text": "It eliminates the need for any branching strategy", "isCorrect": false },
-      { "id": "d", "text": "It requires no automated testing since changes are small", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It uses more long-lived branches for better isolation",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It enables faster integration cycles with short-lived branches merged frequently into the main branch",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It eliminates the need for any branching strategy",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It requires no automated testing since changes are small",
+        "isCorrect": false
+      }
     ],
     "explanation": "Trunk-based development encourages short-lived feature branches (often less than a day) that merge frequently into the main trunk, reducing integration pain and aligning well with CI practices. GitFlow uses long-lived branches like develop and release, which is the opposite of trunk-based development. Trunk-based development still uses branches, just short-lived ones. Automated testing remains essential regardless of branch strategy, and small changes still need verification.",
     "bonusFact": null
@@ -272,10 +524,26 @@
     "prompt": "Which rollback strategy involves redeploying a previously known-good artifact?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Rolling forward with a hotfix commit", "isCorrect": false },
-      { "id": "b", "text": "Artifact-based rollback using a versioned artifact from the registry", "isCorrect": true },
-      { "id": "c", "text": "Git revert followed by a new full pipeline run", "isCorrect": false },
-      { "id": "d", "text": "Scaling down all instances to zero and restarting", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Rolling forward with a hotfix commit",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Artifact-based rollback using a versioned artifact from the registry",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Git revert followed by a new full pipeline run",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Scaling down all instances to zero and restarting",
+        "isCorrect": false
+      }
     ],
     "explanation": "Artifact-based rollback deploys a previously built and tested artifact from an artifact registry, bypassing the need to rebuild from source and enabling the fastest recovery time. Rolling forward means fixing the issue with a new change rather than reverting. Git revert creates a new commit undoing changes but still requires a full pipeline run. Scaling to zero and restarting would cause downtime and does not address the broken deployment.",
     "bonusFact": "Immutable artifacts ensure rollbacks deploy the exact same build."
@@ -291,10 +559,26 @@
       "code": "steps:\n  - uses: actions/checkout@v4\n  - uses: actions/cache@v4\n    with:\n      path: ~/.npm\n      key: npm-${{ hashFiles('**/package-lock.json') }}\n      restore-keys: |\n        npm-\n  - run: npm ci\n  - run: npm test"
     },
     "options": [
-      { "id": "a", "text": "It caches the test results so they do not need to re-run", "isCorrect": false },
-      { "id": "b", "text": "It caches the npm download cache, keyed by the lock file hash, with a fallback prefix", "isCorrect": true },
-      { "id": "c", "text": "It uploads the node_modules folder as a build artifact", "isCorrect": false },
-      { "id": "d", "text": "It locks the npm registry to prevent version changes during the build", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It caches the test results so they do not need to re-run",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It caches the npm download cache, keyed by the lock file hash, with a fallback prefix",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It uploads the node_modules folder as a build artifact",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It locks the npm registry to prevent version changes during the build",
+        "isCorrect": false
+      }
     ],
     "explanation": "The cache action stores the npm download cache directory (~/.npm), using a hash of package-lock.json as the cache key so that the cache invalidates when dependencies change. The restore-keys fallback allows partial cache matches when the exact key is not found. It does not cache test results or upload artifacts; those are separate actions. It also does not lock the npm registry; that behavior comes from using 'npm ci' which installs from the lock file.",
     "bonusFact": "npm ci is faster than npm install because it skips resolution."
@@ -307,10 +591,26 @@
     "prompt": "What is the best practice for managing secrets like API keys in a CI/CD pipeline?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Commit them to the repository in a .env file so the pipeline can access them", "isCorrect": false },
-      { "id": "b", "text": "Store them in the CI platform's encrypted secrets manager and inject them as environment variables at runtime", "isCorrect": true },
-      { "id": "c", "text": "Hardcode them in the pipeline configuration YAML file", "isCorrect": false },
-      { "id": "d", "text": "Share them via a team Slack channel and copy-paste them into the pipeline", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Commit them to the repository in a .env file so the pipeline can access them",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Store them in the CI platform's encrypted secrets manager and inject them as environment variables at runtime",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Hardcode them in the pipeline configuration YAML file",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Share them via a team Slack channel and copy-paste them into the pipeline",
+        "isCorrect": false
+      }
     ],
     "explanation": "CI/CD platforms provide encrypted secrets managers that store sensitive values securely and inject them as masked environment variables during pipeline execution. Committing secrets to a repository, even in .env files, exposes them in version history permanently. Hardcoding secrets in YAML files is equally insecure since pipeline configurations are typically committed to the repository. Sharing secrets via messaging platforms offers no encryption, auditability, or access control.",
     "bonusFact": "GitHub Actions masks secrets in logs automatically."
@@ -326,10 +626,26 @@
       "code": "jobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm test\n\n  deploy:\n    needs: test\n    if: github.ref == 'refs/heads/main'\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: ./deploy.sh production"
     },
     "options": [
-      { "id": "a", "text": "It skips testing when deploying to production", "isCorrect": false },
-      { "id": "b", "text": "It runs the deploy job only when the pipeline is triggered on the main branch", "isCorrect": true },
-      { "id": "c", "text": "It deploys to all environments regardless of the branch", "isCorrect": false },
-      { "id": "d", "text": "It creates a new branch called main before deploying", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It skips testing when deploying to production",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It runs the deploy job only when the pipeline is triggered on the main branch",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It deploys to all environments regardless of the branch",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It creates a new branch called main before deploying",
+        "isCorrect": false
+      }
     ],
     "explanation": "The 'if' condition checks whether the triggering ref is the main branch, ensuring the deploy job only executes for main branch events. The test job always runs because it has no 'if' condition, and 'needs: test' ensures testing completes before deployment. The condition explicitly restricts deployment to the main branch, not all environments. The 'if' condition evaluates the current ref; it does not create branches.",
     "bonusFact": null
@@ -342,10 +658,26 @@
     "prompt": "What distinguishes progressive delivery from traditional continuous deployment?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Progressive delivery skips all testing stages to deploy faster", "isCorrect": false },
-      { "id": "b", "text": "Progressive delivery uses automated analysis of metrics and health signals to gradually increase traffic to new versions", "isCorrect": true },
-      { "id": "c", "text": "Progressive delivery only works with monolithic applications, not microservices", "isCorrect": false },
-      { "id": "d", "text": "Progressive delivery requires manual approval at every stage of rollout", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Progressive delivery skips all testing stages to deploy faster",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Progressive delivery uses automated analysis of metrics and health signals to gradually increase traffic to new versions",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Progressive delivery only works with monolithic applications, not microservices",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Progressive delivery requires manual approval at every stage of rollout",
+        "isCorrect": false
+      }
     ],
     "explanation": "Progressive delivery extends continuous deployment by incorporating automated canary analysis, feature flags, and metric-driven traffic shifting to gradually roll out changes while monitoring for regressions. It does not skip testing; it adds additional safety layers on top of existing tests. It is particularly well-suited for microservices architectures, not limited to monoliths. The key innovation is automated decision-making based on observability data, not manual gates at every stage.",
     "bonusFact": "Argo Rollouts and Flagger are popular progressive delivery tools."
@@ -358,10 +690,26 @@
     "prompt": "Which statement best describes the GitOps principle for CD?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Developers push Docker images directly to production servers via SSH", "isCorrect": false },
-      { "id": "b", "text": "Git is the single source of truth for declarative infrastructure and application state, with automated agents reconciling desired and actual state", "isCorrect": true },
-      { "id": "c", "text": "All deployments must be triggered manually through Git tags only", "isCorrect": false },
-      { "id": "d", "text": "GitOps requires using GitHub exclusively as the Git hosting provider", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Developers push Docker images directly to production servers via SSH",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Git is the single source of truth for declarative infrastructure and application state, with automated agents reconciling desired and actual state",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "All deployments must be triggered manually through Git tags only",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "GitOps requires using GitHub exclusively as the Git hosting provider",
+        "isCorrect": false
+      }
     ],
     "explanation": "GitOps uses a Git repository as the single source of truth for the desired state of infrastructure and applications, with operators like ArgoCD or Flux continuously reconciling the actual cluster state with what is declared in Git. Pushing images directly via SSH bypasses the declarative, auditable approach that GitOps promotes. While Git tags can trigger deployments, GitOps is fundamentally about automated reconciliation, not manual triggers. GitOps is provider-agnostic and works with any Git hosting platform.",
     "bonusFact": "Weaveworks coined the term 'GitOps' in 2017."
@@ -374,10 +722,26 @@
     "prompt": "How does chaos engineering integrate into a CI/CD pipeline?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "By randomly deleting source code files during the build stage", "isCorrect": false },
-      { "id": "b", "text": "By injecting controlled failures in staging or production-like environments to validate system resilience before or after deployment", "isCorrect": true },
-      { "id": "c", "text": "By disabling all monitoring during deployment to reduce noise", "isCorrect": false },
-      { "id": "d", "text": "By using randomized test data instead of deterministic fixtures", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "By randomly deleting source code files during the build stage",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "By injecting controlled failures in staging or production-like environments to validate system resilience before or after deployment",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "By disabling all monitoring during deployment to reduce noise",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "By using randomized test data instead of deterministic fixtures",
+        "isCorrect": false
+      }
     ],
     "explanation": "Chaos engineering in CI/CD involves running controlled experiments that inject failures such as network latency, pod termination, or resource exhaustion in staging or canary environments to verify that the system degrades gracefully. Deleting source code is destructive and not a chaos engineering practice. Disabling monitoring is the opposite of what chaos engineering requires, since monitoring is essential to observe the system's response. Randomized test data is fuzz testing, which is a distinct discipline from chaos engineering.",
     "bonusFact": "Netflix's Chaos Monkey pioneered chaos engineering at scale."
@@ -390,10 +754,26 @@
     "prompt": "What is a supply chain attack in the context of CI/CD pipeline security?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "An attack that targets the physical hardware of CI servers", "isCorrect": false },
-      { "id": "b", "text": "An attack that compromises dependencies, build tools, or pipeline components to inject malicious code into the software delivery process", "isCorrect": true },
-      { "id": "c", "text": "A DDoS attack aimed at making the CI server unavailable", "isCorrect": false },
-      { "id": "d", "text": "An SQL injection attack against the application's database", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "An attack that targets the physical hardware of CI servers",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "An attack that compromises dependencies, build tools, or pipeline components to inject malicious code into the software delivery process",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A DDoS attack aimed at making the CI server unavailable",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "An SQL injection attack against the application's database",
+        "isCorrect": false
+      }
     ],
     "explanation": "Supply chain attacks target the software supply chain by compromising third-party dependencies, build tools, CI plugins, or base images to inject malicious code that gets built into the final artifact. Physical hardware attacks are a different threat category from software supply chain attacks. DDoS attacks affect availability but do not compromise the integrity of the build artifacts. SQL injection targets application logic, not the CI/CD pipeline infrastructure itself.",
     "bonusFact": "SLSA (Supply chain Levels for Software Artifacts) is a security framework for CI/CD."
@@ -409,10 +789,26 @@
       "code": "on:\n  push:\n    paths:\n      - 'packages/auth/**'\n      - 'packages/shared/**'\n\njobs:\n  detect-changes:\n    outputs:\n      auth: ${{ steps.filter.outputs.auth }}\n    steps:\n      - uses: dorny/paths-filter@v3\n        id: filter\n        with:\n          filters: |\n            auth:\n              - 'packages/auth/**'\n  build-auth:\n    needs: detect-changes\n    if: needs.detect-changes.outputs.auth == 'true'\n    runs-on: ubuntu-latest\n    steps:\n      - run: npm run build --workspace=auth"
     },
     "options": [
-      { "id": "a", "text": "It builds all packages on every commit to ensure consistency", "isCorrect": false },
-      { "id": "b", "text": "It uses path-based filtering to only trigger builds for packages with actual file changes", "isCorrect": true },
-      { "id": "c", "text": "It caches the entire monorepo to skip future builds entirely", "isCorrect": false },
-      { "id": "d", "text": "It splits the monorepo into separate repositories automatically", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It builds all packages on every commit to ensure consistency",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It uses path-based filtering to only trigger builds for packages with actual file changes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It caches the entire monorepo to skip future builds entirely",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It splits the monorepo into separate repositories automatically",
+        "isCorrect": false
+      }
     ],
     "explanation": "This configuration uses two layers of path-based filtering: the 'on.push.paths' trigger limits pipeline execution to relevant directories, and the paths-filter action detects which specific packages changed to conditionally run only the affected build jobs. Building all packages would waste resources, which is the exact problem this pattern solves. Caching avoids re-downloading dependencies but does not skip builds based on changed files. The monorepo remains a single repository; the pipeline is just smart about which parts to build.",
     "bonusFact": null
@@ -425,10 +821,26 @@
     "prompt": "What is the safest approach for running database migrations in a Continuous Deployment pipeline?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Run destructive schema changes directly during deployment with no backward compatibility", "isCorrect": false },
-      { "id": "b", "text": "Use expand-and-contract migrations where schema changes are backward-compatible and decoupled from application deployment", "isCorrect": true },
-      { "id": "c", "text": "Disable the database during deployment and restore from a backup if migration fails", "isCorrect": false },
-      { "id": "d", "text": "Avoid database migrations entirely and use a new database for each release", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Run destructive schema changes directly during deployment with no backward compatibility",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use expand-and-contract migrations where schema changes are backward-compatible and decoupled from application deployment",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Disable the database during deployment and restore from a backup if migration fails",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Avoid database migrations entirely and use a new database for each release",
+        "isCorrect": false
+      }
     ],
     "explanation": "The expand-and-contract pattern splits breaking schema changes into backward-compatible steps: first expand (add new columns/tables), then migrate data, then contract (remove old schema). This allows the old and new application versions to coexist during deployment. Running destructive changes without backward compatibility causes failures when old application instances query the changed schema. Disabling the database causes downtime, which defeats the purpose of CD. Creating a new database per release is impractical and would lose all existing data.",
     "bonusFact": "Flyway and Liquibase are popular database migration tools."
@@ -441,10 +853,26 @@
     "prompt": "What does observability-driven deployment mean in a CD context?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Deploying only when all monitoring dashboards have zero alerts", "isCorrect": false },
-      { "id": "b", "text": "Using real-time metrics, traces, and logs to automatically decide whether to promote, pause, or roll back a deployment", "isCorrect": true },
-      { "id": "c", "text": "Sending deployment notifications to a Slack channel for manual observation", "isCorrect": false },
-      { "id": "d", "text": "Disabling observability tools during deployment to reduce overhead", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Deploying only when all monitoring dashboards have zero alerts",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Using real-time metrics, traces, and logs to automatically decide whether to promote, pause, or roll back a deployment",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Sending deployment notifications to a Slack channel for manual observation",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Disabling observability tools during deployment to reduce overhead",
+        "isCorrect": false
+      }
     ],
     "explanation": "Observability-driven deployment integrates real-time telemetry—metrics (error rates, latency), distributed traces, and structured logs—into the deployment process to make automated promotion or rollback decisions. Waiting for zero alerts is impractical and overly rigid since baseline noise always exists. Slack notifications are informational but do not constitute automated decision-making. Disabling observability during deployment is dangerous because that is precisely when you need the most visibility into system behavior.",
     "bonusFact": null
@@ -460,10 +888,26 @@
       "code": "steps:\n  - uses: actions/checkout@v4\n  - name: Build Docker image\n    run: docker build -t myapp:${{ github.sha }} .\n  - name: Sign image\n    run: cosign sign --key env://COSIGN_KEY myapp:${{ github.sha }}\n  - name: Scan for vulnerabilities\n    uses: aquasecurity/trivy-action@master\n    with:\n      image-ref: myapp:${{ github.sha }}\n      exit-code: 1\n      severity: CRITICAL,HIGH"
     },
     "options": [
-      { "id": "a", "text": "Container orchestration with automatic scaling policies", "isCorrect": false },
-      { "id": "b", "text": "Software supply chain security through image signing and vulnerability scanning", "isCorrect": true },
-      { "id": "c", "text": "Blue-green deployment with container image versioning", "isCorrect": false },
-      { "id": "d", "text": "Dependency caching to speed up Docker builds", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Container orchestration with automatic scaling policies",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Software supply chain security through image signing and vulnerability scanning",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Blue-green deployment with container image versioning",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Dependency caching to speed up Docker builds",
+        "isCorrect": false
+      }
     ],
     "explanation": "This pipeline implements two supply chain security measures: Cosign signs the container image to ensure provenance and integrity, and Trivy scans for known vulnerabilities with a fail threshold for critical and high severity issues. Container orchestration and scaling are runtime concerns not addressed here. While the image is tagged with the commit SHA, there is no blue-green traffic switching configured. No caching mechanism for Docker layers or dependencies is defined in these steps.",
     "bonusFact": "Cosign is part of the Sigstore project by the Linux Foundation."
@@ -476,10 +920,26 @@
     "prompt": "What is the primary challenge of multi-region deployment strategies in CD pipelines?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Choosing which programming language to use for the application", "isCorrect": false },
-      { "id": "b", "text": "Coordinating deployment ordering, data consistency across regions, and managing region-specific rollbacks without global downtime", "isCorrect": true },
-      { "id": "c", "text": "Finding enough developers to manage each region independently", "isCorrect": false },
-      { "id": "d", "text": "Selecting different CI/CD tools for each region's deployment", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Choosing which programming language to use for the application",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Coordinating deployment ordering, data consistency across regions, and managing region-specific rollbacks without global downtime",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Finding enough developers to manage each region independently",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Selecting different CI/CD tools for each region's deployment",
+        "isCorrect": false
+      }
     ],
     "explanation": "Multi-region deployment requires careful orchestration of deployment order (often using a canary region first), maintaining data consistency across geographically distributed databases, and the ability to roll back individual regions without affecting others. Programming language choice is an application architecture decision, not a deployment challenge. The goal is automation, not manual management by region-specific teams. Using consistent tooling across regions is preferred over fragmented tool choices to reduce operational complexity.",
     "bonusFact": null
@@ -492,10 +952,26 @@
     "prompt": "Which technique is most effective for optimizing CI pipeline performance in large codebases?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Running all tests in a single sequential job to simplify debugging", "isCorrect": false },
-      { "id": "b", "text": "Combining test impact analysis, parallelized test sharding, and remote build caching to only run affected tests across distributed workers", "isCorrect": true },
-      { "id": "c", "text": "Removing all tests and relying on production monitoring to catch issues", "isCorrect": false },
-      { "id": "d", "text": "Upgrading to the most expensive CI runner tier to brute-force faster builds", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Running all tests in a single sequential job to simplify debugging",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Combining test impact analysis, parallelized test sharding, and remote build caching to only run affected tests across distributed workers",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Removing all tests and relying on production monitoring to catch issues",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Upgrading to the most expensive CI runner tier to brute-force faster builds",
+        "isCorrect": false
+      }
     ],
     "explanation": "The most effective pipeline optimization combines test impact analysis (identifying which tests are affected by code changes), parallel test sharding (distributing tests across multiple workers), and remote build caching (reusing build outputs from previous runs). Running tests sequentially wastes time on parallelizable work and does not scale. Removing tests entirely transfers risk to production, which is far more costly. Simply upgrading hardware provides linear improvement but does not address the fundamental inefficiency of running unnecessary work.",
     "bonusFact": "Bazel and Nx use computation hashing for remote build caching."

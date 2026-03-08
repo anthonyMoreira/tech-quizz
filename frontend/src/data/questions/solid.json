@@ -7,10 +7,26 @@
     "prompt": "What does the Single Responsibility Principle (SRP) state?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "A class should inherit from only one parent class", "isCorrect": false },
-      { "id": "b", "text": "A class should have only one reason to change", "isCorrect": true },
-      { "id": "c", "text": "A class should have only one public method", "isCorrect": false },
-      { "id": "d", "text": "A class should only be instantiated once in the application", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "A class should inherit from only one parent class",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A class should have only one reason to change",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A class should have only one public method",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A class should only be instantiated once in the application",
+        "isCorrect": false
+      }
     ],
     "explanation": "The Single Responsibility Principle states that a class should have only one reason to change, meaning it should encapsulate exactly one responsibility or concern. Option A confuses SRP with single inheritance, which is a language feature, not a design principle. Option C is too restrictive — SRP allows multiple methods as long as they all serve the same responsibility. Option D describes the Singleton pattern, which is a creational design pattern unrelated to SOLID.",
     "bonusFact": null
@@ -23,10 +39,26 @@
     "prompt": "What does the Open/Closed Principle (OCP) state?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Software entities should be open for modification and closed for extension", "isCorrect": false },
-      { "id": "b", "text": "Software entities should be open for extension but closed for modification", "isCorrect": true },
-      { "id": "c", "text": "Source code files should be open-source and closed to proprietary use", "isCorrect": false },
-      { "id": "d", "text": "Classes should be open to any type parameter and closed to concrete types", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Software entities should be open for modification and closed for extension",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Software entities should be open for extension but closed for modification",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Source code files should be open-source and closed to proprietary use",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Classes should be open to any type parameter and closed to concrete types",
+        "isCorrect": false
+      }
     ],
     "explanation": "The Open/Closed Principle states that software entities (classes, modules, functions) should be open for extension but closed for modification. This means you should be able to add new behavior without changing existing code. Option A reverses the relationship — it's extension that should be open, not modification. Option C conflates OCP with open-source licensing, which is entirely unrelated. Option D describes a generic programming concept, not the OCP.",
     "bonusFact": "Bertrand Meyer first formulated OCP in his 1988 book 'Object-Oriented Software Construction'."
@@ -39,10 +71,26 @@
     "prompt": "What does the Liskov Substitution Principle (LSP) state?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Subtypes must be substitutable for their base types without altering correctness", "isCorrect": true },
-      { "id": "b", "text": "Any class can be substituted with any other class that has the same method names", "isCorrect": false },
-      { "id": "c", "text": "Interfaces should always be preferred over abstract classes", "isCorrect": false },
-      { "id": "d", "text": "Derived classes must override every method of the base class", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Subtypes must be substitutable for their base types without altering correctness",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Any class can be substituted with any other class that has the same method names",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Interfaces should always be preferred over abstract classes",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Derived classes must override every method of the base class",
+        "isCorrect": false
+      }
     ],
     "explanation": "The Liskov Substitution Principle states that objects of a superclass should be replaceable with objects of a subclass without breaking the application's correctness. Option B is too loose — merely sharing method names (structural typing) does not guarantee behavioral compatibility. Option C is a design guideline sometimes suggested, but it is not what LSP defines. Option D is incorrect because LSP does not require overriding all methods; it requires that overrides preserve the expected behavior.",
     "bonusFact": null
@@ -55,10 +103,26 @@
     "prompt": "What does the Interface Segregation Principle (ISP) state?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Interfaces should contain as many methods as possible for maximum reuse", "isCorrect": false },
-      { "id": "b", "text": "Each class should implement exactly one interface", "isCorrect": false },
-      { "id": "c", "text": "Clients should not be forced to depend on interfaces they do not use", "isCorrect": true },
-      { "id": "d", "text": "Interfaces must be defined in separate files from their implementations", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Interfaces should contain as many methods as possible for maximum reuse",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Each class should implement exactly one interface",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Clients should not be forced to depend on interfaces they do not use",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Interfaces must be defined in separate files from their implementations",
+        "isCorrect": false
+      }
     ],
     "explanation": "The Interface Segregation Principle states that no client should be forced to depend on methods it does not use, favoring many small, specific interfaces over one large, general-purpose one. Option A directly contradicts ISP by promoting bloated interfaces. Option B is overly restrictive — a class can implement multiple focused interfaces, which is actually encouraged by ISP. Option D is a file organization convention, not a design principle.",
     "bonusFact": "ISP emerged from Robert C. Martin's consulting work with Xerox in the 1990s."
@@ -71,10 +135,26 @@
     "prompt": "What does the Dependency Inversion Principle (DIP) state?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Low-level modules should define the abstractions that high-level modules use", "isCorrect": false },
-      { "id": "b", "text": "Dependencies should always be injected through constructor parameters", "isCorrect": false },
-      { "id": "c", "text": "High-level modules should not depend on low-level modules; both should depend on abstractions", "isCorrect": true },
-      { "id": "d", "text": "All imports should be inverted so child modules import parent modules", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Low-level modules should define the abstractions that high-level modules use",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Dependencies should always be injected through constructor parameters",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "High-level modules should not depend on low-level modules; both should depend on abstractions",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "All imports should be inverted so child modules import parent modules",
+        "isCorrect": false
+      }
     ],
     "explanation": "The Dependency Inversion Principle states that high-level modules should not depend on low-level modules, and both should depend on abstractions. Furthermore, abstractions should not depend on details — details should depend on abstractions. Option A incorrectly assigns abstraction ownership to low-level modules, whereas DIP says high-level policy should own the abstractions. Option B describes dependency injection, which is a technique that can help implement DIP but is not the principle itself. Option D is a nonsensical inversion of import direction that has nothing to do with DIP.",
     "bonusFact": null
@@ -91,9 +171,21 @@
     },
     "options": [
       { "id": "a", "text": "Open/Closed Principle", "isCorrect": false },
-      { "id": "b", "text": "Liskov Substitution Principle", "isCorrect": false },
-      { "id": "c", "text": "Single Responsibility Principle", "isCorrect": true },
-      { "id": "d", "text": "Dependency Inversion Principle", "isCorrect": false }
+      {
+        "id": "b",
+        "text": "Liskov Substitution Principle",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Single Responsibility Principle",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Dependency Inversion Principle",
+        "isCorrect": false
+      }
     ],
     "explanation": "This class violates the Single Responsibility Principle because it handles user management, email sending, report generation, and database backup — at least four distinct responsibilities. Each of these concerns has different reasons to change and should be extracted into its own class. OCP is not the primary issue since the class could still be extended; LSP doesn't apply because there's no inheritance hierarchy shown; and DIP isn't the core problem since the violation is about bundling too many concerns, not about depending on concretions.",
     "bonusFact": "SRP heuristic: if you need 'and' to describe a class, it has too many jobs."
@@ -106,9 +198,17 @@
     "prompt": "Which SOLID principle is violated when adding a new payment type requires modifying an existing PaymentProcessor class?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Interface Segregation Principle", "isCorrect": false },
+      {
+        "id": "a",
+        "text": "Interface Segregation Principle",
+        "isCorrect": false
+      },
       { "id": "b", "text": "Open/Closed Principle", "isCorrect": true },
-      { "id": "c", "text": "Dependency Inversion Principle", "isCorrect": false },
+      {
+        "id": "c",
+        "text": "Dependency Inversion Principle",
+        "isCorrect": false
+      },
       { "id": "d", "text": "Liskov Substitution Principle", "isCorrect": false }
     ],
     "explanation": "When adding a new payment type forces changes to the existing PaymentProcessor class, the Open/Closed Principle is violated because the class is not closed for modification. A better design would allow new payment types to be added via extension, for example through polymorphism or a strategy pattern. ISP deals with interface granularity, not extensibility; DIP deals with abstraction dependencies; and LSP deals with substitutability in inheritance hierarchies.",
@@ -122,10 +222,26 @@
     "prompt": "What is the primary purpose of the SOLID principles as a whole?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "To maximize runtime performance of object-oriented applications", "isCorrect": false },
-      { "id": "b", "text": "To create software that is easier to maintain, understand, and extend", "isCorrect": true },
-      { "id": "c", "text": "To ensure all code is written using design patterns", "isCorrect": false },
-      { "id": "d", "text": "To enforce strict type safety in statically typed languages", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "To maximize runtime performance of object-oriented applications",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To create software that is easier to maintain, understand, and extend",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To ensure all code is written using design patterns",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To enforce strict type safety in statically typed languages",
+        "isCorrect": false
+      }
     ],
     "explanation": "The SOLID principles collectively aim to produce software designs that are easier to maintain, understand, and extend over time, reducing the cost of change. Option A is incorrect because SOLID focuses on design quality, not runtime performance — in fact, applying SOLID may sometimes add a small performance overhead through indirection. Option C is wrong because SOLID principles are guidelines, not mandates to use specific design patterns. Option D confuses SOLID with type system features, which are language-level concerns rather than design principles.",
     "bonusFact": "The SOLID acronym was introduced by Michael Feathers, based on principles by Robert C. Martin."
@@ -138,10 +254,26 @@
     "prompt": "How do the SOLID principles relate to each other?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "They must be applied in order from S to D for each class", "isCorrect": false },
-      { "id": "b", "text": "They are independent rules that never overlap or interact", "isCorrect": false },
-      { "id": "c", "text": "They are complementary guidelines that often reinforce each other", "isCorrect": true },
-      { "id": "d", "text": "Each principle replaces the previous one in modern software design", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "They must be applied in order from S to D for each class",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "They are independent rules that never overlap or interact",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "They are complementary guidelines that often reinforce each other",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Each principle replaces the previous one in modern software design",
+        "isCorrect": false
+      }
     ],
     "explanation": "The SOLID principles are complementary guidelines that often reinforce one another — for example, applying ISP often helps achieve SRP, and DIP frequently supports OCP by enabling extension through abstractions. Option A is incorrect because there is no required application order; principles are applied as needed based on context. Option B is wrong because the principles frequently interact and overlap in practice. Option D is incorrect because none of the principles have been superseded; they all remain relevant and are meant to be applied together.",
     "bonusFact": null
@@ -157,10 +289,22 @@
       "code": "interface Worker {\n  work(): void;\n  eat(): void;\n  sleep(): void;\n  attendMeeting(): void;\n  writeReport(): void;\n}\n\nclass Robot implements Worker {\n  work(): void { /* ok */ }\n  eat(): void { throw new Error('N/A'); }\n  sleep(): void { throw new Error('N/A'); }\n  attendMeeting(): void { throw new Error('N/A'); }\n  writeReport(): void { throw new Error('N/A'); }\n}"
     },
     "options": [
-      { "id": "a", "text": "Single Responsibility Principle", "isCorrect": false },
+      {
+        "id": "a",
+        "text": "Single Responsibility Principle",
+        "isCorrect": false
+      },
       { "id": "b", "text": "Open/Closed Principle", "isCorrect": false },
-      { "id": "c", "text": "Liskov Substitution Principle", "isCorrect": false },
-      { "id": "d", "text": "Interface Segregation Principle", "isCorrect": true }
+      {
+        "id": "c",
+        "text": "Liskov Substitution Principle",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Interface Segregation Principle",
+        "isCorrect": true
+      }
     ],
     "explanation": "This code violates the Interface Segregation Principle because the Robot class is forced to implement methods (eat, sleep, attendMeeting, writeReport) that it cannot meaningfully support, resulting in thrown errors. The Worker interface is too broad and should be split into smaller, role-specific interfaces. While throwing errors from implemented methods could also hint at an LSP violation, the root cause here is the bloated interface forcing irrelevant dependencies. SRP applies to classes having too many responsibilities, and OCP is about extension without modification — neither is the primary concern here.",
     "bonusFact": "ISP violations often surface as methods that throw NotImplementedException or return null."
@@ -173,10 +317,26 @@
     "prompt": "When applying the Single Responsibility Principle to a service layer, what is the best approach for a UserService that handles registration, authentication, and profile updates?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Keep it as one service since it all relates to users", "isCorrect": false },
-      { "id": "b", "text": "Split into RegistrationService, AuthenticationService, and ProfileService", "isCorrect": true },
-      { "id": "c", "text": "Create one method per class, each in its own file", "isCorrect": false },
-      { "id": "d", "text": "Use a single UserService but mark each method with a responsibility annotation", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Keep it as one service since it all relates to users",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Split into RegistrationService, AuthenticationService, and ProfileService",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Create one method per class, each in its own file",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use a single UserService but mark each method with a responsibility annotation",
+        "isCorrect": false
+      }
     ],
     "explanation": "Splitting into RegistrationService, AuthenticationService, and ProfileService correctly applies SRP at the service level, as each service encapsulates a distinct business concern with its own reasons to change. Option A violates SRP because registration logic, authentication logic, and profile management evolve independently and for different reasons. Option C takes SRP to an absurd extreme, creating nano-classes that fragment cohesive logic. Option D merely documents responsibilities without actually separating them, providing no structural benefit.",
     "bonusFact": "SRP at the service layer often aligns naturally with bounded contexts in DDD."
@@ -192,10 +352,26 @@
       "code": "class ShippingCalculator {\n  calculate(type: string, weight: number): number {\n    if (type === 'standard') return weight * 1.5;\n    if (type === 'express') return weight * 3.0;\n    if (type === 'overnight') return weight * 5.0;\n    throw new Error('Unknown type');\n  }\n}"
     },
     "options": [
-      { "id": "a", "text": "Add a default case that returns 0 for unknown shipping types", "isCorrect": false },
-      { "id": "b", "text": "Define a ShippingStrategy interface with a calculate method and create separate classes for each type", "isCorrect": true },
-      { "id": "c", "text": "Convert the if-chain to a switch statement for better readability", "isCorrect": false },
-      { "id": "d", "text": "Make the calculate method protected so subclasses can override it", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Add a default case that returns 0 for unknown shipping types",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Define a ShippingStrategy interface with a calculate method and create separate classes for each type",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Convert the if-chain to a switch statement for better readability",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Make the calculate method protected so subclasses can override it",
+        "isCorrect": false
+      }
     ],
     "explanation": "Defining a ShippingStrategy interface and implementing separate strategy classes for each shipping type follows OCP because new shipping types can be added by creating new strategy classes without modifying the existing calculator. Option A merely handles the error case differently without addressing the extensibility problem. Option C changes syntax but preserves the same structural issue — adding a new type still requires modifying the class. Option D allows subclass overrides but forces the entire calculator to be subclassed for each variation, which is fragile and does not properly close the class for modification.",
     "bonusFact": null
@@ -208,10 +384,22 @@
     "prompt": "A Square class extends Rectangle and overrides setWidth to also set height (and vice versa). Which SOLID principle does this violate?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Single Responsibility Principle", "isCorrect": false },
+      {
+        "id": "a",
+        "text": "Single Responsibility Principle",
+        "isCorrect": false
+      },
       { "id": "b", "text": "Liskov Substitution Principle", "isCorrect": true },
-      { "id": "c", "text": "Interface Segregation Principle", "isCorrect": false },
-      { "id": "d", "text": "Dependency Inversion Principle", "isCorrect": false }
+      {
+        "id": "c",
+        "text": "Interface Segregation Principle",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Dependency Inversion Principle",
+        "isCorrect": false
+      }
     ],
     "explanation": "This is the classic LSP violation: code expecting a Rectangle assumes that setting width and height are independent operations, but a Square couples them, breaking the expected behavior of the base type. Clients that set width and height separately will get incorrect results when given a Square. SRP is not violated because both classes have a single geometric responsibility. ISP is irrelevant since the interface isn't bloated. DIP doesn't apply because the issue is about behavioral substitutability, not abstraction dependencies.",
     "bonusFact": "The Square/Rectangle problem is the most cited example of LSP violation in CS education."
@@ -224,10 +412,26 @@
     "prompt": "A legacy codebase has a single DatabaseInterface with 25 methods covering queries, migrations, backups, and connection pooling. What is the best ISP-driven refactoring approach?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Remove methods that are rarely used", "isCorrect": false },
-      { "id": "b", "text": "Split into Queryable, Migratable, Backupable, and ConnectionPool interfaces", "isCorrect": true },
-      { "id": "c", "text": "Create one interface per method for maximum granularity", "isCorrect": false },
-      { "id": "d", "text": "Add default implementations for all 25 methods so clients can ignore what they don't need", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Remove methods that are rarely used",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Split into Queryable, Migratable, Backupable, and ConnectionPool interfaces",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Create one interface per method for maximum granularity",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Add default implementations for all 25 methods so clients can ignore what they don't need",
+        "isCorrect": false
+      }
     ],
     "explanation": "Splitting into role-based interfaces like Queryable, Migratable, Backupable, and ConnectionPool correctly applies ISP by grouping cohesive operations together while ensuring clients only depend on the capabilities they actually use. Option A removes functionality rather than segregating it, which breaks existing consumers. Option C creates 25 single-method interfaces, which is excessive and loses cohesion between related operations. Option D hides the problem behind default implementations but still forces all clients to nominally depend on the full 25-method contract.",
     "bonusFact": null
@@ -243,10 +447,26 @@
       "code": "class OrderService {\n  private repo = new MySQLOrderRepository();\n  private mailer = new SendGridMailer();\n\n  placeOrder(order: Order): void {\n    this.repo.save(order);\n    this.mailer.send(order.customerEmail, 'Order placed');\n  }\n}"
     },
     "options": [
-      { "id": "a", "text": "Move MySQLOrderRepository and SendGridMailer to a shared utility module", "isCorrect": false },
-      { "id": "b", "text": "Inject OrderRepository and Mailer abstractions through the constructor", "isCorrect": true },
-      { "id": "c", "text": "Make OrderService a singleton to reduce instantiation coupling", "isCorrect": false },
-      { "id": "d", "text": "Use a service locator to resolve MySQLOrderRepository and SendGridMailer at runtime", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Move MySQLOrderRepository and SendGridMailer to a shared utility module",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Inject OrderRepository and Mailer abstractions through the constructor",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Make OrderService a singleton to reduce instantiation coupling",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use a service locator to resolve MySQLOrderRepository and SendGridMailer at runtime",
+        "isCorrect": false
+      }
     ],
     "explanation": "Injecting abstractions (OrderRepository and Mailer interfaces) through the constructor makes OrderService depend on abstractions rather than concrete implementations, which is exactly what DIP requires. Option A merely reorganizes file structure without changing the dependency direction. Option C addresses instantiation count but not dependency direction — OrderService still directly depends on concrete classes. Option D uses a service locator which provides runtime flexibility but still couples OrderService to the locator itself and is widely considered an anti-pattern that obscures dependencies.",
     "bonusFact": "DIP is the principle; Dependency Injection is one technique to achieve it."
@@ -259,10 +479,26 @@
     "prompt": "When refactoring a notification system to satisfy OCP, which approach best allows adding new notification channels (email, SMS, push) without modifying existing code?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Use a switch statement that routes to the correct channel based on a string identifier", "isCorrect": false },
-      { "id": "b", "text": "Define a NotificationChannel interface and register channel implementations in a registry", "isCorrect": true },
-      { "id": "c", "text": "Create a base NotificationService class with all channels as protected methods", "isCorrect": false },
-      { "id": "d", "text": "Use conditional compilation flags to include or exclude channels at build time", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Use a switch statement that routes to the correct channel based on a string identifier",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Define a NotificationChannel interface and register channel implementations in a registry",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Create a base NotificationService class with all channels as protected methods",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use conditional compilation flags to include or exclude channels at build time",
+        "isCorrect": false
+      }
     ],
     "explanation": "A NotificationChannel interface with a registry pattern allows new channels to be added by simply creating a new implementation and registering it, without touching existing code — this is textbook OCP. Option A requires modifying the switch statement every time a new channel is added. Option C bundles all channels into one class, requiring modification of the base class for new channels and also violating SRP. Option D couples the extensibility to the build system rather than the design, making it inflexible and not a proper application of OCP.",
     "bonusFact": null
@@ -275,10 +511,26 @@
     "prompt": "When composing ISP-compliant interfaces, what is the recommended approach for a class that legitimately needs capabilities from multiple small interfaces?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Merge all the small interfaces back into one large interface", "isCorrect": false },
-      { "id": "b", "text": "Have the class implement multiple focused interfaces simultaneously", "isCorrect": true },
-      { "id": "c", "text": "Use only the most important interface and duplicate methods from the others", "isCorrect": false },
-      { "id": "d", "text": "Create adapter classes to translate between the interfaces", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Merge all the small interfaces back into one large interface",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Have the class implement multiple focused interfaces simultaneously",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Use only the most important interface and duplicate methods from the others",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Create adapter classes to translate between the interfaces",
+        "isCorrect": false
+      }
     ],
     "explanation": "Having a class implement multiple focused interfaces is the intended use of ISP — small, client-specific interfaces can be freely composed on the implementation side while keeping each client's view minimal. Option A defeats the purpose of ISP by recreating the fat interface problem. Option C leads to code duplication and breaks the interface contracts that other clients depend on. Option D adds unnecessary indirection; adapters are useful when bridging incompatible interfaces, not when a class naturally fulfills multiple roles.",
     "bonusFact": null
@@ -294,10 +546,26 @@
       "code": "class InvoiceService {\n  createInvoice(data: InvoiceData): Invoice { /* ... */ }\n  calculateTax(invoice: Invoice): number { /* ... */ }\n  formatAsPDF(invoice: Invoice): Buffer { /* ... */ }\n  sendToClient(invoice: Invoice): void { /* ... */ }\n  saveToDatabase(invoice: Invoice): void { /* ... */ }\n}"
     },
     "options": [
-      { "id": "a", "text": "No issue — all methods relate to invoices, so they belong together", "isCorrect": false },
-      { "id": "b", "text": "Split into five classes, one per method", "isCorrect": false },
-      { "id": "c", "text": "Split into InvoiceCreation, InvoiceFormatting, InvoiceDelivery, and InvoicePersistence", "isCorrect": true },
-      { "id": "d", "text": "Move all methods to static utility functions", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "No issue — all methods relate to invoices, so they belong together",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Split into five classes, one per method",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Split into InvoiceCreation, InvoiceFormatting, InvoiceDelivery, and InvoicePersistence",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Move all methods to static utility functions",
+        "isCorrect": false
+      }
     ],
     "explanation": "The correct granularity is to group by cohesive concern: creation with tax calculation (business logic), formatting (presentation), delivery (communication), and persistence (data access). Each group changes for different reasons — tax rules, PDF format requirements, email providers, and database schemas evolve independently. Option A ignores that 'relates to invoices' is too broad a cohesion criterion. Option B creates unnecessary fragmentation, as tax calculation is tightly coupled to invoice creation logic. Option D just moves the same coupled logic into static functions without achieving any separation of concerns.",
     "bonusFact": "SRP granularity should match the rate of change — things that change together should stay together."
@@ -310,10 +578,26 @@
     "prompt": "In a layered architecture with Presentation, Business, and Data layers, how should the Dependency Inversion Principle influence the dependency direction?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Presentation depends on Business, Business depends on Data — all concrete", "isCorrect": false },
-      { "id": "b", "text": "Data layer defines interfaces that the Business layer must implement", "isCorrect": false },
-      { "id": "c", "text": "Business layer defines repository and service interfaces that the Data layer implements", "isCorrect": true },
-      { "id": "d", "text": "All layers should reference each other through a shared dependency container", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Presentation depends on Business, Business depends on Data — all concrete",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Data layer defines interfaces that the Business layer must implement",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Business layer defines repository and service interfaces that the Data layer implements",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "All layers should reference each other through a shared dependency container",
+        "isCorrect": false
+      }
     ],
     "explanation": "DIP in layered architectures means the high-level Business layer owns the abstractions (interfaces for repositories, external services) and the low-level Data layer provides implementations of those interfaces. This ensures the core business logic is independent of infrastructure details. Option A creates a traditional dependency chain where business logic is coupled to data access specifics. Option B inverts ownership incorrectly — low-level modules should not dictate contracts to high-level modules. Option D introduces circular coupling through a shared container, which defeats the purpose of layered separation.",
     "bonusFact": "This DIP pattern in layered architecture is called 'Hexagonal' or 'Ports and Adapters'."
@@ -331,8 +615,16 @@
     "options": [
       { "id": "a", "text": "Open/Closed Principle", "isCorrect": false },
       { "id": "b", "text": "Liskov Substitution Principle", "isCorrect": true },
-      { "id": "c", "text": "Interface Segregation Principle", "isCorrect": false },
-      { "id": "d", "text": "Single Responsibility Principle", "isCorrect": false }
+      {
+        "id": "c",
+        "text": "Interface Segregation Principle",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Single Responsibility Principle",
+        "isCorrect": false
+      }
     ],
     "explanation": "This violates the Liskov Substitution Principle because UserRepository cannot be safely substituted for ReadOnlyRepository — calling findAll() on a ReadOnlyRepository reference would unexpectedly throw an error when the actual object is a UserRepository. Any code written against the base type's contract will break. OCP is not the issue since the class is being extended, not modified. ISP doesn't apply because the base interface is already minimal. SRP isn't violated because both classes have a single data-access responsibility.",
     "bonusFact": null
@@ -345,10 +637,26 @@
     "prompt": "When the Single Responsibility Principle conflicts with the DRY (Don't Repeat Yourself) principle — for example, two services share identical validation logic — what is the best resolution?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Always prioritize DRY and merge the services into one class", "isCorrect": false },
-      { "id": "b", "text": "Always prioritize SRP and accept the code duplication", "isCorrect": false },
-      { "id": "c", "text": "Extract the shared logic into a separate validation component that both services depend on", "isCorrect": true },
-      { "id": "d", "text": "Use inheritance to share the validation logic between both services", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Always prioritize DRY and merge the services into one class",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Always prioritize SRP and accept the code duplication",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Extract the shared logic into a separate validation component that both services depend on",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Use inheritance to share the validation logic between both services",
+        "isCorrect": false
+      }
     ],
     "explanation": "Extracting shared validation into its own component satisfies both SRP (each service retains a single responsibility) and DRY (the validation logic exists in one place). This approach uses composition rather than merging responsibilities or accepting duplication. Option A sacrifices SRP by combining unrelated responsibilities just to avoid duplication. Option B dogmatically accepts duplication that will lead to divergent bugs over time. Option D uses inheritance to share behavior, which creates tight coupling between the services and violates the principle of favoring composition over inheritance.",
     "bonusFact": null
@@ -364,10 +672,26 @@
       "code": "interface Animal { name: string; }\ninterface Dog extends Animal { breed: string; }\n\nclass AnimalShelter {\n  adopt(criteria: Animal): Animal {\n    return { name: 'Generic' };\n  }\n}\n\nclass DogShelter extends AnimalShelter {\n  adopt(criteria: Dog): Dog {\n    return { name: criteria.name, breed: criteria.breed };\n  }\n}"
     },
     "options": [
-      { "id": "a", "text": "DogShelter strengthens the precondition by requiring Dog instead of Animal — a contravariance violation", "isCorrect": true },
-      { "id": "b", "text": "DogShelter weakens the postcondition by returning Dog instead of Animal", "isCorrect": false },
-      { "id": "c", "text": "DogShelter violates ISP because it extends a concrete class instead of an interface", "isCorrect": false },
-      { "id": "d", "text": "There is no violation — Dog extends Animal so this is valid covariant substitution", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "DogShelter strengthens the precondition by requiring Dog instead of Animal — a contravariance violation",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "DogShelter weakens the postcondition by returning Dog instead of Animal",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "DogShelter violates ISP because it extends a concrete class instead of an interface",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "There is no violation — Dog extends Animal so this is valid covariant substitution",
+        "isCorrect": false
+      }
     ],
     "explanation": "DogShelter violates LSP by strengthening the precondition: the base class accepts any Animal, but the subclass requires a Dog. A caller using an AnimalShelter reference could pass a Cat and the code would compile (TypeScript uses structural typing) but fail logically because DogShelter expects a breed property. LSP requires that input parameters be contravariant (same or broader), not covariant. Option B is incorrect because returning Dog instead of Animal is covariant in the return type, which is actually safe. Option C conflates ISP with inheritance mechanics. Option D incorrectly claims covariant input parameters are valid substitution.",
     "bonusFact": "LSP formally requires contravariant inputs and covariant outputs for safe subtyping."
@@ -380,10 +704,26 @@
     "prompt": "The 'expression problem' describes the difficulty of adding both new types and new operations to a system. How does OCP relate to this problem?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "OCP fully solves the expression problem by using abstract classes", "isCorrect": false },
-      { "id": "b", "text": "OCP makes it easy to add new types via subclassing but hard to add new operations without modifying existing classes", "isCorrect": true },
-      { "id": "c", "text": "OCP makes it easy to add both new types and new operations simultaneously", "isCorrect": false },
-      { "id": "d", "text": "OCP is unrelated to the expression problem because it only applies to procedural code", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "OCP fully solves the expression problem by using abstract classes",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "OCP makes it easy to add new types via subclassing but hard to add new operations without modifying existing classes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "OCP makes it easy to add both new types and new operations simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "OCP is unrelated to the expression problem because it only applies to procedural code",
+        "isCorrect": false
+      }
     ],
     "explanation": "OCP in object-oriented design naturally supports adding new types through subclassing and polymorphism, but adding a new operation requires modifying all existing types — this is one side of the expression problem. The functional approach (pattern matching on data types) has the inverse trade-off: easy to add operations, hard to add types. Option A overstates OCP's power — it addresses one dimension but not the other. Option C incorrectly claims OCP solves both dimensions. Option D is wrong because OCP applies broadly to any paradigm, and the expression problem is fundamentally about extensibility in typed systems.",
     "bonusFact": null
@@ -396,10 +736,26 @@
     "prompt": "When applying ISP to microservice API design, which approach best prevents clients from depending on endpoints they don't use?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Create one monolithic API gateway that aggregates all endpoints", "isCorrect": false },
-      { "id": "b", "text": "Expose different API facades per consumer, using Backend-for-Frontend (BFF) pattern", "isCorrect": true },
-      { "id": "c", "text": "Version the entire API for each client so they each get a frozen snapshot", "isCorrect": false },
-      { "id": "d", "text": "Use GraphQL so clients technically only request what they need from one endpoint", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Create one monolithic API gateway that aggregates all endpoints",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Expose different API facades per consumer, using Backend-for-Frontend (BFF) pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Version the entire API for each client so they each get a frozen snapshot",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use GraphQL so clients technically only request what they need from one endpoint",
+        "isCorrect": false
+      }
     ],
     "explanation": "The Backend-for-Frontend (BFF) pattern is the most direct application of ISP at the microservice API level: each consumer (mobile, web, third-party) gets a tailored API facade exposing only the endpoints it needs. Option A does the opposite of ISP by creating a fat interface that all clients depend on. Option C creates versioning overhead without actually segregating interfaces — each version still contains all endpoints. Option D is a partial solution since GraphQL allows flexible queries, but all clients still depend on the same schema, and schema changes can break any client — it reduces over-fetching but doesn't truly segregate interfaces.",
     "bonusFact": null
@@ -415,10 +771,26 @@
       "code": "// domain/OrderService.ts\nimport { OrderRepository } from './ports/OrderRepository';\nimport { Logger } from '../../infrastructure/Logger';\n\nclass OrderService {\n  constructor(\n    private repo: OrderRepository,\n    private logger: Logger\n  ) {}\n\n  place(order: Order): void {\n    this.repo.save(order);\n    this.logger.info('Order placed');\n  }\n}"
     },
     "options": [
-      { "id": "a", "text": "OrderRepository should be a concrete class, not an interface", "isCorrect": false },
-      { "id": "b", "text": "The domain layer imports Logger directly from infrastructure, violating the dependency rule", "isCorrect": true },
-      { "id": "c", "text": "OrderService should not use constructor injection", "isCorrect": false },
-      { "id": "d", "text": "The place method should return the saved order instead of void", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "OrderRepository should be a concrete class, not an interface",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "The domain layer imports Logger directly from infrastructure, violating the dependency rule",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "OrderService should not use constructor injection",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The place method should return the saved order instead of void",
+        "isCorrect": false
+      }
     ],
     "explanation": "While OrderRepository is correctly abstracted through a port in the domain layer, Logger is imported directly from the infrastructure layer, violating the dependency rule which states that inner layers must never reference outer layers. The fix is to define a Logger port (interface) in the domain layer and implement it in infrastructure. Option A would make things worse by coupling the domain to a concrete repository. Option C is incorrect because constructor injection is the preferred way to achieve DIP. Option D is an API design preference unrelated to the dependency rule.",
     "bonusFact": "The Dependency Rule is Robert C. Martin's extension of DIP to full application architecture."
@@ -431,10 +803,26 @@
     "prompt": "How do SOLID principles translate to functional programming, where there are no classes or inheritance?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "SOLID principles are irrelevant in functional programming", "isCorrect": false },
-      { "id": "b", "text": "SRP maps to pure functions, OCP to higher-order functions, LSP to referential transparency, ISP to minimal function signatures, DIP to function parameters instead of hardcoded dependencies", "isCorrect": true },
-      { "id": "c", "text": "Only SRP and OCP apply; the other three require object-oriented features", "isCorrect": false },
-      { "id": "d", "text": "SOLID must be replaced entirely by category theory concepts like monads and functors", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "SOLID principles are irrelevant in functional programming",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "SRP maps to pure functions, OCP to higher-order functions, LSP to referential transparency, ISP to minimal function signatures, DIP to function parameters instead of hardcoded dependencies",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Only SRP and OCP apply; the other three require object-oriented features",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "SOLID must be replaced entirely by category theory concepts like monads and functors",
+        "isCorrect": false
+      }
     ],
     "explanation": "SOLID principles have natural functional equivalents: SRP corresponds to pure functions with a single purpose, OCP maps to extending behavior through higher-order functions and composition, LSP translates to referential transparency where substituting equivalent expressions preserves correctness, ISP means functions should take only the parameters they need, and DIP is achieved by passing dependencies as function arguments. Option A incorrectly dismisses principles that transcend paradigms. Option C arbitrarily limits which principles transfer. Option D overstates the role of category theory — while useful, it doesn't replace fundamental design principles.",
     "bonusFact": null
@@ -451,9 +839,21 @@
     },
     "options": [
       { "id": "a", "text": "God Object anti-pattern", "isCorrect": false },
-      { "id": "b", "text": "Nano-classes (over-decomposition) anti-pattern", "isCorrect": true },
-      { "id": "c", "text": "Anemic Domain Model anti-pattern", "isCorrect": false },
-      { "id": "d", "text": "Circular Dependency anti-pattern", "isCorrect": false }
+      {
+        "id": "b",
+        "text": "Nano-classes (over-decomposition) anti-pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Anemic Domain Model anti-pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Circular Dependency anti-pattern",
+        "isCorrect": false
+      }
     ],
     "explanation": "This code exhibits the nano-classes anti-pattern, where SRP is applied so aggressively that trivially cohesive logic is split into dozens of tiny classes. The result is an explosion of classes, excessive indirection, and an orchestrator that needs an unreasonable number of dependencies, making the system harder to understand and maintain. Option A is the opposite problem — too much responsibility in one class. Option C describes domain objects with no behavior, which isn't shown here. Option D would require bidirectional references between classes, which isn't present in this example.",
     "bonusFact": "The nano-classes anti-pattern is sometimes called 'class explosion' or 'ravioli code'."
@@ -466,10 +866,26 @@
     "prompt": "Which real-world framework pattern is a well-known LSP violation that the community has broadly accepted as a pragmatic trade-off?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "React components extending PureComponent but implementing shouldComponentUpdate to always return true", "isCorrect": false },
-      { "id": "b", "text": "Java's Stack extending Vector, where Stack restricts operations that Vector permits", "isCorrect": true },
-      { "id": "c", "text": "Python decorators wrapping functions with additional behavior", "isCorrect": false },
-      { "id": "d", "text": "Node.js EventEmitter being used as a base class for streams", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "React components extending PureComponent but implementing shouldComponentUpdate to always return true",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Java's Stack extending Vector, where Stack restricts operations that Vector permits",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Python decorators wrapping functions with additional behavior",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Node.js EventEmitter being used as a base class for streams",
+        "isCorrect": false
+      }
     ],
     "explanation": "Java's Stack extends Vector, but Stack is meant to only allow LIFO access while Vector allows random access at any index. This means a Stack cannot be safely substituted for a Vector because clients could call insertElementAt() or elementAt(), bypassing stack semantics. This is a well-documented LSP violation that persists in the Java standard library for backward compatibility. Option A describes a performance optimization quirk, not an LSP violation. Option C is a composition pattern that preserves function signatures. Option D is a legitimate use of inheritance where Streams properly extend EventEmitter behavior.",
     "bonusFact": "Java's Collections.asLifoQueue(Deque) was later introduced as an LSP-compliant alternative."
@@ -482,10 +898,26 @@
     "prompt": "In event-driven architectures, how should SOLID principles be adapted for event handlers and message consumers?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Event handlers should be exempt from SOLID because they are inherently reactive", "isCorrect": false },
-      { "id": "b", "text": "SRP means one handler per event type; OCP means new handlers can subscribe without modifying the publisher; DIP means handlers depend on event abstractions, not concrete publishers", "isCorrect": true },
-      { "id": "c", "text": "Only DIP applies because events already decouple producers from consumers", "isCorrect": false },
-      { "id": "d", "text": "LSP is the only relevant principle because event handlers must be substitutable", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Event handlers should be exempt from SOLID because they are inherently reactive",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "SRP means one handler per event type; OCP means new handlers can subscribe without modifying the publisher; DIP means handlers depend on event abstractions, not concrete publishers",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Only DIP applies because events already decouple producers from consumers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "LSP is the only relevant principle because event handlers must be substitutable",
+        "isCorrect": false
+      }
     ],
     "explanation": "SOLID applies fully to event-driven systems: SRP maps naturally to one handler per event type with a single concern, OCP is achieved because new event handlers can subscribe to the event bus without modifying existing publishers or handlers, and DIP is satisfied when handlers depend on event type abstractions rather than concrete producer classes. Option A incorrectly exempts an entire architectural style from foundational design principles. Option C underestimates the applicability — while DIP is naturally supported, the other principles also provide valuable design guidance. Option D overemphasizes LSP; while handler substitutability matters, all five principles have meaningful applications in event-driven systems.",
     "bonusFact": null
@@ -498,10 +930,26 @@
     "prompt": "In performance-critical code paths (e.g., game loops, real-time data processing), when might deliberately violating SOLID principles be justified?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Never — SOLID should always be followed regardless of performance requirements", "isCorrect": false },
-      { "id": "b", "text": "When profiling proves that polymorphic dispatch, interface indirection, or small-object allocation from SOLID-compliant design causes measurable bottlenecks", "isCorrect": true },
-      { "id": "c", "text": "Always in performance-critical code — SOLID is only for business applications", "isCorrect": false },
-      { "id": "d", "text": "Only when the team has fewer than three developers and cannot afford the abstraction overhead", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Never — SOLID should always be followed regardless of performance requirements",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "When profiling proves that polymorphic dispatch, interface indirection, or small-object allocation from SOLID-compliant design causes measurable bottlenecks",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Always in performance-critical code — SOLID is only for business applications",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only when the team has fewer than three developers and cannot afford the abstraction overhead",
+        "isCorrect": false
+      }
     ],
     "explanation": "Violating SOLID in performance-critical code is justified when profiling data demonstrates that the abstractions — virtual dispatch, small object allocations from many SRP classes, interface indirection from DIP — create measurable performance bottlenecks. The key is evidence-based decision-making: optimize only what profiling proves is slow. Option A is dogmatic and ignores legitimate engineering trade-offs that real systems require. Option C is the opposite extreme, dismissing SOLID entirely in a broad category of applications without evidence. Option D bases the decision on team size rather than technical necessity, which is an irrelevant criterion for performance optimization.",
     "bonusFact": "Data-Oriented Design in game engines often trades OCP/DIP for cache-friendly memory layouts."

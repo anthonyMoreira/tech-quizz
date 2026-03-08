@@ -1,7 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Code Snippet Questions', () => {
-  test('code snippet questions render syntax-highlighted code blocks', async ({ page }) => {
+  test('code snippet questions render syntax-highlighted code blocks', async ({
+    page,
+  }) => {
     // Use DDD or TDD at beginner - they have code-snippet type questions
     await page.goto('/quiz/setup');
     await page.getByRole('button', { name: /Domain-Driven Design/ }).click();
@@ -51,7 +53,9 @@ test.describe('Code Snippet Questions', () => {
     expect(foundCodeSnippet).toBe(true);
   });
 
-  test('bonus facts are displayed for questions that have them', async ({ page }) => {
+  test('bonus facts are displayed for questions that have them', async ({
+    page,
+  }) => {
     await page.goto('/quiz/setup');
     await page.getByRole('button', { name: /Domain-Driven Design/ }).click();
     await page.getByRole('button', { name: /Test-Driven Development/ }).click();

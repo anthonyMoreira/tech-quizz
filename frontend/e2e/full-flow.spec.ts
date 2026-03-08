@@ -4,10 +4,14 @@ import { test, expect } from '@playwright/test';
  * Full end-to-end flow: Home -> Setup -> Play through all 10 questions -> Results -> New Quiz
  */
 test.describe('Full Quiz Flow (E2E)', () => {
-  test('complete flow: home -> setup -> play -> results -> new quiz', async ({ page }) => {
+  test('complete flow: home -> setup -> play -> results -> new quiz', async ({
+    page,
+  }) => {
     // 1. Start at Home
     await page.goto('/');
-    await expect(page.getByRole('heading', { name: 'Tech Quiz App' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Tech Quiz App' }),
+    ).toBeVisible();
 
     // 2. Navigate to Setup
     await page.getByRole('link', { name: 'Start Quiz' }).click();
@@ -28,9 +32,9 @@ test.describe('Full Quiz Flow (E2E)', () => {
     let correctCount = 0;
     for (let q = 1; q <= 10; q++) {
       // Verify progress — "Question" and "X / 10" are in separate spans
-      await expect(
-        page.locator('.quiz-progress__numbers'),
-      ).toHaveText(`${String(q)} / 10`);
+      await expect(page.locator('.quiz-progress__numbers')).toHaveText(
+        `${String(q)} / 10`,
+      );
 
       // Select first answer and confirm
       await page.getByTestId('answer-option').first().click();
@@ -53,27 +57,41 @@ test.describe('Full Quiz Flow (E2E)', () => {
 
     // 6. Verify results page
     await expect(page).toHaveURL(/quiz\/results/);
-    await expect(page.getByRole('heading', { name: 'Quiz Complete!' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Quiz Complete!' }),
+    ).toBeVisible();
 
     // Score
     const pct = Math.round((correctCount / 10) * 100);
-    await expect(page.locator('.results-summary__score-pct')).toHaveText(`${String(pct)}%`);
+    await expect(page.locator('.results-summary__score-pct')).toHaveText(
+      `${String(pct)}%`,
+    );
 
     // Metadata
-    await expect(page.locator('.results-summary__difficulty')).toHaveText(/intermediate/i);
-    await expect(page.locator('.results-summary__theme-tag')).toHaveText('SOLID Principles');
+    await expect(page.locator('.results-summary__difficulty')).toHaveText(
+      /intermediate/i,
+    );
+    await expect(page.locator('.results-summary__theme-tag')).toHaveText(
+      'SOLID Principles',
+    );
 
     // Breakdown has 10 items
-    const items = page.locator('.results-breakdown__list > .results-breakdown__item');
+    const items = page.locator(
+      '.results-breakdown__list > .results-breakdown__item',
+    );
     await expect(items).toHaveCount(10);
 
     // 7. Start a new quiz
     await page.getByRole('link', { name: 'New Quiz' }).click();
     await expect(page).toHaveURL(/quiz\/setup/);
-    await expect(page.getByRole('heading', { name: 'Set Up Your Quiz' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Set Up Your Quiz' }),
+    ).toBeVisible();
   });
 
-  test('multiple themes quiz uses questions from different themes', async ({ page }) => {
+  test('multiple themes quiz uses questions from different themes', async ({
+    page,
+  }) => {
     await page.goto('/quiz/setup');
 
     // Select two themes
@@ -127,7 +145,11 @@ test.describe('Full Quiz Flow (E2E)', () => {
     }
 
     await expect(page).toHaveURL(/quiz\/results/);
-    await expect(page.locator('.results-summary__difficulty')).toHaveText(/advanced/i);
-    await expect(page.locator('.results-summary__theme-tag')).toHaveText('Refactoring');
+    await expect(page.locator('.results-summary__difficulty')).toHaveText(
+      /advanced/i,
+    );
+    await expect(page.locator('.results-summary__theme-tag')).toHaveText(
+      'Refactoring',
+    );
   });
 });

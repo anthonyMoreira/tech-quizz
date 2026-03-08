@@ -30,7 +30,8 @@ const router = createRouter({
     },
     {
       path: '/history',
-      redirect: '/',
+      name: 'history',
+      component: () => import('@/views/StatisticsView.vue'),
     },
     {
       path: '/:pathMatch(.*)*',

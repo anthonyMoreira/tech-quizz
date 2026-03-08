@@ -25,7 +25,7 @@
       label: 'History',
       icon: '📊',
       to: '/history',
-      disabled: true,
+      disabled: false,
     },
   ] as const;
 

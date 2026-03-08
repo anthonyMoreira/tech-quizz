@@ -52,15 +52,23 @@ test.describe('Results Page', () => {
   test('displays Quiz Complete heading and score', async ({ page }) => {
     const correctCount = await completeQuiz(page);
 
-    await expect(page.getByRole('heading', { name: 'Quiz Complete!' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Quiz Complete!' }),
+    ).toBeVisible();
 
     // Score should show correctCount / 10
-    await expect(page.locator('.results-summary__score-correct')).toHaveText(String(correctCount));
-    await expect(page.locator('.results-summary__score-total')).toHaveText('10');
+    await expect(page.locator('.results-summary__score-correct')).toHaveText(
+      String(correctCount),
+    );
+    await expect(page.locator('.results-summary__score-total')).toHaveText(
+      '10',
+    );
 
     // Percentage should be shown
     const pct = Math.round((correctCount / 10) * 100);
-    await expect(page.locator('.results-summary__score-pct')).toHaveText(`${String(pct)}%`);
+    await expect(page.locator('.results-summary__score-pct')).toHaveText(
+      `${String(pct)}%`,
+    );
   });
 
   test('displays difficulty and theme tags', async ({ page }) => {
@@ -68,24 +76,34 @@ test.describe('Results Page', () => {
 
     // Difficulty should be shown (capitalized via CSS text-transform)
     await expect(page.locator('.results-summary__difficulty')).toBeVisible();
-    await expect(page.locator('.results-summary__difficulty')).toHaveText(/intermediate/i);
+    await expect(page.locator('.results-summary__difficulty')).toHaveText(
+      /intermediate/i,
+    );
 
     // Theme tag should be shown
-    await expect(page.locator('.results-summary__theme-tag')).toHaveText('Design Patterns');
+    await expect(page.locator('.results-summary__theme-tag')).toHaveText(
+      'Design Patterns',
+    );
   });
 
   test('displays question breakdown with 10 items', async ({ page }) => {
     await completeQuiz(page);
 
-    await expect(page.getByRole('heading', { name: 'Question Breakdown' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Question Breakdown' }),
+    ).toBeVisible();
 
     // Should have 10 list items in the breakdown
-    const items = page.locator('.results-breakdown__list > .results-breakdown__item');
+    const items = page.locator(
+      '.results-breakdown__list > .results-breakdown__item',
+    );
     await expect(items).toHaveCount(10);
 
     // Each should show Q1, Q2, ..., Q10
     for (let i = 1; i <= 10; i++) {
-      await expect(page.getByText(`Q${String(i)}`, { exact: true })).toBeVisible();
+      await expect(
+        page.getByText(`Q${String(i)}`, { exact: true }),
+      ).toBeVisible();
     }
   });
 
@@ -101,7 +119,9 @@ test.describe('Results Page', () => {
     expect(totalIndicators).toBe(10);
   });
 
-  test('incorrect answers show "Your answer" and "Correct answer"', async ({ page }) => {
+  test('incorrect answers show "Your answer" and "Correct answer"', async ({
+    page,
+  }) => {
     await completeQuiz(page);
 
     const incorrectCount = await page.getByTestId('result-incorrect').count();
@@ -142,6 +162,8 @@ test.describe('Results Page', () => {
 
     await newQuizLink.click();
     await expect(page).toHaveURL(/quiz\/setup/);
-    await expect(page.getByRole('heading', { name: 'Set Up Your Quiz' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Set Up Your Quiz' }),
+    ).toBeVisible();
   });
 });

@@ -7,6 +7,7 @@ import type {
 } from '@/types/quiz';
 import { themes } from '@/data/questions/index';
 import { useQuestionBank } from '@/composables/useQuestionBank';
+import { useQuizHistory } from '@/composables/useQuizHistory';
 
 const session = ref<{
   selectedThemes: readonly string[];
@@ -21,6 +22,7 @@ const isSubmitting = ref(false);
 
 export function useQuiz() {
   const { selectQuestions } = useQuestionBank();
+  const { saveAttempt } = useQuizHistory();
 
   const isActive = computed(
     () => session.value !== null && !session.value.isComplete,
@@ -81,6 +83,26 @@ export function useQuiz() {
 
     if (session.value.answers.length >= session.value.questions.length) {
       session.value.isComplete = true;
+
+      const attempt = {
+        id: crypto.randomUUID(),
+        timestamp: Date.now(),
+        themes: [...session.value.selectedThemes],
+        answers: session.value.answers.map((a) => {
+          const q = session.value?.questions.find(
+            (question) => question.id === a.questionId,
+          );
+          return {
+            questionId: a.questionId,
+            theme: q?.themeId ?? 'unknown',
+            isCorrect: a.isCorrect,
+          };
+        }),
+      };
+
+      saveAttempt(attempt).catch((e: unknown) => {
+        console.error('Failed to save attempt', e);
+      });
     }
 
     isSubmitting.value = false;

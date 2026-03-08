@@ -7,10 +7,26 @@
     "prompt": "What is the fundamental rule in Clean Architecture that governs how dependencies must flow between layers?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Outer layers must depend on inner layers, never the reverse", "isCorrect": true },
-      { "id": "b", "text": "Inner layers must depend on outer layers for data access", "isCorrect": false },
-      { "id": "c", "text": "All layers must depend on a shared middleware layer", "isCorrect": false },
-      { "id": "d", "text": "Dependencies can flow in any direction as long as interfaces are used", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Outer layers must depend on inner layers, never the reverse",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Inner layers must depend on outer layers for data access",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "All layers must depend on a shared middleware layer",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Dependencies can flow in any direction as long as interfaces are used",
+        "isCorrect": false
+      }
     ],
     "explanation": "The Dependency Rule is the cornerstone of Clean Architecture: source code dependencies must always point inward, meaning outer layers depend on inner layers, never the reverse. This ensures that core business logic (entities and use cases) remains independent of frameworks, databases, and UI concerns. Option B reverses the rule entirely, option C introduces a non-existent middleware concept, and option D ignores the strict directional constraint that makes the architecture work.",
     "bonusFact": "Robert C. Martin introduced this rule in his 2012 blog post on Clean Architecture."
@@ -23,10 +39,26 @@
     "prompt": "How are the layers of Clean Architecture typically visualized?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "As a linear stack of horizontal layers", "isCorrect": false },
-      { "id": "b", "text": "As a tree structure with branches for each concern", "isCorrect": false },
-      { "id": "c", "text": "As concentric circles with entities at the center", "isCorrect": true },
-      { "id": "d", "text": "As a network graph with bidirectional connections", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "As a linear stack of horizontal layers",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "As a tree structure with branches for each concern",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "As concentric circles with entities at the center",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "As a network graph with bidirectional connections",
+        "isCorrect": false
+      }
     ],
     "explanation": "Clean Architecture is visualized as concentric circles (rings), with the most stable and abstract layer — entities — at the center, surrounded by use cases, interface adapters, and frameworks & drivers on the outermost ring. This diagram emphasizes that dependencies point inward toward the center. A linear stack (option A) describes traditional layered architecture, a tree structure (option B) doesn't capture the dependency direction, and a network graph (option D) would imply bidirectional coupling which violates the Dependency Rule.",
     "bonusFact": null
@@ -39,10 +71,26 @@
     "prompt": "What is Clean Architecture primarily designed to achieve?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Maximum runtime performance through optimized data access patterns", "isCorrect": false },
-      { "id": "b", "text": "Separation of concerns so business rules are independent of external details", "isCorrect": true },
-      { "id": "c", "text": "Enforcing a single programming language across the entire system", "isCorrect": false },
-      { "id": "d", "text": "Minimizing the number of files and classes in the project", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Maximum runtime performance through optimized data access patterns",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Separation of concerns so business rules are independent of external details",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Enforcing a single programming language across the entire system",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Minimizing the number of files and classes in the project",
+        "isCorrect": false
+      }
     ],
     "explanation": "Clean Architecture's primary goal is to separate business rules from external concerns like frameworks, databases, and delivery mechanisms so that the core logic can be developed, tested, and maintained independently. It is not focused on runtime performance (option A), which may even incur slight overhead due to additional indirection. It has nothing to do with enforcing a single language (option C) or reducing file count (option D) — in fact, it typically increases the number of files due to explicit boundary definitions.",
     "bonusFact": "Uncle Bob's book 'Clean Architecture' was published in 2017."
@@ -55,10 +103,26 @@
     "prompt": "What does the entities layer in Clean Architecture contain?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Database schemas and ORM configuration", "isCorrect": false },
-      { "id": "b", "text": "HTTP controllers and route definitions", "isCorrect": false },
-      { "id": "c", "text": "Enterprise-wide business rules and core domain objects", "isCorrect": true },
-      { "id": "d", "text": "Third-party library integrations and API clients", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Database schemas and ORM configuration",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "HTTP controllers and route definitions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Enterprise-wide business rules and core domain objects",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Third-party library integrations and API clients",
+        "isCorrect": false
+      }
     ],
     "explanation": "The entities layer sits at the center of Clean Architecture and encapsulates enterprise-wide business rules and core domain objects that are the most stable and least likely to change. These entities represent fundamental business concepts that exist regardless of the application's delivery mechanism. Database schemas and ORM configuration (option A) belong to the frameworks & drivers layer, HTTP controllers (option B) belong to the interface adapters layer, and third-party integrations (option D) belong to the outermost frameworks layer.",
     "bonusFact": null
@@ -71,10 +135,26 @@
     "prompt": "What is the primary responsibility of the use cases layer in Clean Architecture?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Rendering views and formatting output for the user", "isCorrect": false },
-      { "id": "b", "text": "Orchestrating application-specific business rules and workflows", "isCorrect": true },
-      { "id": "c", "text": "Managing database connections and transaction lifecycles", "isCorrect": false },
-      { "id": "d", "text": "Handling network protocols and serialization formats", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Rendering views and formatting output for the user",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Orchestrating application-specific business rules and workflows",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Managing database connections and transaction lifecycles",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Handling network protocols and serialization formats",
+        "isCorrect": false
+      }
     ],
     "explanation": "The use cases layer contains application-specific business logic that orchestrates the flow of data to and from entities, directing them to apply their enterprise-wide rules to fulfill a particular application goal. Rendering views (option A) is the job of the interface adapters or frameworks layer, managing database connections (option C) falls under the frameworks & drivers layer, and handling network protocols (option D) is also an outer-layer concern. Use cases know nothing about these external details.",
     "bonusFact": "Use cases are sometimes called 'interactors' in Clean Architecture."
@@ -87,10 +167,26 @@
     "prompt": "What role does the interface adapters layer play in Clean Architecture?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "It defines the core domain entities and their validation rules", "isCorrect": false },
-      { "id": "b", "text": "It converts data between the format used by use cases and the format used by external agencies", "isCorrect": true },
-      { "id": "c", "text": "It provides low-level system utilities like file I/O and threading", "isCorrect": false },
-      { "id": "d", "text": "It stores configuration settings for all other layers", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It defines the core domain entities and their validation rules",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It converts data between the format used by use cases and the format used by external agencies",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It provides low-level system utilities like file I/O and threading",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It stores configuration settings for all other layers",
+        "isCorrect": false
+      }
     ],
     "explanation": "The interface adapters layer acts as a translator, converting data from the format most convenient for use cases and entities to the format required by external agencies like databases, web frameworks, or UIs. Controllers, presenters, and gateways live in this layer. Defining core entities (option A) is the job of the entities layer, low-level system utilities (option C) belong to the frameworks & drivers layer, and storing configuration (option D) is not a dedicated layer responsibility in Clean Architecture.",
     "bonusFact": null
@@ -103,10 +199,26 @@
     "prompt": "What belongs in the frameworks and drivers layer (the outermost layer) of Clean Architecture?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Application-specific validation rules and workflows", "isCorrect": false },
-      { "id": "b", "text": "Abstract interfaces that define repository contracts", "isCorrect": false },
-      { "id": "c", "text": "Concrete implementations like databases, web frameworks, and external APIs", "isCorrect": true },
-      { "id": "d", "text": "Pure domain entities with no dependencies", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Application-specific validation rules and workflows",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Abstract interfaces that define repository contracts",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Concrete implementations like databases, web frameworks, and external APIs",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Pure domain entities with no dependencies",
+        "isCorrect": false
+      }
     ],
     "explanation": "The frameworks and drivers layer is the outermost ring and contains all the concrete, volatile details: web frameworks like Express or Spring, database drivers, external API clients, and UI frameworks. This layer is where the 'glue code' lives that connects your application to the outside world. Validation rules (option A) belong in use cases or entities, abstract interfaces (option B) belong in inner layers, and pure domain entities (option D) sit at the very center of the architecture.",
     "bonusFact": null
@@ -141,10 +253,26 @@
       "code": "// Inner layer (use cases)\ninterface UserRepository {\n  findById(id: string): Promise<User | null>;\n}\n\n// Outer layer (frameworks)\nclass PostgresUserRepo implements UserRepository {\n  async findById(id: string) {\n    return this.db.query('SELECT * FROM users WHERE id=$1', [id]);\n  }\n}"
     },
     "options": [
-      { "id": "a", "text": "Dependency Inversion — the inner layer defines the interface and the outer layer implements it", "isCorrect": true },
-      { "id": "b", "text": "Single Responsibility — each class has only one method", "isCorrect": false },
-      { "id": "c", "text": "Service Locator — the use case looks up the repository at runtime", "isCorrect": false },
-      { "id": "d", "text": "Inheritance — the Postgres class inherits behavior from the interface", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Dependency Inversion — the inner layer defines the interface and the outer layer implements it",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Single Responsibility — each class has only one method",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Service Locator — the use case looks up the repository at runtime",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Inheritance — the Postgres class inherits behavior from the interface",
+        "isCorrect": false
+      }
     ],
     "explanation": "This code demonstrates Dependency Inversion: the UserRepository interface is defined in the inner (use cases) layer, while the concrete PostgresUserRepo implementation lives in the outer (frameworks) layer. The source code dependency points inward because the outer class implements the inner interface. Single Responsibility (option B) is about having one reason to change, not one method. Service Locator (option C) involves a registry pattern not shown here. Interfaces in TypeScript are implemented, not inherited from (option D) — there is no behavior to inherit from an interface.",
     "bonusFact": null
@@ -160,10 +288,26 @@
       "code": "// Approach A\nimport { PrismaClient } from '@prisma/client';\nclass GetUser {\n  private prisma = new PrismaClient();\n  execute(id: string) {\n    return this.prisma.user.findUnique({ where: { id } });\n  }\n}\n// Approach B\nclass GetUser {\n  constructor(private repo: UserRepository) {}\n  execute(id: string) {\n    return this.repo.findById(id);\n  }\n}"
     },
     "options": [
-      { "id": "a", "text": "Approach A is faster at runtime due to fewer abstractions", "isCorrect": false },
-      { "id": "b", "text": "Approach B violates the Dependency Rule by introducing an extra interface", "isCorrect": false },
-      { "id": "c", "text": "Approach B follows Clean Architecture because the use case depends on an abstraction, not a concrete framework", "isCorrect": true },
-      { "id": "d", "text": "Both approaches are equivalent in Clean Architecture since they produce the same result", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Approach A is faster at runtime due to fewer abstractions",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Approach B violates the Dependency Rule by introducing an extra interface",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Approach B follows Clean Architecture because the use case depends on an abstraction, not a concrete framework",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Both approaches are equivalent in Clean Architecture since they produce the same result",
+        "isCorrect": false
+      }
     ],
     "explanation": "Approach B correctly follows Clean Architecture by depending on an abstract UserRepository interface rather than a concrete Prisma implementation, keeping the use case layer independent of the database framework. Approach A directly imports and uses PrismaClient, coupling the business logic to a specific ORM and violating the Dependency Rule. Option A's claim about runtime speed is irrelevant to architectural correctness, option B incorrectly states that abstractions violate the rule (they enable it), and option D ignores the fundamental structural difference between the two approaches.",
     "bonusFact": "This pattern is also known as the Repository Pattern or Port/Adapter."
@@ -176,10 +320,26 @@
     "prompt": "In Clean Architecture, what is the role of a use case interactor?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "It maps HTTP request parameters to domain objects", "isCorrect": false },
-      { "id": "b", "text": "It contains application-specific business logic and orchestrates entities to fulfill a request", "isCorrect": true },
-      { "id": "c", "text": "It serializes domain objects into JSON for API responses", "isCorrect": false },
-      { "id": "d", "text": "It manages the lifecycle of database connections and transactions", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It maps HTTP request parameters to domain objects",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It contains application-specific business logic and orchestrates entities to fulfill a request",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It serializes domain objects into JSON for API responses",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It manages the lifecycle of database connections and transactions",
+        "isCorrect": false
+      }
     ],
     "explanation": "A use case interactor is the concrete implementation of a use case — it contains application-specific business rules and orchestrates the interaction between entities, repositories, and other abstractions to fulfill a specific application request. Mapping HTTP parameters (option A) is the job of a controller in the interface adapters layer, serializing to JSON (option C) is a presenter or serializer responsibility, and managing database connections (option D) belongs in the frameworks & drivers layer. The interactor knows what to do but not how external systems work.",
     "bonusFact": null
@@ -195,10 +355,26 @@
       "code": "// Use cases layer\nexport interface CreateOrderInputPort {\n  execute(req: CreateOrderRequest): Promise<CreateOrderResponse>;\n}\nexport interface OrderOutputPort {\n  present(response: CreateOrderResponse): void;\n}\n// Adapters layer\nexport class OrderController {\n  constructor(private useCase: CreateOrderInputPort) {}\n  async handlePost(req: HttpRequest): Promise<void> {\n    await this.useCase.execute(this.mapToRequest(req));\n  }\n}"
     },
     "options": [
-      { "id": "a", "text": "The Mediator pattern for decoupling event handlers", "isCorrect": false },
-      { "id": "b", "text": "Input/output ports and adapters for boundary crossing", "isCorrect": true },
-      { "id": "c", "text": "The Observer pattern for reactive state management", "isCorrect": false },
-      { "id": "d", "text": "The Factory pattern for creating use case instances", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "The Mediator pattern for decoupling event handlers",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Input/output ports and adapters for boundary crossing",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The Observer pattern for reactive state management",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The Factory pattern for creating use case instances",
+        "isCorrect": false
+      }
     ],
     "explanation": "This code demonstrates the input/output ports and adapters pattern central to Clean Architecture. The InputPort and OutputPort interfaces are defined in the use cases layer, while the OrderController (an adapter) lives in the interface adapters layer and depends on the InputPort abstraction. This ensures the flow of control crosses boundaries through well-defined contracts. The Mediator pattern (option A) involves a central coordinator for multiple handlers, the Observer pattern (option C) deals with event subscriptions, and the Factory pattern (option D) focuses on object creation — none of which describe the boundary-crossing mechanism shown here.",
     "bonusFact": "Ports belong to the inner layer; adapters belong to the outer layer."
@@ -211,10 +387,26 @@
     "prompt": "In Clean Architecture, what is the role of a presenter?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "It validates incoming user input before passing it to the use case", "isCorrect": false },
-      { "id": "b", "text": "It converts use case output into a view model suitable for the UI layer", "isCorrect": true },
-      { "id": "c", "text": "It manages the routing table and dispatches requests to controllers", "isCorrect": false },
-      { "id": "d", "text": "It handles authentication and authorization logic", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It validates incoming user input before passing it to the use case",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It converts use case output into a view model suitable for the UI layer",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It manages the routing table and dispatches requests to controllers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It handles authentication and authorization logic",
+        "isCorrect": false
+      }
     ],
     "explanation": "A presenter in Clean Architecture takes the raw output from a use case (the output data) and formats it into a view model that the view can directly render, such as formatting dates, composing display strings, or mapping status codes to user-friendly messages. This separation ensures that formatting logic does not pollute the use case, keeping business rules and presentation concerns independent. Input validation (option A) is typically handled by the controller or the use case itself, routing (option C) is an infrastructure concern handled by the web framework, and authentication (option D) is a cross-cutting concern that sits outside the presenter's responsibility.",
     "bonusFact": "Presenters implement the output port interface defined by the use case."
@@ -227,10 +419,26 @@
     "prompt": "Why are Data Transfer Objects (DTOs) used at layer boundaries in Clean Architecture?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "To improve runtime performance by reducing object size", "isCorrect": false },
-      { "id": "b", "text": "To prevent inner layers from leaking implementation details to outer layers and vice versa", "isCorrect": true },
-      { "id": "c", "text": "To automatically validate all fields using reflection at compile time", "isCorrect": false },
-      { "id": "d", "text": "To enforce type safety that TypeScript cannot provide on its own", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "To improve runtime performance by reducing object size",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To prevent inner layers from leaking implementation details to outer layers and vice versa",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To automatically validate all fields using reflection at compile time",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To enforce type safety that TypeScript cannot provide on its own",
+        "isCorrect": false
+      }
     ],
     "explanation": "DTOs at layer boundaries ensure that each layer communicates through simple, purpose-specific data structures rather than passing around domain entities or framework-specific objects. This prevents inner layers from being contaminated by outer layer details (like ORM annotations) and stops domain entities from being exposed directly to external consumers. Performance optimization (option A) is not the primary motivation, compile-time reflection-based validation (option C) is not a standard DTO feature, and TypeScript already provides type safety (option D) — DTOs are about architectural decoupling, not language limitations.",
     "bonusFact": null
@@ -243,10 +451,26 @@
     "prompt": "How does the repository pattern support Clean Architecture's Dependency Rule?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "The repository interface is defined in the use cases layer, while its implementation lives in the outer layer", "isCorrect": true },
-      { "id": "b", "text": "The repository provides a singleton database connection shared across all layers", "isCorrect": false },
-      { "id": "c", "text": "The repository automatically caches all query results to reduce database calls", "isCorrect": false },
-      { "id": "d", "text": "The repository must be defined in the frameworks layer since it deals with data storage", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "The repository interface is defined in the use cases layer, while its implementation lives in the outer layer",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The repository provides a singleton database connection shared across all layers",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The repository automatically caches all query results to reduce database calls",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The repository must be defined in the frameworks layer since it deals with data storage",
+        "isCorrect": false
+      }
     ],
     "explanation": "The repository pattern supports the Dependency Rule by placing the abstract repository interface in the use cases (or domain) layer and the concrete implementation in the outer frameworks & drivers layer. The use case depends only on the abstraction, so the dependency arrow points inward. A singleton connection (option B) is an implementation detail unrelated to the architectural rule, automatic caching (option C) is an optimization concern not intrinsic to the pattern, and placing the repository definition in the frameworks layer (option D) would force inner layers to depend outward, violating the rule.",
     "bonusFact": "Repositories are a specific type of 'gateway' in Clean Architecture."
@@ -262,10 +486,26 @@
       "code": "class InMemoryUserRepo implements UserRepository {\n  private users: User[] = [];\n  async findById(id: string) {\n    return this.users.find(u => u.id === id) ?? null;\n  }\n  async save(user: User) { this.users.push(user); }\n}\ntest('registers a new user', async () => {\n  const repo = new InMemoryUserRepo();\n  const useCase = new RegisterUser(repo);\n  await useCase.execute({ name: 'Alice', email: 'a@b.com' });\n  expect(await repo.findById('1')).toBeDefined();\n});"
     },
     "options": [
-      { "id": "a", "text": "The Liskov Substitution Principle — the in-memory repo is a subtype of the real one", "isCorrect": false },
-      { "id": "b", "text": "Dependency Inversion — the use case depends on the UserRepository abstraction, not a concrete database implementation", "isCorrect": true },
-      { "id": "c", "text": "The Open/Closed Principle — the use case is open for extension but closed for modification", "isCorrect": false },
-      { "id": "d", "text": "Interface Segregation — the repository interface has been split into read and write interfaces", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "The Liskov Substitution Principle — the in-memory repo is a subtype of the real one",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Dependency Inversion — the use case depends on the UserRepository abstraction, not a concrete database implementation",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The Open/Closed Principle — the use case is open for extension but closed for modification",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Interface Segregation — the repository interface has been split into read and write interfaces",
+        "isCorrect": false
+      }
     ],
     "explanation": "This test works because the RegisterUser use case depends on the abstract UserRepository interface (Dependency Inversion), allowing an in-memory implementation to be swapped in without any changes to the use case code. This is the core mechanism that makes use cases testable in isolation in Clean Architecture. While Liskov Substitution (option A) is tangentially involved, the primary enabling principle is Dependency Inversion. The Open/Closed Principle (option C) is about extensibility, not testability via substitution. Interface Segregation (option D) is not demonstrated since the code shows a single unified repository interface.",
     "bonusFact": null
@@ -278,10 +518,26 @@
     "prompt": "What does Robert C. Martin mean by 'Screaming Architecture'?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "The project structure should loudly communicate the business domain, not the framework being used", "isCorrect": true },
-      { "id": "b", "text": "Error messages and logs should be extremely verbose and descriptive", "isCorrect": false },
-      { "id": "c", "text": "Code reviews should aggressively flag any violation of SOLID principles", "isCorrect": false },
-      { "id": "d", "text": "Build warnings should be treated as errors and break the CI pipeline", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "The project structure should loudly communicate the business domain, not the framework being used",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Error messages and logs should be extremely verbose and descriptive",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Code reviews should aggressively flag any violation of SOLID principles",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Build warnings should be treated as errors and break the CI pipeline",
+        "isCorrect": false
+      }
     ],
     "explanation": "Screaming Architecture means that when you look at the top-level directory structure of a project, it should immediately tell you what the application does (e.g., 'orders', 'invoices', 'patients') rather than what framework it uses (e.g., 'controllers', 'models', 'views'). The architecture should 'scream' its intent. Verbose logging (option B), aggressive code reviews (option C), and strict CI policies (option D) are all valid engineering practices but have nothing to do with the Screaming Architecture concept, which is purely about how project structure communicates business purpose.",
     "bonusFact": "A healthcare app's top-level folders might be 'patients', 'appointments', 'billing'."
@@ -294,10 +550,26 @@
     "prompt": "In Clean Architecture, what is a gateway interface?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "An API gateway that handles rate limiting and load balancing", "isCorrect": false },
-      { "id": "b", "text": "An abstract interface defined in an inner layer to access external systems without depending on their details", "isCorrect": true },
-      { "id": "c", "text": "A concrete class that wraps multiple third-party libraries behind a unified API", "isCorrect": false },
-      { "id": "d", "text": "A network proxy that translates between different communication protocols", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "An API gateway that handles rate limiting and load balancing",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "An abstract interface defined in an inner layer to access external systems without depending on their details",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A concrete class that wraps multiple third-party libraries behind a unified API",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A network proxy that translates between different communication protocols",
+        "isCorrect": false
+      }
     ],
     "explanation": "In Clean Architecture, a gateway is an abstract interface defined in the use cases or domain layer that specifies how the application interacts with external systems (databases, APIs, file systems) without coupling to their concrete implementations. The outer layer provides the concrete implementation. An API gateway for rate limiting (option A) is an infrastructure component, a concrete wrapper class (option C) is an implementation detail rather than the abstraction itself, and a network proxy (option D) is a deployment-level concern unrelated to the architectural boundary concept.",
     "bonusFact": null
@@ -310,10 +582,26 @@
     "prompt": "How does Clean Architecture differ from Hexagonal Architecture (Ports and Adapters)?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "They are fundamentally different — Clean Architecture uses layers while Hexagonal does not", "isCorrect": false },
-      { "id": "b", "text": "Hexagonal Architecture focuses on two sides (driving and driven) while Clean Architecture specifies four concentric layers", "isCorrect": true },
-      { "id": "c", "text": "Clean Architecture requires microservices while Hexagonal works only with monoliths", "isCorrect": false },
-      { "id": "d", "text": "Hexagonal Architecture does not use dependency inversion, unlike Clean Architecture", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "They are fundamentally different — Clean Architecture uses layers while Hexagonal does not",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Hexagonal Architecture focuses on two sides (driving and driven) while Clean Architecture specifies four concentric layers",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Clean Architecture requires microservices while Hexagonal works only with monoliths",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Hexagonal Architecture does not use dependency inversion, unlike Clean Architecture",
+        "isCorrect": false
+      }
     ],
     "explanation": "While both architectures share the same core principle of isolating business logic from infrastructure, Hexagonal Architecture structures the system around driving (primary) and driven (secondary) ports and adapters, forming two sides around the application core. Clean Architecture refines this into four explicit concentric layers: entities, use cases, interface adapters, and frameworks & drivers. They are not fundamentally different (option A) — they share the same goals. Neither mandates a specific deployment topology like microservices (option C), and both rely heavily on dependency inversion (option D).",
     "bonusFact": "Hexagonal Architecture was introduced by Alistair Cockburn in 2005."
@@ -329,10 +617,26 @@
       "code": "// Use case layer\ninterface OrderResponse {\n  orderId: string;\n  totalCents: number;\n}\n// Adapter layer\nclass OrderPresenter {\n  toViewModel(response: OrderResponse) {\n    return {\n      id: response.orderId,\n      total: `$${(response.totalCents / 100).toFixed(2)}`,\n      displayDate: new Date().toLocaleDateString(),\n    };\n  }\n}"
     },
     "options": [
-      { "id": "a", "text": "Converting raw use case output into a UI-ready view model at the adapter boundary", "isCorrect": true },
-      { "id": "b", "text": "Validating incoming HTTP request data before it reaches the use case", "isCorrect": false },
-      { "id": "c", "text": "Mapping database rows into domain entities for the repository", "isCorrect": false },
-      { "id": "d", "text": "Encrypting sensitive data before crossing the network boundary", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Converting raw use case output into a UI-ready view model at the adapter boundary",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Validating incoming HTTP request data before it reaches the use case",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Mapping database rows into domain entities for the repository",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Encrypting sensitive data before crossing the network boundary",
+        "isCorrect": false
+      }
     ],
     "explanation": "This code shows a presenter in the adapter layer converting a use case output (OrderResponse with raw cents) into a view model with formatted currency strings and display dates — a classic outbound boundary crossing in Clean Architecture. The presenter ensures the UI doesn't need to know about the use case's internal data representation. It's not about inbound validation (option B), which would happen in a controller. It's not database-to-entity mapping (option C), which is a repository concern. And it's not about encryption (option D), which is an infrastructure concern.",
     "bonusFact": "View models should contain only strings and primitives ready for display."
@@ -345,10 +649,26 @@
     "prompt": "How can CQRS (Command Query Responsibility Segregation) be integrated with Clean Architecture?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "By replacing the entities layer with separate command and query models", "isCorrect": false },
-      { "id": "b", "text": "By defining separate command and query use case interactors with distinct input/output ports", "isCorrect": true },
-      { "id": "c", "text": "By removing the interface adapters layer and routing commands directly to the database", "isCorrect": false },
-      { "id": "d", "text": "By using a single use case interactor that switches behavior based on a read/write flag", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "By replacing the entities layer with separate command and query models",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "By defining separate command and query use case interactors with distinct input/output ports",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "By removing the interface adapters layer and routing commands directly to the database",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "By using a single use case interactor that switches behavior based on a read/write flag",
+        "isCorrect": false
+      }
     ],
     "explanation": "CQRS integrates naturally with Clean Architecture by having separate use case interactors for commands (write operations) and queries (read operations), each with their own input/output ports and potentially different data models. The entities layer remains intact (option A is wrong — entities still encapsulate core business rules). Removing the adapters layer (option C) would violate Clean Architecture's fundamental structure. A single interactor with a flag (option D) conflates read and write concerns, defeating CQRS's purpose of separating them for independent optimization and scaling.",
     "bonusFact": "CQRS query paths can bypass the domain layer for read-optimized views."
@@ -361,10 +681,26 @@
     "prompt": "What is the recommended approach for handling cross-cutting concerns like logging and authentication in Clean Architecture?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Embed logging and auth logic directly into every use case interactor", "isCorrect": false },
-      { "id": "b", "text": "Use decorator or middleware patterns in the adapter layer that wrap use case interactors", "isCorrect": true },
-      { "id": "c", "text": "Add a dedicated cross-cutting layer between entities and use cases", "isCorrect": false },
-      { "id": "d", "text": "Handle all cross-cutting concerns exclusively in the entities layer for consistency", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Embed logging and auth logic directly into every use case interactor",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use decorator or middleware patterns in the adapter layer that wrap use case interactors",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Add a dedicated cross-cutting layer between entities and use cases",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Handle all cross-cutting concerns exclusively in the entities layer for consistency",
+        "isCorrect": false
+      }
     ],
     "explanation": "Cross-cutting concerns like logging, authentication, and caching are best handled using the decorator pattern or middleware in the interface adapters layer, wrapping use case interactors without modifying their code. This keeps use cases focused on business logic and follows the Single Responsibility and Open/Closed principles. Embedding logic directly in every interactor (option A) creates duplication and violates SRP. A new layer between entities and use cases (option C) breaks the standard concentric model. Placing cross-cutting logic in the entities layer (option D) would pollute the most stable layer with volatile infrastructure concerns.",
     "bonusFact": null
@@ -380,10 +716,26 @@
       "code": "// Controller -> maps HttpRequest to DTO\nconst dto = RequestMapper.toDTO(httpReq);\n\n// Use case -> maps DTO to domain entity\nconst entity = UserEntity.fromDTO(dto);\nentity.applyBusinessRule();\nconst resultDTO = entity.toResponseDTO();\n\n// Presenter -> maps DTO to ViewModel\nconst viewModel = Presenter.format(resultDTO);\n\n// View -> renders ViewModel\nreturn res.json(viewModel);"
     },
     "options": [
-      { "id": "a", "text": "Multiple data mapping steps add allocation overhead, traded for strict layer isolation and testability", "isCorrect": true },
-      { "id": "b", "text": "The synchronous execution blocks the event loop, traded for simpler error handling", "isCorrect": false },
-      { "id": "c", "text": "The lack of caching causes repeated database queries, traded for data consistency", "isCorrect": false },
-      { "id": "d", "text": "The deep inheritance hierarchy causes slow method resolution, traded for code reuse", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Multiple data mapping steps add allocation overhead, traded for strict layer isolation and testability",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The synchronous execution blocks the event loop, traded for simpler error handling",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The lack of caching causes repeated database queries, traded for data consistency",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The deep inheritance hierarchy causes slow method resolution, traded for code reuse",
+        "isCorrect": false
+      }
     ],
     "explanation": "This code shows four data mapping steps (HTTP to DTO, DTO to entity, entity to response DTO, DTO to view model), each creating new objects. This allocation and mapping overhead is a known performance cost of strict Clean Architecture, traded for clear layer isolation, independent testability, and the ability to change one layer without affecting others. Synchronous blocking (option B) is unrelated to the architecture pattern. No database queries are shown (option C), so caching isn't the concern. There's no inheritance hierarchy (option D) — the code uses composition and mapping.",
     "bonusFact": null
@@ -396,10 +748,26 @@
     "prompt": "How can Clean Architecture principles be applied in a frontend single-page application?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "By placing all logic in framework components since frontends don't have business rules", "isCorrect": false },
-      { "id": "b", "text": "By separating domain logic into framework-agnostic modules with use cases that orchestrate state and API calls through port interfaces", "isCorrect": true },
-      { "id": "c", "text": "By using server-side rendering to move all business logic to the backend", "isCorrect": false },
-      { "id": "d", "text": "By ensuring every component has its own dedicated API endpoint", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "By placing all logic in framework components since frontends don't have business rules",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "By separating domain logic into framework-agnostic modules with use cases that orchestrate state and API calls through port interfaces",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "By using server-side rendering to move all business logic to the backend",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "By ensuring every component has its own dedicated API endpoint",
+        "isCorrect": false
+      }
     ],
     "explanation": "Clean Architecture on the frontend means extracting domain logic and use cases into plain TypeScript/JavaScript modules with no framework imports, defining port interfaces for API calls and state management, and having framework-specific adapters (React hooks, Vue composables) implement those ports. This keeps business logic testable and portable across framework migrations. Option A dismisses frontend business logic, which is increasingly complex in modern SPAs. Option C avoids the problem rather than solving it. Option D confuses API design with architecture and has no bearing on layer separation.",
     "bonusFact": "Frontend Clean Architecture survived migrations from AngularJS to React."
@@ -412,10 +780,26 @@
     "prompt": "What challenge does applying Clean Architecture to micro-frontends introduce?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Each micro-frontend must use the exact same framework and version", "isCorrect": false },
-      { "id": "b", "text": "Shared domain entities and use cases across independently deployed micro-frontends create coupling and versioning challenges", "isCorrect": true },
-      { "id": "c", "text": "Clean Architecture makes micro-frontends impossible because layers cannot span multiple deployables", "isCorrect": false },
-      { "id": "d", "text": "Micro-frontends eliminate the need for Clean Architecture since each is small enough to be simple", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Each micro-frontend must use the exact same framework and version",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Shared domain entities and use cases across independently deployed micro-frontends create coupling and versioning challenges",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Clean Architecture makes micro-frontends impossible because layers cannot span multiple deployables",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Micro-frontends eliminate the need for Clean Architecture since each is small enough to be simple",
+        "isCorrect": false
+      }
     ],
     "explanation": "When applying Clean Architecture across micro-frontends, sharing domain entities and use cases between independently deployed units introduces coupling — changes to shared domain code require coordinated releases, undermining the independence that micro-frontends aim for. Teams must decide between duplicating domain logic or managing shared packages with careful versioning. Option A is incorrect because micro-frontends specifically allow different frameworks. Option C is too absolute — Clean Architecture can work within each micro-frontend. Option D wrongly assumes small size eliminates the need for structured separation of concerns.",
     "bonusFact": null
@@ -431,10 +815,26 @@
       "code": "interface DomainEventPublisher {\n  publish(event: DomainEvent): Promise<void>;\n}\nclass PlaceOrder {\n  constructor(\n    private repo: OrderRepository,\n    private events: DomainEventPublisher\n  ) {}\n  async execute(cmd: PlaceOrderCmd) {\n    const order = Order.create(cmd);\n    await this.repo.save(order);\n    await this.events.publish(new OrderPlaced(order.id));\n  }\n}"
     },
     "options": [
-      { "id": "a", "text": "Synchronous request-response boundary where the caller waits for all downstream processing", "isCorrect": false },
-      { "id": "b", "text": "Event-driven boundary where the use case publishes domain events through a port, decoupling it from downstream consumers", "isCorrect": true },
-      { "id": "c", "text": "Saga pattern where the use case coordinates a multi-step distributed transaction", "isCorrect": false },
-      { "id": "d", "text": "Callback pattern where downstream services inject their handlers into the use case", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Synchronous request-response boundary where the caller waits for all downstream processing",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Event-driven boundary where the use case publishes domain events through a port, decoupling it from downstream consumers",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Saga pattern where the use case coordinates a multi-step distributed transaction",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Callback pattern where downstream services inject their handlers into the use case",
+        "isCorrect": false
+      }
     ],
     "explanation": "This code implements an event-driven boundary where the PlaceOrder use case publishes a domain event through an abstract DomainEventPublisher port. The use case doesn't know or care who consumes the event — the concrete publisher in the outer layer routes it to message queues, other services, or local handlers. This achieves loose coupling at the architectural boundary. Option A is wrong because domain events are inherently asynchronous in nature. Option C describes a saga which involves compensating transactions across steps, not shown here. Option D would require the use case to accept handler functions, creating inward dependencies from consumers.",
     "bonusFact": null
@@ -447,10 +847,26 @@
     "prompt": "In which scenario is adopting full Clean Architecture likely overkill?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "A large enterprise system with multiple teams and a 10-year maintenance horizon", "isCorrect": false },
-      { "id": "b", "text": "A short-lived prototype or CRUD application with minimal business logic", "isCorrect": true },
-      { "id": "c", "text": "A system that must support swapping between multiple database vendors", "isCorrect": false },
-      { "id": "d", "text": "A healthcare application with complex regulatory compliance rules", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "A large enterprise system with multiple teams and a 10-year maintenance horizon",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A short-lived prototype or CRUD application with minimal business logic",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A system that must support swapping between multiple database vendors",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A healthcare application with complex regulatory compliance rules",
+        "isCorrect": false
+      }
     ],
     "explanation": "Full Clean Architecture adds significant structural overhead — multiple layers, boundary interfaces, DTOs, and mappers — which is not justified for a short-lived prototype or simple CRUD app with little to no business logic. The cost of the abstraction exceeds its benefit when the domain is trivial and longevity is not a concern. Large enterprise systems (option A) benefit greatly from the maintainability Clean Architecture provides. Systems needing vendor flexibility (option C) directly benefit from the Dependency Rule. Healthcare apps (option D) with complex rules need the testability and isolation Clean Architecture offers.",
     "bonusFact": "Martin Fowler calls unnecessary abstraction 'speculative generality'."
@@ -463,10 +879,26 @@
     "prompt": "What is a practical partial adoption strategy for introducing Clean Architecture into an existing codebase?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "Rewrite the entire application from scratch following all four concentric layers", "isCorrect": false },
-      { "id": "b", "text": "Start by extracting domain logic behind repository interfaces and use case boundaries for new features only", "isCorrect": true },
-      { "id": "c", "text": "Add all four layers simultaneously to every existing module before writing new code", "isCorrect": false },
-      { "id": "d", "text": "Adopt only the entities layer and skip all other layers as unnecessary overhead", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Rewrite the entire application from scratch following all four concentric layers",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Start by extracting domain logic behind repository interfaces and use case boundaries for new features only",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Add all four layers simultaneously to every existing module before writing new code",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Adopt only the entities layer and skip all other layers as unnecessary overhead",
+        "isCorrect": false
+      }
     ],
     "explanation": "The most practical partial adoption strategy is to introduce Clean Architecture incrementally: start by defining repository interfaces and use case boundaries for new features while leaving existing code untouched, then gradually refactor legacy modules as they're modified. A full rewrite (option A) is high-risk and often fails in practice. Refactoring all modules simultaneously (option C) is impractical and disrupts ongoing development. Adopting only entities (option D) misses the crucial use case and adapter layers that provide the real architectural benefits of testability and framework independence.",
     "bonusFact": null
@@ -482,10 +914,26 @@
       "code": "class CreateUserUseCase {\n  constructor(\n    private db: PrismaClient, private mailer: SendGridClient,\n    private logger: WinstonLogger, private cache: RedisClient\n  ) {}\n  async execute(input: CreateUserInput) {\n    this.logger.info('Creating user...');\n    const cached = await this.cache.get(input.email);\n    if (cached) return JSON.parse(cached);\n    const user = await this.db.user.create({ data: input });\n    await this.mailer.send(input.email, 'Welcome!');\n    return user;\n  }\n}"
     },
     "options": [
-      { "id": "a", "text": "Leaking infrastructure details — the use case directly depends on concrete framework classes instead of abstractions", "isCorrect": true },
-      { "id": "b", "text": "Anemic domain model — the entities lack business logic", "isCorrect": false },
-      { "id": "c", "text": "God class — the use case has too many lines of code", "isCorrect": false },
-      { "id": "d", "text": "Circular dependency — the use case depends on itself through the cache", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "Leaking infrastructure details — the use case directly depends on concrete framework classes instead of abstractions",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Anemic domain model — the entities lack business logic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "God class — the use case has too many lines of code",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Circular dependency — the use case depends on itself through the cache",
+        "isCorrect": false
+      }
     ],
     "explanation": "This use case directly depends on four concrete infrastructure classes (PrismaClient, SendGridClient, WinstonLogger, RedisClient) instead of abstract interfaces, violating the Dependency Rule and making the use case impossible to test without real infrastructure. Every constructor parameter should be an abstract port/interface defined in the use cases layer. While an anemic domain model (option B) may also be a concern, the code doesn't show entities at all so it's not the demonstrated anti-pattern. The class isn't excessively long (option C), and there's no circular dependency (option D) — the cache call doesn't create a self-referencing cycle.",
     "bonusFact": "This anti-pattern is called 'infrastructure leak' or 'leaky abstraction'."
@@ -498,10 +946,26 @@
     "prompt": "Why is mapping between domain models and persistence models important in Clean Architecture, and what is the key trade-off?",
     "codeSnippet": null,
     "options": [
-      { "id": "a", "text": "It ensures database tables exactly mirror domain objects, simplifying queries at the cost of flexibility", "isCorrect": false },
-      { "id": "b", "text": "It allows domain models to evolve independently from the database schema, at the cost of additional mapping code and complexity", "isCorrect": true },
-      { "id": "c", "text": "It eliminates the need for database migrations by keeping models in sync automatically", "isCorrect": false },
-      { "id": "d", "text": "It enables using NoSQL and SQL databases simultaneously without any additional configuration", "isCorrect": false }
+      {
+        "id": "a",
+        "text": "It ensures database tables exactly mirror domain objects, simplifying queries at the cost of flexibility",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It allows domain models to evolve independently from the database schema, at the cost of additional mapping code and complexity",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It eliminates the need for database migrations by keeping models in sync automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It enables using NoSQL and SQL databases simultaneously without any additional configuration",
+        "isCorrect": false
+      }
     ],
     "explanation": "Separating domain models from persistence models is essential in Clean Architecture because it allows the domain to evolve based on business needs without being constrained by the database schema, and vice versa. The domain model can use rich value objects and aggregates while the persistence model can be optimized for storage and querying. The trade-off is additional mapper code that must be maintained. Option A describes the opposite — tightly coupling models — which Clean Architecture avoids. Option C is incorrect because schema changes still require migrations regardless of model separation. Option D oversimplifies multi-database support, which requires far more than just model separation.",
     "bonusFact": null

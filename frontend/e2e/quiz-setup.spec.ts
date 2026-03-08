@@ -6,8 +6,12 @@ test.describe('Quiz Setup', () => {
   });
 
   test('displays setup page with title and sections', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Set Up Your Quiz' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Difficulty' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Set Up Your Quiz' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Difficulty' }),
+    ).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Themes' })).toBeVisible();
   });
 
@@ -30,14 +34,20 @@ test.describe('Quiz Setup', () => {
     await expect(intermediate).toHaveAttribute('aria-checked', 'false');
   });
 
-  test('Start Quiz button is disabled when no themes selected', async ({ page }) => {
+  test('Start Quiz button is disabled when no themes selected', async ({
+    page,
+  }) => {
     const startBtn = page.getByRole('button', { name: /Start Quiz/ });
     await expect(startBtn).toBeDisabled();
   });
 
   test('can select and deselect themes', async ({ page }) => {
-    const dddButton = page.getByRole('button', { name: /Domain-Driven Design/ });
-    const tddButton = page.getByRole('button', { name: /Test-Driven Development/ });
+    const dddButton = page.getByRole('button', {
+      name: /Domain-Driven Design/,
+    });
+    const tddButton = page.getByRole('button', {
+      name: /Test-Driven Development/,
+    });
 
     // Select DDD
     await dddButton.click();
@@ -58,7 +68,9 @@ test.describe('Quiz Setup', () => {
     await expect(startBtn).toContainText('1 theme');
   });
 
-  test('clicking Start Quiz with themes selected navigates to quiz play', async ({ page }) => {
+  test('clicking Start Quiz with themes selected navigates to quiz play', async ({
+    page,
+  }) => {
     // Select a theme
     await page.getByRole('button', { name: /SOLID Principles/ }).click();
 
@@ -69,7 +81,9 @@ test.describe('Quiz Setup', () => {
     await expect(page).toHaveURL(/quiz\/play/);
   });
 
-  test('all 8 themes are available at beginner difficulty', async ({ page }) => {
+  test('all 8 themes are available at beginner difficulty', async ({
+    page,
+  }) => {
     const themeGroup = page.getByRole('group', { name: /Select quiz themes/ });
     const themeButtons = themeGroup.getByRole('button');
     await expect(themeButtons).toHaveCount(8);

@@ -5,9 +5,11 @@
   import DifficultySelector from '@/components/quiz/DifficultySelector.vue';
   import ThemeSelector from '@/components/quiz/ThemeSelector.vue';
   import { useQuiz } from '@/composables/useQuiz';
+  import { useQuizHistory } from '@/composables/useQuizHistory';
 
   const router = useRouter();
   const { startQuiz } = useQuiz();
+  const { themeStats } = useQuizHistory();
 
   const selectedDifficulty = ref<Difficulty>('beginner');
   const selectedThemes = ref<string[]>([]);
@@ -40,6 +42,7 @@
       <ThemeSelector
         v-model="selectedThemes"
         :difficulty="selectedDifficulty"
+        :theme-stats="themeStats"
       />
       <p v-if="showValidationError" class="quiz-setup-view__error" role="alert">
         Please select at least one theme to start the quiz.

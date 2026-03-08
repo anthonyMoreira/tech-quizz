@@ -1,0 +1,53 @@
+:root {
+  /* Colors */
+  --color-bg: #0d0d0d;
+  --color-surface: #1a1a2e;
+  --color-surface-elevated: #1e1e3a;
+  --color-primary: #ff6b6b;
+  --color-secondary: #ee5a9d;
+  --color-accent: #4ecdc4;
+  --color-text: #ffffff;
+  --color-text-muted: #a0a0b0;
+  --color-code-bg: #252540;
+  --color-border: rgba(255, 255, 255, 0.1);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #ff6b6b, #ee5a9d);
+  --gradient-accent: linear-gradient(135deg, #4ecdc4, #44b3aa);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(10px);
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* Border radius */
+  --border-radius: 16px;
+  --border-radius-sm: 8px;
+  --border-radius-lg: 24px;
+
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+
+  /* Transitions */
+  --transition: 300ms ease;
+  --transition-fast: 150ms ease;
+
+  /* Layout */
+  --sidebar-width: 72px;
+  --bottom-nav-height: 64px;
+  --breakpoint-mobile: 768px;
+
+  /* Z-index */
+  --z-nav: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+}

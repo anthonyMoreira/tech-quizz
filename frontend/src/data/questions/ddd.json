@@ -1,0 +1,1084 @@
+[
+  {
+    "id": "ddd-beg-001",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the primary purpose of a Bounded Context in Domain-Driven Design?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To define clear ownership boundaries where a domain model applies consistently",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To manage database schemas and table relationships",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To handle HTTP API versioning and routing",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To define microservice deployment boundaries",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A Bounded Context defines the explicit boundary within which a particular domain model is defined and applicable. Within this boundary, every term has a precise meaning and the model is internally consistent. Different Bounded Contexts may use the same word (e.g., 'Customer') to mean different things. Options B, C, and D are operational concerns, not what Bounded Contexts are fundamentally about.",
+    "bonusFact": "Eric Evans introduced Bounded Contexts in his 2003 'blue book' on Domain-Driven Design."
+  },
+  {
+    "id": "ddd-beg-002",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What distinguishes an Entity from a Value Object in DDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Entities have database tables; Value Objects do not",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Entities are defined by identity; Value Objects are defined by their attributes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Entities are mutable; Value Objects are always persisted",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Entities have no behavior; Value Objects encapsulate business logic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Entities are objects that have a distinct identity that runs through time — two Entities with the same attributes are still different if they have different identities (e.g., two users named 'John'). Value Objects, in contrast, have no identity — they are equal if all their attributes are equal (e.g., two Money objects of $10 are interchangeable). Value Objects should be immutable.",
+    "bonusFact": "Value Objects make great candidates for immutable records in modern languages like Kotlin data classes or Java records."
+  },
+  {
+    "id": "ddd-beg-003",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the role of the Ubiquitous Language in Domain-Driven Design?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A programming language chosen for its widespread adoption",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A shared vocabulary used by both developers and domain experts throughout the project",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The SQL dialect used across all database queries",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "An API specification format like OpenAPI",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Ubiquitous Language is a shared language developed by the team — both developers and domain experts — that is used consistently in code, documentation, conversations, and tests. When developers and business stakeholders use the same terms with the same meanings, communication improves and the code more accurately reflects the business domain.",
+    "bonusFact": "The word 'ubiquitous' means 'present everywhere' — the language should literally appear everywhere: in method names, class names, tests, and discussions."
+  },
+  {
+    "id": "ddd-beg-004",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is an Aggregate in Domain-Driven Design?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "a", "text": "A SQL GROUP BY query result", "isCorrect": false },
+      {
+        "id": "b",
+        "text": "A cluster of domain objects treated as a single unit for data changes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A service that aggregates data from multiple microservices",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A repository that combines multiple database tables",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "An Aggregate is a cluster of associated objects treated as a unit for the purpose of data changes. Each Aggregate has an Aggregate Root (an Entity) that controls access to the cluster. External objects may only reference the Aggregate Root, not the internal members directly. This ensures consistency rules within the Aggregate boundary are always maintained.",
+    "bonusFact": "A common guideline is to design Aggregates as small as possible — large Aggregates lead to concurrency issues and performance problems."
+  },
+  {
+    "id": "ddd-beg-005",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the primary responsibility of a Domain Service in DDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To handle HTTP requests and route them to the correct controller",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To encapsulate domain logic that does not naturally belong to an Entity or Value Object",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To manage database connections and query execution",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To orchestrate calls to external APIs and third-party services",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A Domain Service holds domain logic that doesn't naturally fit within a single Entity or Value Object. For example, a 'TransferFunds' operation involves two BankAccount entities — it doesn't belong to either one, so it lives in a Domain Service. Domain Services are stateless and represent significant domain operations, not technical concerns like database access.",
+    "bonusFact": null
+  },
+  {
+    "id": "ddd-beg-006",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of a Repository in Domain-Driven Design?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To version-control source code changes",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To provide a collection-like interface for accessing domain objects without exposing persistence details",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To cache frequently accessed configuration settings",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To coordinate communication between microservices",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A Repository mediates between the domain model and the persistence layer (e.g., database). It provides a collection-like interface (add, remove, findById) so that domain code can retrieve and store Aggregates without knowing about SQL, ORMs, or file storage. This keeps the domain model clean and testable.",
+    "bonusFact": "The Repository pattern was popularized by Martin Fowler in 'Patterns of Enterprise Application Architecture' (2002)."
+  },
+  {
+    "id": "ddd-beg-007",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which of the following best describes a Domain Event in DDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A UI click event triggered by user interaction",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A record of something significant that happened in the domain",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "An exception thrown when a business rule is violated",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A scheduled job that runs periodically",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A Domain Event represents something that happened in the domain that domain experts care about — e.g., 'OrderPlaced', 'PaymentReceived', 'UserRegistered'. Domain Events are immutable records of the past, named in past tense. They enable loose coupling between different parts of the system and support event-driven architectures.",
+    "bonusFact": "Domain Events are a key building block for Event Sourcing, where the state of an Aggregate is derived from its event history."
+  },
+  {
+    "id": "ddd-beg-008",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the term 'Anti-Corruption Layer' (ACL) refer to in DDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A security layer that prevents SQL injection attacks",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A translation layer that isolates your domain from external systems or legacy models",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Code review rules that prevent bad practices from entering the codebase",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A database constraint preventing invalid data insertion",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "An Anti-Corruption Layer (ACL) acts as a protective boundary between your Bounded Context and external systems (e.g., legacy systems, third-party APIs). It translates their models and concepts into your own domain language, preventing external 'corruption' of your clean domain model. Without an ACL, integrating with poorly designed external systems often pollutes the internal model.",
+    "bonusFact": null
+  },
+  {
+    "id": "ddd-beg-009",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is 'Strategic Design' in Domain-Driven Design?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Choosing the most performant algorithms for critical paths",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "High-level decisions about how to divide the domain into Bounded Contexts and their relationships",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Database schema design decisions and indexing strategies",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Sprint planning and backlog prioritization for domain work",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Strategic Design in DDD deals with the big picture: identifying Bounded Contexts, defining their relationships (Context Map), and deciding how teams should collaborate. It answers questions like 'What are the major subsystems?' and 'How do they integrate?' Tactical Design, by contrast, focuses on building blocks within a single Bounded Context (Entities, Value Objects, Aggregates, etc.).",
+    "bonusFact": "A Context Map is the strategic DDD tool for visualizing relationships between Bounded Contexts — patterns include Shared Kernel, Customer/Supplier, and Conformist."
+  },
+  {
+    "id": "ddd-beg-010",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Why should Value Objects be immutable?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To comply with REST API standards for GET requests",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Because immutability makes them safe to share, simplifies equality, and eliminates unintended side effects",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To enable serialization to JSON without custom converters",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Because databases require immutable objects for efficient caching",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Value Objects represent descriptive aspects of the domain with no identity. Making them immutable means they can be safely shared between Entities without risk of one Entity changing a shared value and accidentally affecting another. Immutability also simplifies equality checks (two VOs are equal if all attributes are equal) and eliminates a whole class of bugs caused by accidental mutation.",
+    "bonusFact": "Money is the classic Value Object example: $10 is $10 regardless of which '$10 object' you use."
+  },
+  {
+    "id": "ddd-beg-011",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "What DDD building block does this TypeScript class represent?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class Money {\n  constructor(\n    public readonly amount: number,\n    public readonly currency: string\n  ) {}\n\n  equals(other: Money): boolean {\n    return (\n      this.amount === other.amount &&\n      this.currency === other.currency\n    );\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Entity — it has a unique identity field",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Value Object — equality is based on attributes, not identity",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Aggregate Root — it controls access to child objects",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Domain Service — it encapsulates stateless business logic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This class is a Value Object because its equality is determined entirely by its attributes (amount and currency), not by a unique identity. Notice there is no 'id' field — two Money instances with the same amount and currency are considered equal. The readonly modifiers also enforce immutability, which is a hallmark of well-designed Value Objects in DDD.",
+    "bonusFact": "Money is the canonical Value Object example in Eric Evans' original DDD book."
+  },
+  {
+    "id": "ddd-beg-012",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "According to DDD Aggregate rules, what is WRONG with the commented line in this code?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class OrderItem {\n  constructor(\n    public readonly productId: string,\n    public quantity: number\n  ) {}\n}\n\nclass Order {\n  private items: OrderItem[] = [];\n\n  addItem(productId: string, qty: number) {\n    this.items.push(new OrderItem(productId, qty));\n  }\n}\n\n// External code:\n// order.items[0].quantity = 999;"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "OrderItem should extend Order to inherit its behavior",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It directly modifies an internal Aggregate member, bypassing the Aggregate Root",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The Order class should not contain OrderItem instances",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The quantity field should be a string, not a number",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In DDD, only the Aggregate Root (here, Order) should control modifications to its internal members. The commented line violates this rule by reaching into the Aggregate and directly mutating an OrderItem's quantity. External code should call a method on Order (e.g., order.updateItemQuantity(productId, 999)) so the Aggregate Root can enforce business invariants like stock limits or minimum order quantities.",
+    "bonusFact": "Vaughn Vernon calls this the 'Law of Demeter for Aggregates' — don't reach through the root."
+  },
+  {
+    "id": "ddd-beg-013",
+    "themeId": "ddd",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "What DDD pattern does this TypeScript interface represent?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "interface OrderRepository {\n  findById(id: string): Promise<Order | null>;\n  save(order: Order): Promise<void>;\n  remove(order: Order): Promise<void>;\n  nextId(): string;\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Domain Service — it defines stateless business operations",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Factory — it creates new instances of complex Aggregates",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Repository — it provides a collection-like interface for persisting and retrieving Aggregates",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Anti-Corruption Layer — it translates between two Bounded Contexts",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This interface defines a Repository, which provides a collection-like abstraction (find, save, remove) for storing and retrieving Aggregates. The domain layer depends on this interface, while the infrastructure layer provides the concrete implementation (e.g., using a database). This keeps persistence concerns out of the domain model. The nextId() method is a common Repository addition for generating unique identifiers.",
+    "bonusFact": null
+  },
+  {
+    "id": "ddd-int-001",
+    "themeId": "ddd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "In a Context Map, what does the 'Shared Kernel' pattern imply about two Bounded Contexts?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "They share a common subset of the domain model that both teams agree to maintain together",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "One context provides a published API and the other must conform to it without changes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "They share the same database schema but have separate application logic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "They are deployed as a single monolithic application with shared runtime memory",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A Shared Kernel is a small, explicitly defined subset of the domain model that two or more Bounded Contexts share and co-maintain. Both teams must agree on any changes to this shared code, which creates tight coupling but reduces duplication. Option B describes the Conformist pattern, where the downstream team adopts the upstream model without negotiation. Option C conflates database sharing with model sharing, and Option D confuses deployment topology with domain modeling patterns.",
+    "bonusFact": "Shared Kernels require strong coordination — they work best when teams sit close together."
+  },
+  {
+    "id": "ddd-int-002",
+    "themeId": "ddd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the key guideline Vaughn Vernon recommends for Aggregate sizing?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Aggregates should encompass all related entities to ensure full transactional consistency",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Prefer small Aggregates with only the data needed to enforce immediate invariants",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Aggregate size should match the database table structure for ORM compatibility",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Each microservice should contain exactly one large Aggregate representing the full domain",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Vaughn Vernon's effective Aggregate design rule is to keep Aggregates as small as possible — ideally containing only the Aggregate Root entity and the minimum data required to enforce its invariants. Large Aggregates cause concurrency contention because only one transaction can modify an Aggregate at a time, and they lead to performance problems from loading unnecessary data. Option A is the classic mistake of creating 'God Aggregates' that try to enforce too many rules in a single transaction. Options C and D conflate infrastructure concerns with domain modeling.",
+    "bonusFact": "Vernon's first rule: 'Design small Aggregates' — from 'Implementing Domain-Driven Design'."
+  },
+  {
+    "id": "ddd-int-003",
+    "themeId": "ddd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the primary difference between a Domain Event and an Integration Event?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Domain Events use JSON; Integration Events use XML",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Domain Events are meaningful within a single Bounded Context; Integration Events are published across Bounded Context boundaries",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Domain Events are synchronous; Integration Events are always asynchronous",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Domain Events carry full entity snapshots; Integration Events carry only IDs",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Domain Events represent something that happened within a single Bounded Context and use the Ubiquitous Language of that context. Integration Events are designed to cross Bounded Context boundaries and must be expressed in a language both the publisher and subscriber understand. Integration Events often carry a carefully curated payload to avoid leaking internal model details. Option C is wrong because delivery mechanism (sync/async) is an infrastructure concern orthogonal to the event type. Options A and D are incorrect because serialization format and payload structure are implementation choices, not defining characteristics.",
+    "bonusFact": null
+  },
+  {
+    "id": "ddd-int-004",
+    "themeId": "ddd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does CQRS (Command Query Responsibility Segregation) relate to Domain-Driven Design?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "CQRS replaces the need for Aggregates by splitting all operations into commands and queries",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "CQRS is mandatory in any DDD implementation to separate reads from writes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "CQRS complements DDD by allowing the write model to enforce domain invariants while the read model is optimized for queries",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "CQRS is an alternative to DDD used when the domain is too simple for Aggregates",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "CQRS complements DDD by recognizing that the write side (commands) and read side (queries) have fundamentally different requirements. The write model uses Aggregates and enforces domain invariants, while the read model can use denormalized views optimized for specific query patterns. CQRS is not mandatory for DDD — many DDD projects succeed without it. Option A is wrong because Aggregates still exist on the command side. Option B overstates the relationship, and Option D incorrectly positions CQRS as an alternative rather than a complement.",
+    "bonusFact": "Greg Young coined the term CQRS, building on Bertrand Meyer's CQS principle."
+  },
+  {
+    "id": "ddd-int-005",
+    "themeId": "ddd",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What DDD pattern does this TypeScript class implement?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class OverdueInvoiceSpec {\n  isSatisfiedBy(invoice: Invoice): boolean {\n    const now = new Date();\n    return (\n      invoice.status === 'unpaid' &&\n      invoice.dueDate < now\n    );\n  }\n\n  and(other: Specification<Invoice>) {\n    return new AndSpecification(this, other);\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Repository — it queries the database for matching invoices",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Specification — it encapsulates a business rule as a composable, reusable predicate",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Domain Service — it performs a stateless operation across multiple entities",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Policy — it triggers automated actions when conditions are met",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This class implements the Specification pattern, which encapsulates a boolean business rule into a reusable, composable object. The isSatisfiedBy method tests whether an Invoice meets the criteria, and the and method allows combining specifications using logical operators. This keeps complex selection logic in the domain layer rather than scattering it across repositories or services. Option A is wrong because Specifications define criteria, not database access. Option C is incorrect because this is a predicate, not a cross-entity operation. Option D describes reactive behavior, not rule encapsulation.",
+    "bonusFact": "The Specification pattern was formalized by Eric Evans and Martin Fowler."
+  },
+  {
+    "id": "ddd-int-006",
+    "themeId": "ddd",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What DDD pattern is the OrderFactory class implementing, and why would you use it instead of a simple constructor?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class OrderFactory {\n  static createFromQuote(\n    quote: Quote,\n    shippingAddress: Address\n  ): Order {\n    const order = new Order(generateId());\n    for (const line of quote.lines) {\n      order.addItem(\n        line.productId,\n        line.quantity,\n        line.negotiatedPrice\n      );\n    }\n    order.setShipping(shippingAddress);\n    return order;\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Builder pattern — it constructs the order step by step with a fluent API",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Factory pattern in DDD — it encapsulates complex Aggregate creation logic that spans multiple objects",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Application Service — it orchestrates a use case involving Quote and Order",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Anti-Corruption Layer — it translates the Quote model into the Order model",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This is the DDD Factory pattern, used when creating an Aggregate is complex enough that it shouldn't be crammed into the Aggregate's constructor. The factory encapsulates the knowledge of how to assemble an Order from a Quote, including translating quote lines into order items with negotiated prices. Option A is incorrect because this is not a step-by-step fluent builder — it's a single creation method. Option C is wrong because factories live in the domain layer, not the application layer. Option D is tempting but wrong because both Quote and Order likely live in the same Bounded Context; an ACL translates between different contexts.",
+    "bonusFact": null
+  },
+  {
+    "id": "ddd-int-007",
+    "themeId": "ddd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When two Aggregates in different Bounded Contexts must eventually reach a consistent state, what is the recommended DDD approach?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use a distributed two-phase commit transaction to guarantee immediate consistency",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Merge the two Bounded Contexts into one so they share a single transactional boundary",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Use Domain Events and eventual consistency, allowing each Aggregate to update independently in its own transaction",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Have both Aggregates share a single database table to ensure atomic updates",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "DDD strongly favors eventual consistency between Aggregates, especially across Bounded Context boundaries. When one Aggregate completes its operation, it publishes a Domain Event that the other context subscribes to and processes in its own transaction. This preserves autonomy and loose coupling between contexts. Option A introduces tight coupling and fragility through distributed transactions. Option B defeats the purpose of having separate Bounded Contexts. Option D conflates persistence with domain boundaries and creates hidden coupling.",
+    "bonusFact": "Pat Helland's 'Life Beyond Distributed Transactions' paper is foundational reading for this topic."
+  },
+  {
+    "id": "ddd-int-008",
+    "themeId": "ddd",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "Which Context Mapping pattern is being used in this integration between the Shipping and Inventory Bounded Contexts?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "// Shipping context\ninterface InventoryService {\n  checkAvailability(\n    sku: string,\n    qty: number\n  ): Promise<boolean>;\n}\n\n// Implementation adapts Inventory API\nclass InventoryServiceAdapter\n  implements InventoryService {\n  async checkAvailability(\n    sku: string, qty: number\n  ): Promise<boolean> {\n    const res = await this.inventoryApi\n      .getStockLevel({ itemCode: sku });\n    return res.availableUnits >= qty;\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Shared Kernel — both contexts share the InventoryService interface",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Conformist — the Shipping context adopts the Inventory context's model directly",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Customer-Supplier with an Anti-Corruption Layer — the adapter translates the upstream Inventory API into the Shipping context's own interface",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Open Host Service — the Inventory context publishes a standardized protocol for any consumer",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Shipping context defines its own InventoryService interface using its own language (sku, qty, checkAvailability), then uses an adapter to translate calls to the Inventory API which uses different terminology (itemCode, availableUnits, getStockLevel). This is a Customer-Supplier relationship with an Anti-Corruption Layer — the downstream Shipping context protects itself from the upstream Inventory context's model. Option A is wrong because there is no shared code. Option B is incorrect because the Shipping context does not adopt the Inventory model. Option D describes the upstream side's pattern, not the downstream integration strategy.",
+    "bonusFact": null
+  },
+  {
+    "id": "ddd-int-009",
+    "themeId": "ddd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the 'Anemic Domain Model' anti-pattern, and why is it problematic in DDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A model with too many small classes, causing excessive fragmentation and complexity",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Domain objects that contain only data (getters/setters) with all business logic living in separate service classes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A model that lacks persistence mapping, making it impossible to store in a database",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A domain model that uses inheritance instead of composition for code reuse",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "An Anemic Domain Model looks like a real domain model — it has classes named after domain concepts — but the objects carry no behavior, only data. All business logic resides in procedural service classes that manipulate these data-holder objects. This violates the core DDD principle that domain objects should encapsulate both state and behavior, making invariants harder to enforce and scattering domain knowledge across services. Option A describes a different design smell (over-engineering). Option C is an infrastructure concern. Option D is a general OOP debate unrelated to anemia.",
+    "bonusFact": "Martin Fowler coined the term 'Anemic Domain Model' in a 2003 blog post."
+  },
+  {
+    "id": "ddd-int-010",
+    "themeId": "ddd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When should you consider splitting one Bounded Context into two separate Bounded Contexts?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "When the codebase exceeds a certain number of lines of code",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "When terms in the Ubiquitous Language start having conflicting meanings for different use cases within the same context",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "When the team grows beyond five developers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "When the deployment pipeline becomes slower than 10 minutes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The strongest signal to split a Bounded Context is linguistic: when the same term (e.g., 'Product') starts meaning fundamentally different things to different stakeholders or use cases within that context, you have a modeling conflict. This indicates that two distinct models are being forced into one boundary. Option A is an arbitrary metric with no DDD significance. Option C is a team structure concern that may correlate but is not the primary driver. Option D is a deployment/CI concern, not a domain modeling decision. DDD splits are driven by model clarity, not technical metrics.",
+    "bonusFact": "If two teams cannot agree on a single Ubiquitous Language, that is a Bounded Context boundary."
+  },
+  {
+    "id": "ddd-adv-001",
+    "themeId": "ddd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "In Event Sourcing, how is an Aggregate's current state reconstructed?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "By querying the latest row in the Aggregate's database table and deserializing it",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "By replaying all stored Domain Events for that Aggregate in order, applying each to rebuild the state from scratch",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "By loading a cached in-memory snapshot that is refreshed every time the application restarts",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "By merging the write model and read model projections into a single consistent view",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In Event Sourcing, the Aggregate does not store its current state directly. Instead, all state changes are persisted as an ordered sequence of Domain Events. To reconstruct the current state, the system loads all events for that Aggregate and replays them one by one through the Aggregate's event-application methods. Snapshots can be used as an optimization to avoid replaying the entire history, but the fundamental mechanism is event replay. Option A describes traditional state-based persistence. Option C misunderstands snapshots — they are periodic checkpoints, not the sole source of truth. Option D confuses CQRS read-side projections with Aggregate state reconstruction.",
+    "bonusFact": "Snapshots store periodic state checkpoints to speed up replay of long event streams."
+  },
+  {
+    "id": "ddd-adv-002",
+    "themeId": "ddd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the key difference between a Saga and a Process Manager in the context of DDD and distributed systems?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A Saga uses compensating transactions to undo steps on failure, while a Process Manager maintains state and orchestrates a complex workflow by reacting to events",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A Saga is always synchronous, while a Process Manager is always asynchronous",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A Saga handles read operations, while a Process Manager handles write operations",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A Saga is a pattern from functional programming, while a Process Manager is an object-oriented pattern",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A Saga is a sequence of local transactions where each step either succeeds or triggers a compensating transaction to undo previous steps, ensuring eventual consistency without distributed transactions. A Process Manager is a stateful orchestrator that subscribes to events, tracks the progress of a long-running business process, and issues commands to advance the workflow. In practice the terms are sometimes used interchangeably, but the distinction matters: Sagas focus on compensation logic, while Process Managers focus on workflow coordination and state tracking. Options B, C, and D are fabricated distinctions with no basis in DDD literature.",
+    "bonusFact": "The Saga pattern originated in a 1987 paper by Garcia-Molina and Salem on long-lived transactions."
+  },
+  {
+    "id": "ddd-adv-003",
+    "themeId": "ddd",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What problem does this code have when trying to enforce an invariant that spans two Aggregates?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class TransferService {\n  async transfer(\n    fromId: string,\n    toId: string,\n    amount: Money\n  ): Promise<void> {\n    const from = await this.accountRepo\n      .findById(fromId);\n    const to = await this.accountRepo\n      .findById(toId);\n    from.debit(amount);\n    to.credit(amount);\n    await this.accountRepo.save(from);\n    await this.accountRepo.save(to);\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "The service should use a Value Object for the account IDs instead of strings",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "The two Aggregate saves happen in separate transactions, so a failure after the first save leaves the system in an inconsistent state",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The debit and credit methods should return new Account instances instead of mutating state",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The TransferService should be an Entity, not a Domain Service",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Each Aggregate should be saved in its own transaction. If the save of 'from' succeeds but the save of 'to' fails (network error, concurrency conflict, etc.), the money has been debited but never credited — a classic consistency violation. The DDD-recommended approach is to use eventual consistency: debit the source account in one transaction (publishing a Domain Event), then credit the target account in a separate transaction triggered by that event, with compensating logic if the credit fails. Option A is a minor design improvement but not the core problem. Option C confuses immutability concerns with transactional consistency. Option D is incorrect because transfer logic is inherently a service, not an entity.",
+    "bonusFact": null
+  },
+  {
+    "id": "ddd-adv-004",
+    "themeId": "ddd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Conway's Law influence strategic DDD decisions about Bounded Context boundaries?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Conway's Law dictates that Bounded Contexts must always mirror the company's org chart exactly",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Conway's Law is irrelevant to DDD because DDD focuses on domain models, not organizational structure",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Conway's Law suggests that system architecture mirrors team communication, so aligning Bounded Contexts with team boundaries reduces friction and enables autonomous ownership",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Conway's Law requires that each developer owns exactly one Bounded Context to minimize merge conflicts",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Conway's Law states that organizations design systems that mirror their communication structures. In strategic DDD, this means that Bounded Context boundaries are most effective when they align with team boundaries, because the team owning a context can evolve its model autonomously. The 'Inverse Conway Maneuver' deliberately structures teams to produce the desired architecture. Option A overstates the relationship — it's alignment, not exact mirroring. Option B ignores a critical real-world constraint on DDD adoption. Option D reduces Conway's Law to a trivial code ownership concern rather than the systemic organizational dynamic it actually describes.",
+    "bonusFact": "The 'Inverse Conway Maneuver' restructures teams to get the architecture you want."
+  },
+  {
+    "id": "ddd-adv-005",
+    "themeId": "ddd",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What technique does this event handler use to safely handle duplicate or redelivered Domain Events?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class OrderConfirmedHandler {\n  async handle(\n    event: OrderConfirmed\n  ): Promise<void> {\n    const existing = await this.ledgerRepo\n      .findByEventId(event.eventId);\n    if (existing) return;\n\n    const entry = LedgerEntry.create(\n      event.orderId,\n      event.total,\n      event.eventId\n    );\n    await this.ledgerRepo.save(entry);\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Optimistic locking — it checks a version number before saving",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Idempotency — it uses the event ID to detect and skip already-processed events",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Event deduplication at the message broker level before the handler is invoked",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Saga compensation — it reverses the previous entry if a duplicate is detected",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This handler implements idempotent event processing by storing the event ID alongside the created LedgerEntry and checking for its existence before processing. If the same event is delivered again (due to at-least-once delivery semantics, retries, etc.), the handler detects the duplicate via findByEventId and returns early without creating a second entry. Option A is about concurrency control on Aggregates, not duplicate detection. Option C describes broker-level deduplication, but this code implements application-level idempotency. Option D describes compensating transactions, not duplicate detection.",
+    "bonusFact": "At-least-once delivery makes idempotent handlers essential in event-driven systems."
+  },
+  {
+    "id": "ddd-adv-006",
+    "themeId": "ddd",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What concurrency control mechanism is being used in this Aggregate persistence code, and what happens when a conflict is detected?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class SqlOrderRepository {\n  async save(order: Order): Promise<void> {\n    const result = await this.db.query(\n      `UPDATE orders\n       SET data = $1, version = $2\n       WHERE id = $3 AND version = $4`,\n      [\n        serialize(order),\n        order.version + 1,\n        order.id,\n        order.version\n      ]\n    );\n    if (result.rowCount === 0)\n      throw new ConcurrencyError(order.id);\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Pessimistic locking — it acquires an exclusive database lock before writing",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Optimistic locking — it uses a version column and throws an error if another transaction modified the Aggregate first",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Last-write-wins — it always overwrites regardless of concurrent modifications",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Two-phase locking — it holds a read lock and upgrades to a write lock on save",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code implements optimistic concurrency control by including a version check in the WHERE clause of the UPDATE statement. When the Aggregate is loaded, its current version is recorded. On save, the UPDATE only succeeds if the version in the database still matches the loaded version (meaning no other transaction modified it). If another transaction incremented the version first, rowCount is 0 and a ConcurrencyError is thrown, allowing the application to retry or inform the user. Option A is wrong because no explicit lock is acquired — the check happens at write time. Option C is incorrect because the code explicitly detects and rejects conflicting writes. Option D describes a different locking strategy not shown here.",
+    "bonusFact": null
+  },
+  {
+    "id": "ddd-adv-007",
+    "themeId": "ddd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "In strategic DDD, how should you classify subdomains to decide where to invest modeling effort?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "All subdomains deserve equal modeling effort since they all contribute to the system",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Core subdomains get the most investment (competitive advantage), Supporting subdomains get moderate effort, and Generic subdomains should use off-the-shelf solutions",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Subdomains are classified by technical complexity: simple, medium, and complex",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Classification is based on team size: large teams handle Core, small teams handle Generic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "DDD classifies subdomains into three categories based on strategic value. Core subdomains are the organization's competitive differentiator and deserve the best talent and deepest modeling effort. Supporting subdomains are necessary but not differentiating — they support the core but can use simpler approaches. Generic subdomains solve common problems (authentication, email, billing) that are not unique to the business and should ideally use existing solutions. Option A ignores the strategic reality of limited resources. Option C conflates technical difficulty with business value. Option D confuses organizational resource allocation with domain classification.",
+    "bonusFact": "Your core subdomain is what your competitors cannot easily copy or buy off the shelf."
+  },
+  {
+    "id": "ddd-adv-008",
+    "themeId": "ddd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "In a CQRS system with Event Sourcing, what is a projection rebuild and when is it necessary?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Restoring the write model from a database backup after data loss",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Replaying all events from the event store through updated projection logic to reconstruct read models from scratch",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Migrating the event store schema when the event format changes",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Restarting the message broker to clear any stuck events in the queue",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A projection rebuild involves replaying the complete event history through new or updated projection logic to regenerate read-side views from scratch. This is necessary when you add a new read model, fix a bug in existing projection logic, or need to add new fields to an existing view. Because the event store is the authoritative source of truth, projections are disposable and can always be rebuilt. Option A confuses write-model recovery with read-model reconstruction. Option C describes event schema evolution, which is a separate concern. Option D is an infrastructure operation unrelated to projection rebuilding.",
+    "bonusFact": "Projection rebuilds are why event stores should never delete events — they are your audit trail."
+  },
+  {
+    "id": "ddd-adv-009",
+    "themeId": "ddd",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What Anti-Corruption Layer implementation pattern is demonstrated in this code?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "// Our domain model\ninterface Product {\n  sku: string;\n  name: string;\n  price: Money;\n}\n\n// ACL translating legacy ERP\nclass ErpProductAdapter {\n  constructor(\n    private erpClient: ErpSoapClient\n  ) {}\n\n  async getProduct(\n    sku: string\n  ): Promise<Product> {\n    const raw = await this.erpClient\n      .fetchItem({ ITEM_NO: sku });\n    return {\n      sku: raw.ITEM_NO,\n      name: raw.DESC_LONG,\n      price: new Money(\n        raw.UNIT_PRC / 100,\n        raw.CCY_CD\n      ),\n    };\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Facade pattern — it simplifies the ERP interface by hiding complex subsystem interactions",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Adapter-based ACL — it translates the external system's model (field names, data formats, protocols) into the local domain's language and types",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Conformist pattern — the local domain conforms to the ERP's data model",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Open Host Service — the ERP exposes a standardized API for consumers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code demonstrates an Adapter-based Anti-Corruption Layer. The ErpProductAdapter translates the legacy ERP's SOAP-based model (ITEM_NO, DESC_LONG, UNIT_PRC in cents, CCY_CD) into the local domain's clean model (sku, name, Money value object). This protects the domain from being polluted by the ERP's conventions. Option A is a structural simplification pattern, not a domain translation pattern. Option C is the opposite of what's happening — the code actively resists conforming to the ERP model. Option D describes the upstream system's pattern; the ERP is not providing an open host service here.",
+    "bonusFact": null
+  },
+  {
+    "id": "ddd-adv-010",
+    "themeId": "ddd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is a common Aggregate design mistake when developers confuse the Aggregate Root with the Aggregate boundary?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Making every Entity in the system an Aggregate Root, resulting in no true Aggregate boundaries and no transactional consistency guarantees",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Using Value Objects inside Aggregates instead of keeping them outside as standalone objects",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Defining the Aggregate Root as an abstract class that other Entities inherit from",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Storing the Aggregate Root and its children in separate database tables",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A widespread design mistake is treating every Entity as its own Aggregate Root. When developers fail to understand that Aggregates are clusters of objects with a single root, they end up with one-Entity-per-Aggregate everywhere. This means there are no meaningful consistency boundaries — invariants that span multiple Entities cannot be enforced within a single transaction because each Entity is independently loadable and saveable. The result is scattered validation logic and potential data corruption. Option B is incorrect because Value Objects belong inside Aggregates. Option C is a valid (if unusual) implementation choice, not a mistake. Option D is a persistence concern independent of Aggregate design.",
+    "bonusFact": "Vaughn Vernon: 'An Aggregate is not just its root — it's the root plus its boundary.'"
+  }
+]

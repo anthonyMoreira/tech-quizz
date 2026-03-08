@@ -1,0 +1,1085 @@
+[
+  {
+    "id": "tdd-beg-001",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does TDD stand for and what is the core cycle?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Test-Driven Development — write tests after code to verify correctness",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Test-Driven Development — Red (failing test), Green (pass), Refactor",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Type-Driven Development — use types to drive API design",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Test-Driven Deployment — automate test runs before each deployment",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "TDD stands for Test-Driven Development. The core cycle is Red-Green-Refactor: first write a failing test (Red), then write the minimal code to make it pass (Green), then clean up the code without breaking tests (Refactor). This cycle is repeated for every small piece of functionality. The key insight is that tests drive the design of the code, not just verify it.",
+    "bonusFact": "Kent Beck popularized TDD as part of Extreme Programming (XP) and wrote 'Test-Driven Development: By Example' in 2002."
+  },
+  {
+    "id": "tdd-beg-002",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "In TDD, what should you do when you have a failing test?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Write the complete, optimized implementation immediately",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Write the minimum code necessary to make that specific test pass",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Delete the test and write it differently until it passes",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Write all remaining tests first before implementing anything",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Green phase of TDD requires writing just enough code to make the failing test pass — no more, no less. This discipline prevents over-engineering and ensures every line of production code is justified by a test. Writing the simplest possible implementation (even if it seems naive) is intentional — the Refactor phase then improves it while tests remain green.",
+    "bonusFact": null
+  },
+  {
+    "id": "tdd-beg-003",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the primary benefit of writing tests before code in TDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It eliminates the need for manual QA testing entirely",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It forces you to think about the API and design before implementation",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It guarantees 100% code coverage automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It makes the build pipeline faster",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Writing tests first forces you to think from the consumer's perspective: What interface do I need? What should this function accept and return? This design pressure produces simpler, more usable APIs. When you write tests after the code, you tend to test the implementation you've already written rather than the ideal interface you should have designed.",
+    "bonusFact": "TDD practitioners often say the tests are 'the first client' of your code — if a test is hard to write, the API is probably too complex."
+  },
+  {
+    "id": "tdd-beg-004",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does 'Refactor' mean in the Red-Green-Refactor cycle?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Rewrite all tests to be more comprehensive",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Improve code structure and readability without changing behavior, keeping tests green",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Add new features that were discovered during the Green phase",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Change requirements to match the code that was written",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Refactoring means improving the internal structure of code without changing its observable behavior. In TDD, refactoring happens after tests are green — the tests serve as a safety net that confirms behavior hasn't changed. Common refactorings include extracting methods, removing duplication, renaming for clarity, and simplifying conditionals. The key rule: tests must stay green throughout.",
+    "bonusFact": "Martin Fowler's book 'Refactoring: Improving the Design of Existing Code' is the definitive catalog of refactoring techniques."
+  },
+  {
+    "id": "tdd-beg-005",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which of these is a characteristic of a well-written unit test in TDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It tests multiple related features together to save time",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It is fast, isolated, and tests one specific behavior",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It always requires a database connection to be realistic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It is written in a separate repository from the production code",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Good unit tests in TDD follow the FIRST principles: Fast (run in milliseconds), Isolated (don't depend on external systems or other tests), Repeatable (same result every run), Self-validating (pass or fail automatically), and Timely (written before the code). Testing one specific behavior per test makes failures easy to diagnose.",
+    "bonusFact": "The acronym FIRST was coined by Robert C. Martin to describe the properties of clean tests."
+  },
+  {
+    "id": "tdd-beg-006",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the 'Fake It Till You Make It' technique in TDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Using mock data in the UI until the backend is ready",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Returning a hardcoded value to make a test pass, then generalizing with more tests",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Writing placeholder tests that always pass until real tests are written",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Pretending a third-party library works correctly without testing it",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Faking It is a legitimate TDD technique where you return a hardcoded value to make the first test pass, then write additional tests that force you to generalize the implementation. For example, if the test expects add(2,3) === 5, you might first return 5 always, then add a test for add(1,1) === 2 which forces you to implement real addition. This keeps the Red-Green-Refactor cycle short.",
+    "bonusFact": null
+  },
+  {
+    "id": "tdd-beg-007",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "How does TDD relate to code coverage?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "TDD automatically guarantees 100% coverage",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "TDD naturally produces high coverage because every line written is driven by a test",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Coverage is irrelevant in TDD — only test count matters",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "TDD produces low coverage because the focus is on speed, not thoroughness",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Because TDD requires writing a failing test before writing code, every line of production code is written specifically to make a test pass. This naturally produces high coverage. However, TDD doesn't guarantee 100% coverage — edge cases or error paths might be missed if no test drives them. Coverage is a useful metric but TDD's real value is in design quality, not just coverage numbers.",
+    "bonusFact": "High coverage doesn't mean good tests — you can cover code with tests that make no assertions. TDD's discipline of writing meaningful tests first addresses this."
+  },
+  {
+    "id": "tdd-beg-008",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a test double (e.g., mock, stub) used for in TDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To run the same test twice to catch flaky behavior",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To replace real dependencies with controlled substitutes for isolation",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To generate twice as many test cases automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To validate that two implementations produce identical results",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Test doubles replace real dependencies (databases, external APIs, services) with controlled substitutes during testing. A stub returns predefined values, a mock records calls and verifies interactions, a fake has a working implementation (like an in-memory DB), and a spy wraps the real object while recording calls. They enable unit testing in isolation without external infrastructure.",
+    "bonusFact": "The term 'test double' comes from the movie concept of a 'stunt double' — a substitute that stands in for the real thing."
+  },
+  {
+    "id": "tdd-beg-009",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does 'YAGNI' mean and how does TDD enforce it?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "You Are Going Nowhere Iteratively — plan the full design before coding",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "You Aren't Gonna Need It — TDD prevents adding code without a failing test requiring it",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Your API Generates No Issues — TDD validates API correctness",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Yet Another Great New Idea — a creativity technique for test case generation",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "YAGNI (You Aren't Gonna Need It) is an XP principle that says don't implement functionality until you actually need it. TDD naturally enforces YAGNI because the rule is: don't write production code without a failing test. If there's no test requiring a feature, you don't write it. This prevents speculative generality and keeps codebases lean.",
+    "bonusFact": "YAGNI pairs with KISS (Keep It Simple, Stupid) and DRY (Don't Repeat Yourself) as the trilogy of XP code quality principles."
+  },
+  {
+    "id": "tdd-beg-010",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the key difference between unit tests and integration tests in TDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Unit tests are written first; integration tests are written after deployment",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Unit tests test a single piece of code in isolation; integration tests verify that components work together",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Unit tests run in production; integration tests run only in CI",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Unit tests cover UI interactions; integration tests cover database queries",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Unit tests verify small, isolated pieces of code (a function, a class) with all dependencies mocked or stubbed. They run extremely fast and pinpoint failures precisely. Integration tests verify that multiple components work together correctly — for example, a service and its database, or a controller and its middleware. Both types are valuable in TDD; unit tests drive inner design while integration tests verify the system as a whole.",
+    "bonusFact": "The 'Test Pyramid' suggests having many unit tests, fewer integration tests, and even fewer E2E tests — prioritizing speed and isolation."
+  },
+  {
+    "id": "tdd-beg-011",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "In the Red-Green-Refactor cycle, what phase is this developer currently in?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "// Step 1: Test written first\ntest('adds two numbers', () => {\n  expect(add(2, 3)).toBe(5);\n});\n\n// Step 2: Simplest implementation\nfunction add(a: number, b: number): number {\n  return 5; // hardcoded!\n}\n\n// Step 3: The test passes (green).\n// Developer now cleans up the code."
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Red — the test is still failing",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Green — the test passes but the implementation is naive",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Refactor — the developer is improving the code while keeping tests green",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "This is not a valid TDD workflow",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The developer has already written the test (Red), then made it pass with a hardcoded value (Green using the 'Fake It' technique), and is now at Step 3 where they clean up the code — this is the Refactor phase. During Refactor, the developer would replace the hardcoded 'return 5' with a real implementation like 'return a + b' while ensuring the test stays green. The Refactor phase improves structure without changing behavior.",
+    "bonusFact": "Kent Beck calls the hardcoded-value trick 'Fake It' — one of three core TDD strategies."
+  },
+  {
+    "id": "tdd-beg-012",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "What type of test double is `fakeMailer` in this test?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class FakeMailer {\n  public sentEmails: { to: string; body: string }[] = [];\n\n  send(to: string, body: string): void {\n    this.sentEmails.push({ to, body });\n  }\n}\n\ntest('sends welcome email on signup', () => {\n  const mailer = new FakeMailer();\n  const service = new SignupService(mailer);\n  service.register('alice@test.com');\n  expect(mailer.sentEmails).toHaveLength(1);\n});"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Stub — it returns a predefined value when called",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Fake — it has a working in-memory implementation that replaces the real dependency",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Mock — it was auto-generated by the testing framework",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Spy — it wraps the real mailer and records calls",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "FakeMailer is a Fake because it provides a simplified but functional implementation — it actually stores sent emails in an in-memory array instead of sending real emails. A Stub would just return a canned response without recording anything. A Mock is typically framework-generated and pre-programmed with expectations. A Spy wraps the real object while recording interactions. Fakes are useful when you need a lightweight, working substitute.",
+    "bonusFact": "Gerard Meszaros defined all five test double types in 'xUnit Test Patterns' (2007)."
+  },
+  {
+    "id": "tdd-beg-013",
+    "themeId": "tdd",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "Which parts of this test correspond to the Arrange-Act-Assert pattern?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "test('calculates total with discount', () => {\n  // Section A\n  const cart = new ShoppingCart();\n  cart.addItem({ name: 'Shirt', price: 50 });\n  cart.addItem({ name: 'Pants', price: 100 });\n\n  // Section B\n  cart.applyDiscount(10);\n\n  // Section C\n  expect(cart.total()).toBe(135);\n});"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "A = Act, B = Arrange, C = Assert",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A = Assert, B = Act, C = Arrange",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A = Arrange, B = Act, C = Assert",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "A = Arrange, B = Assert, C = Act",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Arrange-Act-Assert (AAA) pattern structures tests into three clear phases. Section A is Arrange: it sets up the test data by creating a cart and adding items. Section B is Act: it performs the action under test by applying a 10% discount. Section C is Assert: it verifies the expected outcome (the total should be 135 after discounting 15 from the original 150). Following AAA makes tests easy to read and maintain.",
+    "bonusFact": "AAA is also known as 'Given-When-Then' in BDD (Behavior-Driven Development)."
+  },
+  {
+    "id": "tdd-int-001",
+    "themeId": "tdd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the key difference between Outside-In and Inside-Out TDD approaches?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Outside-In starts from the UI layer and works inward using mocks; Inside-Out starts from domain logic and builds outward with real collaborators",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Outside-In writes tests after code; Inside-Out writes tests before code",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Outside-In is used only for frontend development; Inside-Out is exclusively for backend",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Outside-In means testing in production; Inside-Out means testing in development only",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Outside-In TDD (also called London School or mockist TDD) begins with acceptance tests at the outer boundary and works inward, mocking collaborators that don't exist yet. Inside-Out TDD (also called Chicago School or classicist TDD) starts with the innermost domain logic and builds outward, using real objects wherever possible. Outside-In tends to produce more interfaces and mocks, while Inside-Out favors concrete classes and integration. Neither is inherently better — the choice depends on the project's needs and the team's design philosophy.",
+    "bonusFact": "Outside-In TDD is championed in 'GOOS' by Freeman and Pryce (2009)."
+  },
+  {
+    "id": "tdd-int-002",
+    "themeId": "tdd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "According to the Test Pyramid, how should tests be distributed across layers for an optimal strategy?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Equal numbers of unit, integration, and end-to-end tests for balanced coverage",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Many fast unit tests at the base, fewer integration tests in the middle, and very few slow E2E tests at the top",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Mostly end-to-end tests because they catch the most bugs, with a few unit tests for critical functions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only unit tests, since integration and E2E tests are too slow to justify",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Test Pyramid, coined by Mike Cohn, recommends a large base of fast, isolated unit tests, a smaller middle layer of integration tests that verify component interactions, and a thin top layer of slow, expensive end-to-end tests. This distribution maximizes feedback speed because the majority of tests run in milliseconds. Teams that invert this pyramid (lots of E2E, few unit tests) experience slow CI pipelines, flaky tests, and difficulty isolating failures — an anti-pattern sometimes called the 'Ice Cream Cone.'",
+    "bonusFact": "Mike Cohn introduced the Test Pyramid in 'Succeeding with Agile' (2009)."
+  },
+  {
+    "id": "tdd-int-003",
+    "themeId": "tdd",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What test smell is present in this test suite?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "let service: UserService;\nbeforeEach(() => {\n  service = new UserService(new Database());\n  service.create({ name: 'Alice', role: 'admin' });\n});\ntest('finds user by name', () => {\n  expect(service.findByName('Alice')).toBeDefined();\n});\ntest('deletes user', () => {\n  service.delete('Alice');\n  expect(service.findByName('Alice')).toBeUndefined();\n});\ntest('counts remaining users', () => {\n  expect(service.count()).toBe(0); // FAILS!\n});"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Mystery Guest — the test relies on external data not visible in the test",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Test coupling — the third test depends on the second test's side effect of deleting Alice",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Assertion Roulette — too many assertions without messages",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Eager Test — each test is testing too many behaviors at once",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The third test expects count() to be 0, which only works if the second test's deletion of Alice ran first. This is test coupling — tests depend on execution order and each other's side effects. If tests run in isolation or in a different order, the third test would fail because Alice still exists (count would be 1). The fix is to make each test self-contained: the beforeEach recreates state, so the third test should account for the Alice created there. Mystery Guest applies when external data is invisible, but here the shared setup is visible — the problem is inter-test dependency.",
+    "bonusFact": null
+  },
+  {
+    "id": "tdd-int-004",
+    "themeId": "tdd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When should you prefer a stub over a mock in TDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "When you only need to provide canned responses and don't care about how the dependency was called",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "When the dependency is a third-party library that cannot be instantiated",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "When you want to verify the exact sequence and arguments of every call made to the dependency",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "When the system under test has no dependencies at all",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Stubs are appropriate when the test only needs a dependency to return specific data so the system under test can proceed — you're testing state, not interaction. Mocks are appropriate when the behavior itself (which methods were called, with what arguments, how many times) is what matters. Over-using mocks leads to brittle tests that break when implementation details change, even if behavior is correct. Option C describes the use case for mocks, not stubs. Option B is not a distinguishing factor since both mocks and stubs can replace third-party dependencies.",
+    "bonusFact": "Martin Fowler's article 'Mocks Aren't Stubs' (2007) is the classic reference for this distinction."
+  },
+  {
+    "id": "tdd-int-005",
+    "themeId": "tdd",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What is the correct approach to TDD this asynchronous function?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "async function fetchUserScore(\n  api: ApiClient, userId: string\n): Promise<number> {\n  const res = await api.get(`/users/${userId}`);\n  if (!res.ok) throw new Error('Failed');\n  return res.data.score;\n}\n// A: test('...', () => { fetchUserScore(api, '1'); })\n// B: test('...', async () => {\n//   const score = await fetchUserScore(stubApi, '1');\n//   expect(score).toBe(42);\n// })"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Approach A — synchronous tests are faster and simpler for async code",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Approach B — use async/await in the test with a stubbed API to properly resolve promises",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Neither — async code cannot be reliably tested with TDD",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use setTimeout in the test to wait for the promise to settle before asserting",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Approach B is correct because async tests must await the promise to ensure assertions run after the asynchronous operation completes. Approach A calls the function without awaiting it, meaning the test finishes before the promise resolves — the assertion never runs, and failures go undetected. Using setTimeout (option D) is fragile and non-deterministic. The key to TDD with async code is to stub the I/O dependency (the API client) so the test remains fast and deterministic while still exercising the async flow.",
+    "bonusFact": "Jest, Vitest, and Mocha all support returning promises or using async/await in tests natively."
+  },
+  {
+    "id": "tdd-int-006",
+    "themeId": "tdd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is a characterization test and when is it used in TDD with legacy code?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A test that documents the current (possibly incorrect) behavior of legacy code so you can safely refactor it",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A performance benchmark test that characterizes the speed of the system",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A test that verifies character encoding is handled correctly across the application",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A test written by the QA team to characterize acceptance criteria before development begins",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Characterization tests (coined by Michael Feathers in 'Working Effectively with Legacy Code') capture what the code actually does right now, even if that behavior contains bugs. The purpose is to create a safety net that alerts you if a refactoring changes existing behavior. You write the test, run it to see the actual output, then set the assertion to match that output. This is fundamentally different from normal TDD where you define desired behavior first — with characterization tests, you're documenting reality so you can later change it safely.",
+    "bonusFact": "Michael Feathers defines 'legacy code' as simply 'code without tests.'"
+  },
+  {
+    "id": "tdd-int-007",
+    "themeId": "tdd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does Behavior-Driven Development (BDD) relate to TDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "BDD replaces TDD entirely with a requirements-only approach that doesn't involve writing code tests",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "BDD is a refinement of TDD that emphasizes describing behavior in business language using Given-When-Then scenarios",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "BDD is a testing framework, while TDD is a design philosophy — they operate at completely different levels",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "BDD focuses only on UI acceptance tests, while TDD covers only unit tests",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "BDD, created by Dan North, evolved from TDD to address the confusion beginners felt about where to start and what to test. BDD reframes TDD in terms of behavior: instead of 'test this method,' you describe 'given this context, when this action occurs, then this outcome is expected.' The Red-Green-Refactor cycle still applies, but the language shifts to be understandable by non-developers. BDD does not replace TDD — it layers business-readable specifications on top of the same test-first discipline.",
+    "bonusFact": "Dan North's 2006 article 'Introducing BDD' describes how BDD emerged from TDD frustrations."
+  },
+  {
+    "id": "tdd-int-008",
+    "themeId": "tdd",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What testing technique does this test demonstrate?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "describe('isPalindrome', () => {\n  test.each([\n    ['racecar', true],\n    ['hello', false],\n    ['madam', true],\n    ['', true],\n    ['a', true],\n    ['ab', false],\n  ])('isPalindrome(\"%s\") === %s',\n    (input, expected) => {\n      expect(isPalindrome(input)).toBe(expected);\n    }\n  );\n});"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Property-based testing — generating random inputs to find edge cases",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Parameterized (data-driven) testing — running the same assertion logic with multiple input/output pairs",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Mutation testing — altering the implementation to verify test effectiveness",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Snapshot testing — recording output and comparing against a stored snapshot",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This is parameterized (or data-driven) testing, where the test logic is written once and executed multiple times with different input/output pairs from a table. The test.each() API in Jest/Vitest makes this straightforward. This technique reduces duplication when many test cases share the same structure. Property-based testing (option A) would use a generator to produce random inputs and verify invariants, not a fixed list. Mutation testing (option C) involves modifying source code to check if tests catch the change. Snapshot testing (option D) would use toMatchSnapshot().",
+    "bonusFact": null
+  },
+  {
+    "id": "tdd-int-009",
+    "themeId": "tdd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Why is dependency injection essential for testability in TDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It allows constructors to accept alternative implementations, enabling test doubles to replace real dependencies",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It automatically generates mock objects for all dependencies without any configuration",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It eliminates the need for test doubles entirely by making all code pure functions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It is only useful in Java and C# — JavaScript and TypeScript don't need dependency injection for testing",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Dependency injection (DI) means passing dependencies into a class or function rather than having it create them internally. This is critical for testability because tests can substitute real dependencies (databases, HTTP clients, file systems) with test doubles. Without DI, code that instantiates its own dependencies (e.g., new Database() inside a method) forces tests to use the real dependency or resort to monkey-patching. DI doesn't generate mocks (option B) — it simply provides the seam where mocks can be inserted. It's equally valuable in JavaScript/TypeScript (option D), even without a formal DI framework.",
+    "bonusFact": null
+  },
+  {
+    "id": "tdd-int-010",
+    "themeId": "tdd",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When practicing TDD, what is the best approach to testing error paths and edge cases?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Write failing tests for each error scenario before implementing the error handling — treat errors as first-class behaviors",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Add error handling to the code first, then write tests to verify it works — errors are implementation details",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Only test the happy path in TDD; error testing belongs to QA and integration testing phases",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use try-catch in every test to ensure no exceptions leak out during the test run",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In TDD, error paths deserve the same test-first treatment as happy paths. You write a failing test that expects a specific error (e.g., expect(() => withdraw(-1)).toThrow('Amount must be positive')), then implement the validation. This ensures error handling is intentional and documented by tests. Skipping error tests (option C) violates TDD's core principle. Adding error handling before tests (option B) reverses the TDD cycle. Wrapping every test in try-catch (option D) would swallow real test failures. Edge cases like null inputs, empty strings, boundary values, and concurrent access should all be driven by tests.",
+    "bonusFact": "Robert C. Martin's Transformation Priority Premise orders: simple, nil, then edges."
+  },
+  {
+    "id": "tdd-adv-001",
+    "themeId": "tdd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does property-based testing differ from example-based testing, and when does it provide more value?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Property-based testing verifies invariants hold across randomly generated inputs, uncovering edge cases that hand-picked examples miss",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Property-based testing uses CSS-like property selectors to target DOM elements for UI testing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Property-based testing replaces all unit tests by checking that class properties have correct types at runtime",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Property-based testing is identical to parameterized testing but uses larger datasets",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Property-based testing (PBT), pioneered by Haskell's QuickCheck, generates hundreds or thousands of random inputs and verifies that certain properties (invariants) always hold. For example: 'sorting a list then sorting it again yields the same result' or 'encoding then decoding always returns the original value.' Unlike parameterized tests where you choose specific examples, PBT discovers edge cases you didn't think of — off-by-one errors, empty inputs, integer overflow, etc. Libraries like fast-check (TypeScript) and Hypothesis (Python) implement this. PBT is most valuable for algorithmic code, serialization, and mathematical properties, but less suited for testing specific business rules that require exact examples.",
+    "bonusFact": "fast-check shrinks failing inputs to the smallest reproducing case automatically."
+  },
+  {
+    "id": "tdd-adv-002",
+    "themeId": "tdd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is mutation testing and what metric does it provide that code coverage cannot?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It introduces small changes (mutants) to production code and checks if tests detect them, measuring test suite effectiveness beyond line coverage",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It randomly mutates test assertions to verify they are not tautologies, measuring assertion density",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It tracks how often code mutates shared state, measuring side-effect frequency",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It replaces all dependencies with mutant stubs to test fault tolerance, measuring system resilience",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Mutation testing systematically introduces small syntactic changes (mutants) to your production code — such as changing > to >=, flipping true to false, or removing a function call — then runs your test suite to see if any test fails. If no test catches a mutant, it 'survives,' indicating a gap in test quality. The mutation score (killed mutants / total mutants) measures how effectively your tests detect real bugs, something that line coverage cannot reveal. You can have 100% coverage with weak assertions that never catch logical errors. Tools like Stryker (JavaScript/TypeScript) and PIT (Java) automate this process.",
+    "bonusFact": "Stryker Mutator supports TypeScript and can test Jest/Vitest projects out of the box."
+  },
+  {
+    "id": "tdd-adv-003",
+    "themeId": "tdd",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What TDD strategy is this microservice test demonstrating?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "// Order Service test\ntest('publishes OrderCreated event', async () => {\n  const bus = new InMemoryEventBus();\n  const svc = new OrderService(bus);\n  await svc.placeOrder({ item: 'Book', qty: 1 });\n  expect(bus.getPublished()).toHaveLength(1);\n  expect(bus.getPublished()[0].type).toBe('OrderCreated');\n});\n// Payment Service test (separate service)\ntest('handles OrderCreated event', async () => {\n  const handler = new PaymentHandler();\n  const evt = { type: 'OrderCreated', payload: { item: 'Book', qty: 1 } };\n  const result = await handler.handle(evt);\n  expect(result.status).toBe('payment_initiated');\n});"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "End-to-end testing — both services are tested together in a staging environment",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Contract testing — both services independently verify they produce and consume the agreed-upon event schema",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Smoke testing — a quick check that the services can start up without errors",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Load testing — verifying the event bus can handle concurrent events",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This demonstrates contract testing for event-driven microservices. The Order Service test verifies it publishes an event with the correct type and payload structure (the producer side of the contract). The Payment Service test verifies it can correctly handle that same event schema (the consumer side). Both tests run independently without requiring the other service, yet they share an implicit contract: the OrderCreated event schema. If either side changes the schema and breaks the contract, its own test will still pass but the integration will fail. Formalizing this with tools like Pact makes the contract explicit and catches drift before deployment.",
+    "bonusFact": "Pact is the most popular consumer-driven contract testing tool for microservices."
+  },
+  {
+    "id": "tdd-adv-004",
+    "themeId": "tdd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the primary risk of approval (snapshot) testing, and when is it most appropriate?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Developers blindly update snapshots when they break, masking real regressions; it works best for stable serialized outputs like component trees or API responses",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Snapshots consume too much disk space; it is only appropriate for small functions returning primitives",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Snapshot tests run significantly slower than unit tests; they should only be used in nightly builds",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Snapshots cannot detect changes in object structure; they only compare string equality",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The main risk of snapshot/approval testing is the 'blind update' problem: when a snapshot breaks, developers often run the update command without carefully reviewing the diff, inadvertently approving a regression as the new expected behavior. This defeats the purpose of the test. Snapshot tests are most valuable for outputs that are large, stable, and tedious to write assertions for — such as serialized React component trees, API response shapes, or CLI output. They serve as regression detectors rather than specification tools. For rapidly evolving code, snapshots create excessive noise and churn. Teams should establish code review practices that scrutinize snapshot changes carefully.",
+    "bonusFact": null
+  },
+  {
+    "id": "tdd-adv-005",
+    "themeId": "tdd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the key difference between 'solitary' (isolated) unit tests and 'sociable' unit tests, and what trade-off does each approach make?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Solitary tests mock all collaborators for speed and isolation but risk missing integration bugs; sociable tests use real collaborators for confidence but are slower and harder to diagnose",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Solitary tests are written by one developer; sociable tests are written by a pair — the trade-off is development speed vs code quality",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Solitary tests run in a single thread; sociable tests run in parallel — the trade-off is determinism vs execution speed",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Solitary tests cover private methods; sociable tests only cover public APIs — the trade-off is thoroughness vs encapsulation",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Jay Fields coined the terms 'solitary' and 'sociable' unit tests. Solitary tests replace every collaborator with a test double, achieving perfect isolation — failures point directly to the unit under test, and tests run extremely fast. However, they can't detect bugs in the interaction between real objects, and heavy mocking can make tests brittle and tightly coupled to implementation details. Sociable tests use real collaborators wherever feasible, catching integration issues early but making failures harder to diagnose (was it the unit or a collaborator?) and running slower. The classicist (Chicago) school favors sociable tests, while the mockist (London) school favors solitary tests.",
+    "bonusFact": null
+  },
+  {
+    "id": "tdd-adv-006",
+    "themeId": "tdd",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What technique does this test use to handle non-deterministic time, and why is it important?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "test('token expires after 1 hour', () => {\n  const clock = vi.useFakeTimers();\n  clock.setSystemTime(\n    new Date('2025-01-15T10:00:00Z')\n  );\n\n  const token = createToken({ userId: '123' });\n  expect(token.isValid()).toBe(true);\n\n  clock.advanceTimersByTime(60 * 60 * 1000 + 1);\n  expect(token.isValid()).toBe(false);\n\n  clock.useRealTimers();\n});"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Time freezing with fake timers — it makes time deterministic so tests don't depend on wall-clock time and never flake",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Performance profiling — it measures how long token validation takes to ensure it meets SLA requirements",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Chaos engineering — it simulates time skew to test distributed system resilience",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Test parallelization — it speeds up slow tests by advancing time instead of actually waiting",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This test uses fake timers (vi.useFakeTimers() from Vitest) to control the system clock. By pinning time to a specific moment and then advancing it programmatically, the test becomes fully deterministic — it doesn't depend on when or how fast it runs. Without fake timers, testing time-dependent logic (expiry, rate limiting, scheduling) requires either real waiting (making tests slow) or fragile timing assumptions (making tests flaky). The pattern is: freeze time, perform action, advance time to the critical threshold, assert the changed behavior. This technique is essential for testing any code that uses Date.now(), setTimeout, or setInterval.",
+    "bonusFact": "Sinon.js pioneered fake timers in JavaScript; Vitest and Jest now include them natively."
+  },
+  {
+    "id": "tdd-adv-007",
+    "themeId": "tdd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "When applying TDD to event-driven systems (e.g., message queues, event sourcing), what is the biggest testing challenge and how is it best addressed?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Verifying that the correct events are produced and consumed with proper ordering — addressed by using in-memory event buses and asserting on captured events",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Event-driven systems cannot be tested with TDD because events are inherently asynchronous and non-deterministic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The biggest challenge is testing event serialization — addressed by always using JSON.stringify in tests",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The biggest challenge is network latency — addressed by adding sleep() calls between publishing and consuming",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In event-driven architectures, the core difficulty is that producers and consumers are decoupled — you can't simply call a method and check the return value. The best TDD approach is to replace the real message broker with an in-memory event bus that synchronously captures published events. This lets you assert: (1) the correct events were published with the right payload, (2) event handlers produce the correct side effects when given specific events, and (3) event ordering is preserved when it matters. This keeps tests fast and deterministic. Claiming event systems can't be TDD'd (option B) is false — the key is isolating the event infrastructure. Adding sleep() (option D) creates flaky, slow tests.",
+    "bonusFact": null
+  },
+  {
+    "id": "tdd-adv-008",
+    "themeId": "tdd",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "This test is flaky in CI but passes locally. What is the most likely root cause?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "test('returns sorted users', async () => {\n  const db = await connectToTestDB();\n  await db.collection('users').insertMany([\n    { name: 'Charlie', age: 30 },\n    { name: 'Alice', age: 25 },\n    { name: 'Bob', age: 28 },\n  ]);\n  const result = await getUsers(db);\n  expect(result).toEqual([\n    { name: 'Alice', age: 25 },\n    { name: 'Bob', age: 28 },\n    { name: 'Charlie', age: 30 },\n  ]);\n  await db.collection('users').deleteMany({});\n});"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "The test depends on a real database, and leftover data from parallel tests or incomplete cleanup causes non-deterministic results",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The insertMany operation is not supported in CI environments due to security restrictions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The toEqual matcher doesn't work with database objects — toBe should be used instead",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Async/await is unreliable in CI runners and should be replaced with callbacks",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This test has multiple flakiness vectors. First, it uses a real shared database, so parallel test execution may leave residual data that pollutes results. Second, cleanup happens at the end (deleteMany), so if a previous test run crashed, stale data persists. Third, there's no beforeEach cleanup — the test assumes the collection is empty before insertMany but doesn't guarantee it. The fix involves: using a fresh collection or transaction per test, cleaning up in beforeEach (not afterEach), or using an in-memory database. Option B is fabricated — insertMany works everywhere MongoDB runs. Option D is incorrect — async/await is reliable in all modern test runners.",
+    "bonusFact": "The 'clean before, not after' pattern ensures tests start from a known state even after crashes."
+  },
+  {
+    "id": "tdd-adv-009",
+    "themeId": "tdd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How should randomness be handled when practicing TDD for code that uses random number generation?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Inject the random generator as a dependency so tests can provide a seeded or deterministic substitute",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Run the test thousands of times and assert the result falls within a statistical confidence interval",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Avoid using randomness entirely — TDD-driven code should always be deterministic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Mock Math.random globally in every test file to always return 0.5",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The cleanest TDD approach to randomness is dependency injection: pass the random source as a parameter (e.g., a function () => number or a seeded PRNG instance). Tests inject a deterministic generator that returns known values, making assertions predictable and repeatable. Statistical testing (option B) is unreliable for unit tests — it's slow and can still flake. Avoiding randomness entirely (option C) is impractical for many domains like games, simulations, or security. Global mocking (option D) is fragile, affects all code, and can break unrelated tests running in the same process. The DI approach keeps production code flexible and tests fully deterministic.",
+    "bonusFact": "Seedable PRNGs like 'seedrandom' let you reproduce exact sequences for debugging."
+  },
+  {
+    "id": "tdd-adv-010",
+    "themeId": "tdd",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "Which of the following describes the 'Ice Cream Cone' anti-pattern and the 'test coupling' anti-pattern in TDD?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Ice Cream Cone inverts the test pyramid with mostly E2E tests and few unit tests; test coupling means tests depend on each other's execution order or shared mutable state",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Ice Cream Cone means writing tests that are sweet but lack substance; test coupling means pairing production classes one-to-one with test classes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Ice Cream Cone is having too many layers of abstraction in test helpers; test coupling means tests are tightly coupled to the testing framework",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Ice Cream Cone means testing only during hot-fix emergencies; test coupling means running unit and integration tests in the same suite",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Ice Cream Cone anti-pattern is an inverted test pyramid: the majority of tests are slow, brittle end-to-end or manual tests, with few or no unit tests at the base. This leads to slow feedback cycles, high maintenance costs, and frequent flaky failures. The test coupling anti-pattern occurs when tests share mutable state or depend on running in a specific order — if test B only passes when test A runs first (because A sets up data that B relies on), the suite becomes fragile and non-parallelizable. Both anti-patterns undermine the goals of TDD: fast feedback, isolation, and confidence in refactoring. Fixing them requires investing in unit tests and ensuring each test is fully independent.",
+    "bonusFact": "Alister Scott coined the 'Software Testing Ice Cream Cone' to warn against top-heavy test suites."
+  }
+]

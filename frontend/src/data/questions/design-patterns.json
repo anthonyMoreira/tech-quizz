@@ -1,0 +1,986 @@
+[
+  {
+    "id": "design-patterns-beg-001",
+    "themeId": "design-patterns",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a design pattern in software engineering?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A specific library or framework that solves a common problem",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A reusable solution template to a commonly occurring problem in software design",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A mandatory coding standard enforced by a compiler",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A UML diagram that documents the architecture of a system",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A design pattern is a general, reusable solution template for a commonly occurring problem in software design. It is not finished code you can copy-paste, but rather a description or blueprint for how to solve a problem that can be adapted to many different situations. A library or framework is concrete implementation code, not a conceptual template. A coding standard is a style rule, and a UML diagram is a documentation tool — neither captures the intent of a design pattern.",
+    "bonusFact": "The term was inspired by architect Christopher Alexander's 'A Pattern Language' (1977)."
+  },
+  {
+    "id": "design-patterns-beg-002",
+    "themeId": "design-patterns",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which of the following is NOT one of the three categories of GoF (Gang of Four) design patterns?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Creational",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Structural",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Architectural",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Behavioral",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Gang of Four book 'Design Patterns: Elements of Reusable Object-Oriented Software' categorizes patterns into three groups: Creational (object creation), Structural (object composition), and Behavioral (object communication and responsibility). Architectural is not a GoF category — it refers to higher-level patterns like MVC or microservices that deal with system-wide structure rather than individual class relationships. All three GoF categories operate at the class/object level.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-beg-003",
+    "themeId": "design-patterns",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the Singleton pattern ensure?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A class can only have a single method",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A class has only one instance and provides a global access point to it",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A class can only inherit from one parent class",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A class can only be used by a single other class",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Singleton pattern ensures that a class has exactly one instance throughout the application and provides a global point of access to that instance. This is useful for resources like database connection pools, configuration managers, or loggers where multiple instances would be wasteful or cause conflicts. Having a single method, single inheritance, or single consumer are unrelated constraints that describe entirely different concepts.",
+    "bonusFact": "Singleton is often considered an anti-pattern due to hidden global state and testing difficulties."
+  },
+  {
+    "id": "design-patterns-beg-004",
+    "themeId": "design-patterns",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which pattern defines a one-to-many dependency so that when one object changes state, all its dependents are notified automatically?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Strategy pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Observer pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Factory Method pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Adapter pattern",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Observer pattern establishes a one-to-many dependency between a subject and its observers, so that when the subject's state changes, all registered observers are automatically notified and updated. The Strategy pattern is about swapping algorithms at runtime, not notification. The Factory Method pattern is a creational pattern for delegating object creation to subclasses. The Adapter pattern converts one interface to another — none of these involve automatic change notification.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-beg-005",
+    "themeId": "design-patterns",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the Factory Method pattern accomplish?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It converts the interface of one class into another interface clients expect",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It defines an interface for creating an object but lets subclasses decide which class to instantiate",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It attaches additional responsibilities to an object dynamically",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It composes objects into tree structures to represent part-whole hierarchies",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Factory Method pattern defines an interface for creating objects but defers the actual instantiation to subclasses. This allows a class to delegate object creation without knowing the exact class to instantiate. Converting interfaces describes the Adapter pattern, attaching responsibilities dynamically describes the Decorator pattern, and composing objects into tree structures describes the Composite pattern — all fundamentally different concerns from object creation.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-beg-006",
+    "themeId": "design-patterns",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which GoF category does the Strategy pattern belong to?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Creational",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Behavioral",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Structural",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Concurrency",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Strategy pattern is a behavioral pattern because it defines a family of interchangeable algorithms and lets the algorithm vary independently from the clients that use it. Behavioral patterns are concerned with communication and assignment of responsibilities between objects. Creational patterns deal with object creation mechanisms, and structural patterns deal with object composition. Concurrency is not a GoF pattern category at all.",
+    "bonusFact": "Strategy is one of the most commonly used patterns in modern frameworks."
+  },
+  {
+    "id": "design-patterns-beg-007",
+    "themeId": "design-patterns",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the Adapter pattern do?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It wraps an object to add new behaviors while keeping the same interface",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It converts the interface of a class into another interface that clients expect",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It provides a simplified interface to a complex subsystem",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It encapsulates a request as an object to parameterize clients",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Adapter pattern converts the interface of an existing class into a different interface that the client expects, allowing incompatible classes to work together. Wrapping an object to add behaviors while keeping the same interface describes the Decorator pattern. Providing a simplified interface to a subsystem describes the Facade pattern. Encapsulating a request as an object describes the Command pattern — each solves a different structural or behavioral problem.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-beg-008",
+    "themeId": "design-patterns",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "Which design pattern does this TypeScript code implement?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class Logger {\n  private static instance: Logger;\n  private constructor() {}\n\n  static getInstance(): Logger {\n    if (!Logger.instance) {\n      Logger.instance = new Logger();\n    }\n    return Logger.instance;\n  }\n\n  log(msg: string): void {\n    console.log(`[LOG] ${msg}`);\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Factory Method pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Singleton pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Builder pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Prototype pattern",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code implements the Singleton pattern. The key indicators are the private constructor (preventing external instantiation), the static instance field, and the static getInstance() method that creates the instance only once and returns the same reference thereafter. Factory Method delegates creation to subclasses — not what happens here. Builder separates construction of complex objects step by step, and Prototype creates objects by cloning — neither matches this lazy-initialization, single-instance approach.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-beg-009",
+    "themeId": "design-patterns",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "Which design pattern is demonstrated in this TypeScript code?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "interface SortStrategy {\n  sort(data: number[]): number[];\n}\nclass BubbleSort implements SortStrategy {\n  sort(data: number[]): number[] {\n    /* bubble sort logic */\n    return data;\n  }\n}\nclass Sorter {\n  constructor(private strategy: SortStrategy) {}\n  execute(data: number[]): number[] {\n    return this.strategy.sort(data);\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Observer pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Strategy pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Command pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Template Method pattern",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code demonstrates the Strategy pattern. A SortStrategy interface defines interchangeable algorithms, BubbleSort is a concrete strategy, and the Sorter context delegates the work to whichever strategy is injected. The Observer pattern involves subscribing to state changes, not algorithm substitution. The Command pattern encapsulates a request as an object with undo/redo capabilities. The Template Method defines a skeleton in a base class with overridable steps — unlike Strategy, which uses composition over inheritance.",
+    "bonusFact": "In modern JS/TS, a simple function parameter often replaces the full Strategy class hierarchy."
+  },
+  {
+    "id": "design-patterns-beg-010",
+    "themeId": "design-patterns",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "Which design pattern is this TypeScript code an example of?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "interface Command { execute(): void; undo(): void; }\nclass LightOnCommand implements Command {\n  constructor(private light: Light) {}\n  execute() { this.light.turnOn(); }\n  undo() { this.light.turnOff(); }\n}\nclass RemoteControl {\n  private history: Command[] = [];\n  press(cmd: Command) {\n    cmd.execute();\n    this.history.push(cmd);\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Command pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Strategy pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Observer pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Mediator pattern",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This is the Command pattern. The Command interface encapsulates a request as an object with execute() and undo() methods, LightOnCommand is a concrete command binding a receiver (Light) to an action, and RemoteControl is the invoker that stores command history. Strategy also uses polymorphism but focuses on swapping algorithms, not encapsulating requests with undo capability. Observer is about event notification, and Mediator centralizes communication between objects — neither involves request encapsulation with history tracking.",
+    "bonusFact": "The Command pattern is the backbone of undo/redo in text editors and IDEs."
+  },
+  {
+    "id": "design-patterns-int-001",
+    "themeId": "design-patterns",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the key difference between Abstract Factory and Factory Method?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Abstract Factory creates a single product; Factory Method creates families of products",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Abstract Factory creates families of related objects; Factory Method delegates creation of a single product to subclasses",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Factory Method uses composition; Abstract Factory uses inheritance",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "They are different names for the same pattern",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Abstract Factory provides an interface for creating families of related or dependent objects without specifying concrete classes, while Factory Method defines an interface for creating a single product and lets subclasses decide which class to instantiate. Option A reverses the relationship — it is Abstract Factory that creates families, not Factory Method. Factory Method relies on inheritance (subclasses override the factory method), while Abstract Factory typically uses composition (a factory object is passed around), making option C backwards. They are definitively different patterns with distinct intents.",
+    "bonusFact": "Abstract Factory is often implemented using multiple Factory Methods internally."
+  },
+  {
+    "id": "design-patterns-int-002",
+    "themeId": "design-patterns",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does the Observer pattern differ from the Publish/Subscribe pattern?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "They are identical — Pub/Sub is just a modern name for Observer",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "In Observer, the subject knows its observers directly; in Pub/Sub, an event channel or broker decouples publishers from subscribers",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Observer supports multiple subscribers; Pub/Sub supports only one",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Pub/Sub is synchronous; Observer is always asynchronous",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In the classic Observer pattern, the subject (observable) maintains a direct reference to its observers and notifies them directly, creating a tight coupling. In Pub/Sub, a message broker or event channel sits between publishers and subscribers, meaning neither side knows about the other. Both support multiple subscribers, so option C is wrong. Either pattern can be synchronous or asynchronous depending on implementation, making option D incorrect. While related, they are architecturally distinct — Pub/Sub introduces an extra layer of indirection.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-int-003",
+    "themeId": "design-patterns",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When should you prefer the Strategy pattern over the State pattern?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "When the object needs to transition between behaviors automatically based on internal state changes",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "When you want to select one algorithm from a family of interchangeable algorithms at runtime without the object tracking internal state transitions",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "When you need the behavior to change itself from within during execution",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "When you need a finite state machine with well-defined transitions",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Strategy is the right choice when you need to swap an algorithm or behavior from outside the object, and the strategies are independent and interchangeable without knowledge of each other. State is better when behavior changes are driven by internal state transitions, where each state knows which state to transition to next. Option A describes State pattern behavior — automatic transitions based on internal changes. Option C also describes State, where the current state object replaces itself. Option D describes a finite state machine, which is the State pattern's natural domain.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-int-004",
+    "themeId": "design-patterns",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the primary purpose of the Composite pattern?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To combine multiple classes into a single class through multiple inheritance",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To compose objects into tree structures so clients can treat individual objects and compositions uniformly",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To merge two incompatible interfaces into a single compatible interface",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To combine creational patterns together for more flexible object creation",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Composite pattern composes objects into tree (part-whole) structures and lets clients treat individual objects (leaves) and compositions (branches) through the same interface. This is especially useful for representing hierarchies like file systems, UI components, or organizational structures. Multiple inheritance is a language feature, not a pattern. Merging incompatible interfaces describes the Adapter pattern. Combining creational patterns is not a recognized pattern — the name 'Composite' refers to the tree composition, not general combination.",
+    "bonusFact": "React components form a Composite tree — a <div> can contain children or stand alone."
+  },
+  {
+    "id": "design-patterns-int-005",
+    "themeId": "design-patterns",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which of the following is NOT a common variation of the Proxy pattern?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Virtual Proxy (lazy initialization of expensive objects)",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Protection Proxy (access control based on permissions)",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Inheritance Proxy (automatically inheriting methods from a parent class)",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Remote Proxy (representing an object in a different address space)",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Virtual Proxy, Protection Proxy, and Remote Proxy are all well-known variations of the Proxy pattern. Virtual Proxy delays the creation of expensive objects until they are actually needed. Protection Proxy controls access by checking permissions before forwarding requests. Remote Proxy acts as a local representative for an object in another process or network. Inheritance Proxy is not a real pattern — Proxy works through composition (wrapping the real subject), not inheritance, making it a fabricated term.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-int-006",
+    "themeId": "design-patterns",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What pattern does this TypeScript code demonstrate?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class QueryBuilder {\n  private query: string[] = ['SELECT'];\n  columns(cols: string[]): this {\n    this.query.push(cols.join(', ')); return this;\n  }\n  from(table: string): this {\n    this.query.push(`FROM ${table}`); return this;\n  }\n  where(cond: string): this {\n    this.query.push(`WHERE ${cond}`); return this;\n  }\n  build() { return this.query.join(' '); }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Factory Method pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Builder pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Chain of Responsibility pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Prototype pattern",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code demonstrates the Builder pattern. The QueryBuilder constructs a complex object (an SQL query string) step by step through method chaining, with a final build() method that produces the result. Each method adds a part and returns 'this' for fluent chaining. Factory Method delegates creation to subclasses, which is not happening here. Chain of Responsibility passes a request through a chain of handlers — the method chaining syntax looks similar but serves a completely different purpose. Prototype creates objects by cloning existing instances.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-int-007",
+    "themeId": "design-patterns",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does the Template Method pattern differ from the Strategy pattern?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Template Method defines an algorithm skeleton in a base class using inheritance; Strategy defines interchangeable algorithms using composition",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Template Method is a creational pattern; Strategy is behavioral",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Template Method can only be used with abstract classes; Strategy requires interfaces",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Strategy supports only one variation point; Template Method supports many",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Template Method uses inheritance to define an algorithm's skeleton in a base class, deferring some steps to subclasses that override specific hook methods. Strategy uses composition — the algorithm is encapsulated in a separate strategy object that can be swapped at runtime. Both are behavioral patterns, so option B is wrong. While Template Method often uses abstract classes, neither pattern is strictly limited to abstract classes or interfaces. Strategy can have multiple variation points through different strategy objects, making option D incorrect.",
+    "bonusFact": "Hollywood Principle: 'Don't call us, we'll call you' — Template Method calls subclass hooks."
+  },
+  {
+    "id": "design-patterns-int-008",
+    "themeId": "design-patterns",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the key difference between the Facade pattern and the Adapter pattern?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Facade wraps a single object; Adapter wraps multiple objects",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Facade simplifies a complex subsystem's interface; Adapter makes an existing interface compatible with an expected one",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Adapter is structural; Facade is behavioral",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Facade creates new functionality; Adapter only wraps existing functionality",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Facade provides a simplified, higher-level interface to a complex subsystem of multiple classes, reducing coupling between client code and the subsystem. Adapter converts one existing interface to match another expected interface, enabling two incompatible classes to work together. Option A reverses reality — Facade typically wraps multiple objects (a subsystem), while Adapter wraps a single class. Both Facade and Adapter are structural patterns, so option C is wrong. Neither pattern is meant to add new functionality — they both reorganize access to existing behavior.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-int-009",
+    "themeId": "design-patterns",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When is applying a design pattern likely to be a mistake?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "When the codebase is already large and complex",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "When the problem the pattern solves does not actually exist in your code, adding unnecessary complexity",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "When the team is unfamiliar with the pattern being used",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "When the code needs to be maintained by multiple developers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Applying a pattern when the underlying problem it solves does not exist leads to over-engineering — adding layers of abstraction that complicate the code without providing any benefit. This is sometimes called 'pattern-itis' or speculative generality. Large codebases often benefit from patterns, so option A is not inherently a mistake. Team unfamiliarity (option C) is a training issue, not a reason to avoid patterns entirely. Multi-developer maintenance (option D) is actually a scenario where well-applied patterns improve readability and communication.",
+    "bonusFact": "YAGNI (You Aren't Gonna Need It) is the antidote to premature pattern application."
+  },
+  {
+    "id": "design-patterns-int-010",
+    "themeId": "design-patterns",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What design pattern does this TypeScript code apply?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "interface Component {\n  operation(): string;\n}\nclass ConcreteComponent implements Component {\n  operation(): string { return 'Base'; }\n}\nclass LoggingDecorator implements Component {\n  constructor(private wrapped: Component) {}\n  operation(): string {\n    console.log('Before');\n    const result = this.wrapped.operation();\n    console.log('After');\n    return result;\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Proxy pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Adapter pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Decorator pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Composite pattern",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code implements the Decorator pattern. LoggingDecorator wraps a Component, implements the same interface, and adds behavior (logging) before and after delegating to the wrapped object. The Proxy pattern looks structurally similar but controls access rather than adding behavior — and typically manages the lifecycle of the wrapped object. Adapter converts between different interfaces, but here both classes implement the same Component interface. Composite deals with tree structures of objects, not wrapping single objects to extend behavior.",
+    "bonusFact": "TypeScript/JavaScript decorators (@decorator) were directly inspired by this pattern."
+  },
+  {
+    "id": "design-patterns-adv-001",
+    "themeId": "design-patterns",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does the Visitor pattern achieve double dispatch in a language like TypeScript that only supports single dispatch?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "By using runtime type checking with instanceof to determine which method to call",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "By having the element call accept(visitor), which then calls visitor.visitConcreteElement(this), dispatching on both the element and visitor type",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "By using TypeScript generics to resolve the correct method at compile time",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "By using function overloading to dispatch on multiple argument types simultaneously",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Visitor pattern simulates double dispatch through two sequential single-dispatch calls. First, calling element.accept(visitor) dispatches on the element's type. Inside accept(), the element calls visitor.visitConcreteElement(this), which dispatches on the visitor's type — achieving dispatch on both types. Using instanceof (option A) is a fragile alternative that breaks the Open/Closed Principle. TypeScript generics (option C) are resolved at compile time and erased at runtime, so they cannot drive runtime dispatch. Function overloading in TypeScript (option D) is syntactic sugar that doesn't provide true multiple dispatch.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-adv-002",
+    "themeId": "design-patterns",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How do monads in functional programming relate to classical design patterns?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Monads are the functional equivalent of the Singleton pattern, ensuring single-value contexts",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Monads unify several GoF patterns — they act like chainable Decorators for computation, with flatMap resembling Chain of Responsibility for sequencing operations",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Monads replace all 23 GoF patterns in functional programming",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Monads are unrelated to design patterns — they are a purely mathematical concept",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Monads can be seen as a generalization of several GoF patterns in a functional context. They wrap values in a context (like Decorator wrapping behavior), chain operations through flatMap/bind (similar to Chain of Responsibility passing requests along), and encapsulate side effects (like Strategy encapsulating algorithms). They are not Singletons — monads can wrap any number of values (e.g., List monad). Claiming they replace all 23 patterns is an overstatement. While rooted in category theory, monads are very much a practical design pattern in languages like Haskell, Scala, and increasingly TypeScript.",
+    "bonusFact": "Promise in JavaScript is essentially the continuation monad with then() as flatMap."
+  },
+  {
+    "id": "design-patterns-adv-003",
+    "themeId": "design-patterns",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "Which of the following best describes the 'God Object' anti-pattern and its relationship to design patterns?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A God Object is a valid application of the Facade pattern, centralizing all logic in one place for simplicity",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A God Object is a class that knows too much or does too much, violating the Single Responsibility Principle, and can be refactored using patterns like Strategy, Observer, and Mediator to distribute responsibilities",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A God Object is the result of applying too many design patterns to the same class",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A God Object is acceptable in small projects because design patterns only matter at scale",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A God Object is an anti-pattern where a single class accumulates too many responsibilities, becoming a tangled hub that everything depends on. It violates the Single Responsibility Principle and makes testing, reuse, and modification extremely difficult. Unlike Facade — which delegates to subsystem classes while remaining thin — a God Object contains the actual logic itself. It is not caused by applying too many patterns; it is caused by failing to separate concerns. The idea that design patterns only matter at scale is a misconception — even small projects suffer from poorly distributed responsibilities.",
+    "bonusFact": "Lava Flow is a related anti-pattern: dead code nobody dares remove."
+  },
+  {
+    "id": "design-patterns-adv-004",
+    "themeId": "design-patterns",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does the Mediator pattern improve event-driven systems compared to direct Observer connections?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Mediator eliminates the need for events entirely by using direct method calls",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Mediator centralizes complex communication logic between multiple objects, preventing the tangled web of many-to-many Observer connections",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Mediator is faster than Observer because it reduces the number of method calls",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Mediator automatically persists events for replay, which Observer cannot do",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In event-driven systems with many interacting components, direct Observer connections create a tangled web of many-to-many dependencies that are hard to understand and maintain. The Mediator pattern centralizes this communication logic in one place, so each component only knows about the mediator rather than all the other components. Mediator does not eliminate events — it coordinates them. It typically adds a level of indirection that may slightly increase call overhead, not reduce it. Event persistence is an infrastructure concern handled by event stores, not inherent to either pattern.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-adv-005",
+    "themeId": "design-patterns",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "Which pattern does this TypeScript middleware pipeline implement?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "type Next = () => Promise<void>;\ntype Middleware = (ctx: Context, next: Next) => Promise<void>;\nclass Pipeline {\n  private stack: Middleware[] = [];\n  use(mw: Middleware): void {\n    this.stack.push(mw);\n  }\n  async execute(ctx: Context): Promise<void> {\n    const run = (i: number): Promise<void> =>\n      i < this.stack.length\n        ? this.stack[i](ctx, () => run(i + 1))\n        : Promise.resolve();\n    return run(0);\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Strategy pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Chain of Responsibility pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Command pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Decorator pattern",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This middleware pipeline implements the Chain of Responsibility pattern. Each middleware receives the context and a 'next' function that passes control to the next handler in the chain, allowing each handler to decide whether to proceed, modify the context, or short-circuit. Strategy would swap entire algorithms rather than chain them sequentially. Command encapsulates requests as objects with execute/undo — there is no undo mechanism here. Decorator wraps objects to add behavior via the same interface, but this code chains independent functions rather than wrapping nested objects.",
+    "bonusFact": "Koa.js and Express.js middleware stacks are real-world Chain of Responsibility."
+  },
+  {
+    "id": "design-patterns-adv-006",
+    "themeId": "design-patterns",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What pattern is used in this TypeScript reactive stream code?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class Observable<T> {\n  constructor(private subscribeFn: (obs: Observer<T>) => void) {}\n  subscribe(obs: Observer<T>): void {\n    this.subscribeFn(obs);\n  }\n  pipe<R>(op: (src: Observable<T>) => Observable<R>): Observable<R> {\n    return op(this);\n  }\n  static of<T>(...items: T[]): Observable<T> {\n    return new Observable(obs => {\n      items.forEach(i => obs.next(i));\n      obs.complete();\n    });\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Iterator pattern only",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Observer pattern combined with Iterator (push-based iteration)",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Strategy pattern with functional composition",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Pub/Sub pattern with type-safe channels",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Reactive Observables combine the Observer pattern (push-based notification via subscribe/next/complete) with the Iterator pattern (sequential processing of items). The Observable pushes values to its observer, which is the inversion of Iterator's pull-based model — hence 'push-based iteration.' Pure Iterator would require the consumer to pull values. Strategy with functional composition misidentifies the pipe() method — pipe transforms data streams, not algorithms. This is not Pub/Sub because there is no message broker — the Observable notifies its subscriber directly, which is the hallmark of Observer.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-adv-007",
+    "themeId": "design-patterns",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "When is the Flyweight pattern most appropriate, and what trade-off does it introduce?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "When you need to cache database queries; it trades memory for CPU time",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "When a large number of similar objects consume too much memory; it trades increased code complexity and separation of intrinsic/extrinsic state for reduced memory usage",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "When you need to speed up object creation; it trades immutability for performance",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "When objects need to be serialized efficiently; it trades type safety for smaller payloads",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Flyweight pattern shares common state (intrinsic) among many objects instead of storing it redundantly, dramatically reducing memory when millions of similar objects exist. The trade-off is increased complexity: you must carefully separate intrinsic state (shared, immutable, stored in the flyweight) from extrinsic state (context-dependent, passed in by the client). Database query caching is a different concern entirely. Flyweight does not primarily address creation speed — that is Builder or Prototype territory. Serialization efficiency is unrelated; Flyweight is purely about runtime memory optimization.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-adv-008",
+    "themeId": "design-patterns",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How is the MVC (Model-View-Controller) architectural pattern best described in terms of GoF pattern composition?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "MVC is a single GoF pattern — it is just the Mediator pattern applied at the UI level",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "MVC composes Observer (Model notifies View), Strategy (Controller is a strategy for the View), and Composite (View hierarchy) patterns together",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "MVC is the Facade pattern — the Controller is a facade over Model and View",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "MVC uses only the Command pattern — user actions are commands routed through the Controller",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The GoF book itself describes MVC as a composition of three patterns: Observer connects the Model to Views so that when data changes, Views update automatically. Strategy allows the View's behavior to change by swapping Controllers (the Controller is the View's strategy for handling input). Composite enables nested View hierarchies where groups and individual widgets are treated uniformly. Calling MVC just Mediator, Facade, or Command captures at most one aspect of its design while missing the other two critical pattern collaborations.",
+    "bonusFact": null
+  },
+  {
+    "id": "design-patterns-adv-009",
+    "themeId": "design-patterns",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "This TypeScript code refactors from inheritance to composition. Which principle and pattern does it apply?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "// Before: class Dog extends Animal { speak() { return 'Woof'; } }\n// After:\ninterface Speaker { speak(): string; }\ninterface Mover { move(): string; }\n\nconst barker: Speaker = { speak: () => 'Woof' };\nconst walker: Mover = { move: () => 'Walk' };\n\nfunction createDog(speaker: Speaker, mover: Mover) {\n  return {\n    ...speaker,\n    ...mover,\n    fetch: () => `${mover.move()} and retrieve`,\n  };\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Dependency Inversion Principle using the Abstract Factory pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Favor composition over inheritance using the Strategy pattern (behaviors are injected as composable objects)",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Interface Segregation Principle using the Adapter pattern",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Liskov Substitution Principle using the Prototype pattern",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This refactoring replaces class inheritance (Dog extends Animal) with composition by injecting behavior objects (Speaker, Mover) into a factory function. The behaviors are interchangeable strategies — barker could be swapped for a silent speaker — making this the Strategy pattern applied through the 'favor composition over inheritance' principle. Dependency Inversion and Abstract Factory focus on abstraction layers and families of objects. Interface Segregation is about splitting fat interfaces, which the small interfaces here support but is not the primary refactoring driver. Prototype clones objects, which is unrelated to this composition approach.",
+    "bonusFact": "The GoF book itself says: 'Favor object composition over class inheritance.'"
+  },
+  {
+    "id": "design-patterns-adv-010",
+    "themeId": "design-patterns",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "Which modern language feature or paradigm most directly replaces the need for the classical Strategy pattern with separate class hierarchies?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Reflection and runtime type inspection",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "First-class functions and closures, allowing strategies to be passed as simple function arguments",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Generics and template metaprogramming",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Dependency injection frameworks that auto-wire strategy implementations",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In languages with first-class functions (JavaScript, TypeScript, Python, Kotlin), the Strategy pattern's intent — swapping algorithms at runtime — is achieved by simply passing a function as an argument, eliminating the need for a separate interface and class hierarchy. A sort comparator function is a classic example. Reflection enables runtime introspection but does not inherently replace the strategy mechanism. Generics resolve types at compile time, not runtime algorithm selection. DI frameworks automate wiring but still rely on the underlying class-based Strategy structure rather than replacing it with a simpler construct.",
+    "bonusFact": "Peter Norvig showed that 16 of 23 GoF patterns simplify or vanish in dynamic languages."
+  }
+]

@@ -1,0 +1,989 @@
+[
+  {
+    "id": "refactoring-beg-001",
+    "themeId": "refactoring",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the definition of refactoring in software engineering?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Adding new features to the codebase while fixing bugs simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Restructuring existing code without changing its external behavior",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Rewriting the entire application from scratch using a new framework",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Optimizing code exclusively for better runtime performance",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Refactoring is the process of restructuring existing code without changing its observable external behavior. The goal is to improve the internal structure — readability, maintainability, and design — while keeping functionality identical. Adding features changes behavior (so it's not refactoring), rewriting from scratch is a replacement rather than an incremental improvement, and performance optimization is a separate concern that may or may not involve structural changes.",
+    "bonusFact": "Martin Fowler's 'Refactoring' (1999) is the seminal book that cataloged refactoring techniques."
+  },
+  {
+    "id": "refactoring-beg-002",
+    "themeId": "refactoring",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a 'code smell' in the context of refactoring?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A syntax error that prevents the code from compiling",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A surface-level indication in the code that hints at a deeper design problem",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A security vulnerability that exposes user data",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A failing unit test that reveals a regression bug",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A code smell is a surface-level indication in source code that usually corresponds to a deeper problem in the system's design. Code smells are not bugs — the code still works correctly — but they suggest that the code could be improved. Syntax errors prevent compilation and are not smells, security vulnerabilities are a different category of defect, and failing tests indicate behavioral bugs rather than structural issues.",
+    "bonusFact": "Kent Beck coined the term 'code smell' in the late 1990s."
+  },
+  {
+    "id": "refactoring-beg-003",
+    "themeId": "refactoring",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the 'Extract Method' refactoring technique?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Removing a method from a class and placing it in a utility file",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Taking a code fragment from an existing method and turning it into its own method with a descriptive name",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Copying a method from one class to another to share behavior",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Deleting unused methods from the codebase to reduce file size",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Extract Method involves taking a fragment of code that can be grouped together, moving it into a new method, and giving that method a name that explains its purpose. This is one of the most common refactoring techniques because it directly combats the Long Method smell and improves readability. Moving a method to a utility file is closer to 'Move Method,' copying methods creates duplication rather than reducing it, and deleting unused code is dead code removal rather than extraction.",
+    "bonusFact": "Most modern IDEs can perform Extract Method automatically with a keyboard shortcut."
+  },
+  {
+    "id": "refactoring-beg-004",
+    "themeId": "refactoring",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Why is renaming a variable or method considered a valid refactoring?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Because shorter names always make code run faster",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Because a clear, intention-revealing name improves readability without changing behavior",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Because renaming forces the compiler to re-optimize the code",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Because it changes the public API to match new requirements",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Rename Variable/Method is a refactoring because it improves code clarity and communicates intent without altering what the code does. Good names serve as documentation and reduce the cognitive load for future readers. Name length has no impact on runtime performance in any modern language, compilers do not re-optimize based on names, and renaming internal identifiers does not change the public API — it changes the internal vocabulary for maintainability.",
+    "bonusFact": null
+  },
+  {
+    "id": "refactoring-beg-005",
+    "themeId": "refactoring",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "Which code smell does this function most clearly demonstrate?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "function processOrder(order: Order): void {\n  // validate order... (30 lines)\n  // calculate totals... (25 lines)\n  // apply discounts... (20 lines)\n  // check inventory... (15 lines)\n  // process payment... (35 lines)\n  // send confirmation email... (20 lines)\n  // update analytics... (15 lines)\n  // log audit trail... (10 lines)\n  // total: ~170 lines\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Feature Envy",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Long Method",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Shotgun Surgery",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Primitive Obsession",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A 200-line method is a textbook example of the Long Method smell. Long methods are hard to understand, test, and maintain because they try to do too many things at once. Feature Envy is when a method uses another class's data more than its own, Shotgun Surgery is when a single change requires edits across many classes, and Primitive Obsession is overuse of primitives instead of small objects. None of these are directly about method length.",
+    "bonusFact": null
+  },
+  {
+    "id": "refactoring-beg-006",
+    "themeId": "refactoring",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the 'Duplicate Code' smell and why is it problematic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Having backup copies of source files; it wastes disk space",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "The same or very similar code appearing in multiple places; changes must be replicated everywhere",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Using version control branches that contain the same commits",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Running the same test suite twice in CI; it slows down the pipeline",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Duplicate Code is one of the most common and harmful code smells. When the same logic exists in multiple places, every bug fix or change must be applied to all copies — and forgetting one creates inconsistency. The fix usually involves Extract Method or Extract Class to centralize the logic. Backup files, branch management, and CI configuration are unrelated operational concerns, not code-level structural smells.",
+    "bonusFact": "The DRY principle (Don't Repeat Yourself) directly targets duplicate code."
+  },
+  {
+    "id": "refactoring-beg-007",
+    "themeId": "refactoring",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "Which code smell is present in the following function?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "function calculateTotal(price: number, qty: number): number {\n  const result = price * qty;\n  if (result > 1000) {\n    return result * 0.9;\n  } else if (result > 500) {\n    return result * 0.95;\n  }\n  return result;\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Long Method — the function has too many lines",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Magic Numbers — the values 1000, 0.9, 500, and 0.95 lack explanation",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Dead Code — some branches are never executed",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Duplicate Code — the return statements repeat the same logic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The function contains Magic Numbers: 1000, 500, 0.9, and 0.95 are hardcoded numeric literals with no explanation of what they represent. Are these discount thresholds? Tax brackets? A reader cannot tell without additional context. The fix is to extract them into named constants like BULK_DISCOUNT_THRESHOLD and BULK_DISCOUNT_RATE. The function is only 8 lines so it's not a Long Method, all branches are reachable so there's no Dead Code, and the return statements compute different values so they are not duplicates.",
+    "bonusFact": "Named constants also make it easier to update thresholds across the codebase."
+  },
+  {
+    "id": "refactoring-beg-008",
+    "themeId": "refactoring",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "When is the best time to refactor code during development?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Only during dedicated 'refactoring sprints' scheduled every quarter",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Continuously, as part of everyday development — especially before adding new features or after fixing bugs",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Only when the application crashes in production",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Never — working code should not be touched",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Refactoring should be a continuous, ongoing activity woven into daily development. The best opportunities are right before adding a new feature (to make the change easier) or right after getting something working (to clean up). Waiting for quarterly sprints lets technical debt accumulate dangerously, waiting for crashes is reactive rather than preventive, and the belief that working code should never be touched leads to codebases that become impossible to maintain over time.",
+    "bonusFact": "The Boy Scout Rule says: 'Leave the code cleaner than you found it.'"
+  },
+  {
+    "id": "refactoring-beg-009",
+    "themeId": "refactoring",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the key difference between refactoring and rewriting?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Refactoring uses a different programming language; rewriting keeps the same one",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Refactoring improves code in small, incremental steps preserving behavior; rewriting replaces code wholesale",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Rewriting is always faster and cheaper than refactoring",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "There is no difference — the terms are interchangeable",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Refactoring is an incremental, disciplined process of restructuring existing code in small steps, each preserving external behavior. Rewriting means discarding the existing code and building it again from scratch. Refactoring is lower risk because tests continue to pass at each step, while rewrites carry the danger of losing embedded business logic. The language used is irrelevant to the distinction, rewrites are often more expensive and risky (not cheaper), and the two terms describe fundamentally different approaches.",
+    "bonusFact": null
+  },
+  {
+    "id": "refactoring-beg-010",
+    "themeId": "refactoring",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "Which code smell does this class most clearly demonstrate?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class OrderProcessor {\n  calcShipping(order: Order) { /* 40 lines */ }\n  calcTax(order: Order) { /* 30 lines */ }\n  sendConfirmation(order: Order) { /* 25 lines */ }\n  generateInvoice(order: Order) { /* 35 lines */ }\n  updateInventory(order: Order) { /* 20 lines */ }\n  notifyWarehouse(order: Order) { /* 15 lines */ }\n  processPayment(order: Order) { /* 50 lines */ }\n  applyDiscount(order: Order) { /* 20 lines */ }\n  validateAddress(order: Order) { /* 30 lines */ }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Feature Envy — the methods want to belong to a different class",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Large Class (God Class) — one class handles far too many responsibilities",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Long Parameter List — the methods accept too many arguments",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Speculative Generality — the class provides features nobody uses yet",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This OrderProcessor class handles shipping, tax, email, invoicing, inventory, warehouse notifications, payments, discounts, and address validation — far too many responsibilities for a single class. This is the Large Class or God Class smell. The fix is to extract separate classes like ShippingCalculator, PaymentProcessor, and NotificationService. Feature Envy relates to a method overly using another class's data, Long Parameter List is about method signatures with too many arguments, and Speculative Generality is about unused abstractions built for hypothetical future needs.",
+    "bonusFact": "The God Class smell directly violates the Single Responsibility Principle."
+  },
+  {
+    "id": "refactoring-int-001",
+    "themeId": "refactoring",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "Which refactoring technique best improves the following code?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "function getDiscount(customer: Customer): number {\n  if (customer.type === 'premium') {\n    return 0.2;\n  } else if (customer.type === 'gold') {\n    return 0.15;\n  } else if (customer.type === 'silver') {\n    return 0.1;\n  } else {\n    return 0;\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Extract Method — break each branch into a separate function",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Replace Conditional with Polymorphism — create subclasses that override a getDiscount method",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Inline Method — collapse the function into its callers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Introduce Null Object — add a NullCustomer class",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Replace Conditional with Polymorphism is the ideal refactoring here because the conditional branches on customer type to determine behavior — a classic sign that subclasses (PremiumCustomer, GoldCustomer, etc.) should each implement their own getDiscount method. This eliminates the growing if/else chain and makes adding new customer types a matter of adding a class rather than modifying existing code. Extract Method only moves the problem around without fixing the design, inlining would duplicate the conditional everywhere, and Null Object addresses missing objects rather than type-based branching.",
+    "bonusFact": "This refactoring aligns with the Open/Closed Principle from SOLID."
+  },
+  {
+    "id": "refactoring-int-002",
+    "themeId": "refactoring",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What does the 'Extract Class' refactoring achieve?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It combines two small classes into one larger, more efficient class",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It moves a coherent subset of fields and methods from an existing class into a new class",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It converts a class into a standalone function module",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It removes all private methods from a class to make testing easier",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Extract Class takes a class that is doing too much and splits it by moving a coherent group of fields and methods into a new, separate class. The original class then delegates to the new one. This directly addresses the Large Class smell by giving each class a single, clear responsibility. Combining classes is the opposite operation (Inline Class), converting to functions is a paradigm shift rather than a refactoring, and removing private methods would destroy encapsulation rather than improve it.",
+    "bonusFact": null
+  },
+  {
+    "id": "refactoring-int-003",
+    "themeId": "refactoring",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When should you apply the 'Move Method' refactoring?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "When a method is too long and needs to be split into smaller pieces",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "When a method uses more features of another class than the class it currently lives in",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "When you want to convert a static method into an instance method",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "When a method has too many parameters and needs simplification",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Move Method is applied when a method has Feature Envy — it accesses data or calls methods on another class more than on its own class. Moving the method to the class it interacts with most reduces coupling and improves cohesion. Splitting long methods is Extract Method, converting static to instance methods is a different transformation, and too many parameters calls for Introduce Parameter Object. Move Method specifically addresses misplaced responsibility.",
+    "bonusFact": "Feature Envy is the primary indicator that Move Method is needed."
+  },
+  {
+    "id": "refactoring-int-004",
+    "themeId": "refactoring",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What refactoring would best simplify the following function signature?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "function createEvent(\n  title: string,\n  startDate: Date,\n  endDate: Date,\n  startTime: string,\n  endTime: string,\n  location: string,\n  room: string,\n  capacity: number\n): Event {\n  // ...\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Rename Method — give the function a more descriptive name",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Introduce Parameter Object — group related parameters into objects like DateRange and Venue",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Extract Method — split the function body into smaller helper functions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Inline Method — remove the function and place its logic at every call site",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Introduce Parameter Object replaces a group of related parameters with a single object. Here, startDate/endDate/startTime/endTime could become a DateRange object, and location/room/capacity could become a Venue object, reducing the parameter list from eight to three. Renaming the function does not address the long parameter list, Extract Method works on the body not the signature, and inlining would spread the complexity to every call site making things worse.",
+    "bonusFact": "Parameter objects often reveal missing domain concepts hiding in plain sight."
+  },
+  {
+    "id": "refactoring-int-005",
+    "themeId": "refactoring",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the 'Feature Envy' code smell?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A class that has too many public methods exposed in its interface",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A method that accesses data from another class more than from its own class",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A function that is overly optimized at the expense of readability",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A module that imports every other module in the application",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Feature Envy occurs when a method seems more interested in another class's data than its own — it constantly reaches into another object to access fields or call methods. This suggests the method belongs in the other class. Too many public methods is an interface bloat concern, over-optimization is a readability issue but not a named smell, and excessive imports might indicate high coupling but is not specifically Feature Envy.",
+    "bonusFact": null
+  },
+  {
+    "id": "refactoring-int-006",
+    "themeId": "refactoring",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the 'Shotgun Surgery' code smell?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A single class that absorbs responsibilities from many other classes",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A single logical change that requires small edits scattered across many different classes or modules",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A method that randomly deletes data from the database",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A function that takes different code paths depending on a global flag",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Shotgun Surgery means that making one conceptual change (e.g., adding a new customer field) forces you to make many small modifications in many different classes or files. This indicates that the responsibility is spread too thin across the codebase. A class absorbing too many responsibilities is the God Class smell (the opposite problem), random data deletion is a bug not a smell, and branching on global flags relates to coupling but is not Shotgun Surgery.",
+    "bonusFact": "Shotgun Surgery is the opposite of Divergent Change in Fowler's smell catalog."
+  },
+  {
+    "id": "refactoring-int-007",
+    "themeId": "refactoring",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What does the 'Replace Temp with Query' refactoring achieve?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It replaces a temporary variable with a direct inline expression everywhere it appears",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It extracts the expression assigned to a temp variable into a reusable method (query) and replaces the temp with calls to that method",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It replaces database queries with in-memory temporary variables for performance",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It splits a temporary variable used for multiple purposes into several single-purpose variables",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Replace Temp with Query takes a temporary variable that holds the result of an expression and extracts that expression into its own method, replacing every use of the temp with a call to the new method. This is superior to simple inlining because the extracted method is reusable from other methods in the class. Replacing database queries with temps is a caching optimization not a refactoring, and splitting a multi-purpose temp variable is a different refactoring called Split Temporary Variable.",
+    "bonusFact": null
+  },
+  {
+    "id": "refactoring-int-008",
+    "themeId": "refactoring",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is 'composing method' as a refactoring strategy?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Writing methods that compose functional pipelines using map, filter, and reduce",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Breaking a long method into smaller methods so the original reads like a series of well-named steps",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Combining multiple classes into a single method to reduce class count",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Using method chaining to create a fluent API interface",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Composing method is a refactoring strategy where you break a long, complex method into a sequence of smaller, well-named methods so that reading the original method is like reading a high-level outline of the algorithm. Each extracted method handles one step and has a name that explains its purpose. This is different from functional composition using map/filter/reduce, has nothing to do with merging classes, and is not about fluent API design — it is specifically about decomposing a method's body into readable sub-steps.",
+    "bonusFact": "Kent Beck described the Composed Method pattern in 'Smalltalk Best Practice Patterns.'"
+  },
+  {
+    "id": "refactoring-int-009",
+    "themeId": "refactoring",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Why are automated tests considered essential before performing refactoring?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Tests automatically refactor the code for you when run in watch mode",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Tests act as a safety net that verifies behavior is preserved after each refactoring step",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Tests are required by the compiler to allow code modifications",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Tests measure code performance to ensure refactoring does not slow the application",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Automated tests serve as a safety net during refactoring by confirming that external behavior remains unchanged after each small structural change. If a test fails after a refactoring step, you know immediately that something broke and can revert. Tests do not automatically refactor code, compilers do not require tests, and standard unit tests verify correctness rather than performance. Without tests, refactoring becomes a high-risk activity because you cannot be confident that your changes preserved behavior.",
+    "bonusFact": "Michael Feathers defines legacy code as 'code without tests.'"
+  },
+  {
+    "id": "refactoring-int-010",
+    "themeId": "refactoring",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What refactoring has been applied to transform the 'before' code into the 'after' code?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "// Before:\nfunction printOwing(invoice: Invoice) {\n  let outstanding = 0;\n  for (const o of invoice.orders) {\n    outstanding += o.amount;\n  }\n  console.log(`name: ${invoice.customer}`);\n  console.log(`amount: ${outstanding}`);\n}\n\n// After:\nfunction printOwing(invoice: Invoice) {\n  const outstanding = getOutstanding(invoice);\n  printDetails(invoice, outstanding);\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Inline Method — the helper methods were collapsed into printOwing",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Extract Method — the calculation and printing logic were pulled into separate methods",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Replace Temp with Query — the outstanding variable was removed entirely",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Move Method — printOwing was moved to a different class",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Extract Method was applied twice: the loop calculating outstanding was extracted into getOutstanding, and the console.log statements were extracted into printDetails. The result is that printOwing now reads as a concise, high-level description of what it does. Inline Method is the reverse operation (collapsing helpers back in), the outstanding variable still exists so Replace Temp with Query was not the primary refactoring, and the method stayed in the same class so Move Method does not apply.",
+    "bonusFact": null
+  },
+  {
+    "id": "refactoring-adv-001",
+    "themeId": "refactoring",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the Strangler Fig pattern for refactoring legacy systems?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Shutting down the legacy system completely before starting development of the replacement",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Gradually building a new system around the old one, intercepting and replacing functionality piece by piece until the old system can be removed",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Running the old and new systems in parallel permanently, splitting traffic 50/50 between them",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Wrapping the entire legacy system in an adapter and never modifying it again",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Strangler Fig pattern (named after the strangler fig tree that grows around a host tree) involves gradually building new functionality around a legacy system, routing requests to the new code piece by piece until the legacy system is completely replaced. This approach minimizes risk because the old system continues to handle traffic for parts that haven't been migrated yet. Shutting down the old system first creates downtime and risk. Permanent 50/50 traffic splitting is a load-balancing strategy not a migration pattern, and wrapping without eventual replacement just adds a layer of indirection without progressing toward modernization.",
+    "bonusFact": "Martin Fowler named this pattern after strangler figs in a 2004 article."
+  },
+  {
+    "id": "refactoring-adv-002",
+    "themeId": "refactoring",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the 'parallel change' (expand-contract) refactoring strategy?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Running two versions of the application simultaneously in production to compare outputs",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Introducing the new interface alongside the old one, migrating consumers, then removing the old interface",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Using parallel threads to execute refactoring operations faster",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Contracting the codebase by removing all deprecated APIs in a single commit",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Parallel change (expand-contract) is a three-phase strategy: first expand by adding the new interface alongside the old one, then migrate all consumers from the old interface to the new one, and finally contract by removing the old interface. This ensures backward compatibility throughout the migration and eliminates the need for coordinated big-bang releases. Running two apps in production for comparison is dark launching or shadow testing, parallel threads are a concurrency concept, and removing all deprecated APIs at once is the risky big-bang approach that expand-contract specifically avoids.",
+    "bonusFact": "This pattern is essential for safe API evolution in libraries with external consumers."
+  },
+  {
+    "id": "refactoring-adv-003",
+    "themeId": "refactoring",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is 'Branch by Abstraction' and when is it used in refactoring?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Creating a Git branch for each abstraction layer in the application",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Introducing an abstraction layer over a component to allow its implementation to be swapped incrementally without long-lived branches",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Using abstract classes instead of interfaces during refactoring to preserve inheritance hierarchies",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Splitting the codebase into micro-repositories, each containing one abstract module",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Branch by Abstraction is a technique for making large-scale changes on the main branch without using long-lived feature branches. You introduce an abstraction (interface) over the component you want to replace, switch all clients to use that abstraction, build the new implementation behind it, and then swap. This keeps the codebase always deployable. It has nothing to do with Git branching strategies, choosing between abstract classes and interfaces, or repository organization — it is about using code-level abstractions to enable incremental replacement.",
+    "bonusFact": "Paul Hammant popularized the term as an alternative to feature branches."
+  },
+  {
+    "id": "refactoring-adv-004",
+    "themeId": "refactoring",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What does 'refactoring to patterns' mean in practice?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Implementing all 23 Gang of Four design patterns at the start of every project",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Evolving code toward a design pattern only when the code's current structure reveals the need for that pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Using regex patterns to find and automatically replace code smells",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Following a fixed sequence of refactoring steps documented in a template",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Refactoring to patterns, as described by Joshua Kerievsky, means you let the code tell you when a pattern is needed rather than imposing patterns upfront. When you see a conditional that keeps growing, you might refactor toward Strategy; when object creation becomes complex, you might evolve toward Factory Method. Pre-applying all GoF patterns leads to over-engineering, regex-based replacements are too mechanical for design-level changes, and fixed templates cannot account for the context-dependent nature of design decisions.",
+    "bonusFact": "Joshua Kerievsky's 'Refactoring to Patterns' bridges Fowler's and GoF's work."
+  },
+  {
+    "id": "refactoring-adv-005",
+    "themeId": "refactoring",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What are the unique challenges of refactoring database schemas compared to application code?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Databases cannot be versioned, so changes must be done manually in production",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Schema changes must preserve existing data, support rollback, and account for multiple application versions accessing the database simultaneously",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Database refactoring is impossible — schemas should be finalized before any code is written",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The only challenge is ensuring foreign key constraints remain valid after the change",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Database refactoring is uniquely challenging because schemas carry persistent state (data) that must be migrated without loss or corruption. Multiple versions of an application may access the same database during rolling deployments, so schema changes must be backward compatible. Rollback must also be possible without data loss, which requires careful migration design. Databases can be versioned using migration tools like Flyway or Liquibase, schemas absolutely can and should evolve after initial design, and while foreign keys are one concern, data migration, backward compatibility, and zero-downtime deployment are equally critical challenges.",
+    "bonusFact": "Scott Ambler's 'Refactoring Databases' catalogs over 60 database refactorings."
+  },
+  {
+    "id": "refactoring-adv-006",
+    "themeId": "refactoring",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "Which advanced refactoring pattern does this transformation illustrate?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "// Step 1: Introduce interface\ninterface PaymentGateway {\n  charge(amount: number): Promise<Result>;\n}\n// Step 2: Old impl behind interface\nclass LegacyPayment implements PaymentGateway {\n  charge(amount: number) { /* old Stripe v2 */ }\n}\n// Step 3: New impl behind interface\nclass ModernPayment implements PaymentGateway {\n  charge(amount: number) { /* new Stripe v4 */ }\n}\n// Step 4: Swap and remove LegacyPayment"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Dependency Injection — injecting the payment service at runtime",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Branch by Abstraction — abstracting the component to swap implementations incrementally",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Strategy Pattern — selecting an algorithm at runtime based on context",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Adapter Pattern — wrapping an incompatible interface to match an expected one",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code demonstrates Branch by Abstraction: an interface (PaymentGateway) is introduced as an abstraction layer, the legacy implementation is placed behind it, a new implementation is built alongside it, and finally the old one is removed. While it uses an interface (which is also part of Strategy and DI), the specific four-step process of abstracting, implementing new, migrating, and removing old is what defines Branch by Abstraction. Dependency Injection is a wiring mechanism, Strategy is about runtime algorithm selection, and Adapter is about interface compatibility — none describe this incremental replacement workflow.",
+    "bonusFact": null
+  },
+  {
+    "id": "refactoring-adv-007",
+    "themeId": "refactoring",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What special considerations apply when refactoring distributed systems or microservices?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Distributed systems are simpler to refactor because each service is independently deployable",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "API contracts between services must be versioned, backward compatibility maintained, and changes coordinated across multiple deployment pipelines",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "You should refactor all microservices simultaneously in a single coordinated release",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Network boundaries have no impact on refactoring — the same techniques as monoliths apply",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Refactoring distributed systems introduces challenges absent in monoliths: API contracts between services must maintain backward compatibility (since you cannot deploy all services simultaneously), message formats must be versioned, and changes must be rolled out across independent deployment pipelines. While independent deployability is a benefit of microservices, it actually complicates refactoring across service boundaries. Coordinated big-bang releases negate the benefits of microservices, and network boundaries absolutely matter because you cannot use compile-time checks to verify cross-service contracts.",
+    "bonusFact": "Postel's Law — 'be liberal in what you accept' — is critical in distributed refactoring."
+  },
+  {
+    "id": "refactoring-adv-008",
+    "themeId": "refactoring",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "In which situation is it advisable NOT to refactor existing code?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "When the code is ugly but works correctly and will never need to change again",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "When the code is so broken that its behavior cannot be characterized by tests, making a rewrite more practical",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "When the code was written by a senior developer and should not be questioned",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "When the codebase has more than 100,000 lines — large codebases should never be refactored",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Refactoring requires that you can verify behavior is preserved, which means you need tests or the ability to write them. When code is so fundamentally broken, tangled, or undocumented that you cannot characterize its actual behavior with tests, refactoring becomes dangerous — a controlled rewrite may be more practical. Ugly but stable code that never changes is also a case where refactoring has low ROI, but that's about priorities not impossibility. Author seniority is irrelevant to code quality, and large codebases are refactored routinely — size alone is never a reason to avoid refactoring.",
+    "bonusFact": null
+  },
+  {
+    "id": "refactoring-adv-009",
+    "themeId": "refactoring",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "After refactoring, what measurable improvement does this transformation primarily demonstrate?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "// Before: cyclomatic complexity = 8\nfunction rate(user: User): number {\n  if (user.age < 18) return 0;\n  if (user.age > 65) return 0.5;\n  if (user.score > 900) return 0.1;\n  if (user.score > 700) return 0.2;\n  if (user.score > 500) return 0.3;\n  if (user.tenure > 5) return 0.25;\n  if (user.tenure > 2) return 0.35;\n  return 0.4;\n}\n// After: cyclomatic complexity = 2 per class"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Reduced lines of code — the refactored version has fewer total lines",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Reduced cyclomatic complexity — distributing branching logic across focused classes lowers complexity per unit",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Improved runtime performance — fewer if statements means faster execution",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Reduced number of classes — consolidating logic into one function is simpler",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The key measurable improvement is cyclomatic complexity reduction. The original function has a complexity of 8 due to its many branching paths, making it hard to test and modify. Refactoring into separate strategy classes (e.g., AgeRatingStrategy, ScoreRatingStrategy) distributes the complexity so each unit has a complexity of around 2, which is much easier to test and reason about. The total lines of code may actually increase since classes add boilerplate, runtime performance is not meaningfully affected by this structural change, and the refactored version has more classes not fewer — but each class is focused and independently testable.",
+    "bonusFact": "Cyclomatic complexity correlates with the number of test cases needed for branch coverage."
+  },
+  {
+    "id": "refactoring-adv-010",
+    "themeId": "refactoring",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "Which combination of code smells and refactorings best describes what should be done to improve this code?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class ReportGenerator {\n  generate(type: string, data: any[], fmt: string) {\n    let result = '';\n    if (type === 'sales') {\n      for (const d of data) result += d.product + ',' + d.qty + ',' + d.price + '\\n';\n    } else if (type === 'inventory') {\n      for (const d of data) result += d.sku + ',' + d.stock + '\\n';\n    }\n    if (fmt === 'html') result = '<pre>' + result + '</pre>';\n    return result;\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Long Method only — apply Extract Method to shorten the function",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Replace Conditional with Polymorphism for report types, Strategy pattern for formatters, and Extract Class to separate report generation from formatting",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Rename Variable — change 'd' to 'item' and 'fmt' to 'format' and the code is clean",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Inline Method — merge this into the caller to give it more context",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code has multiple intertwined smells: the type-based conditional for report generation should be replaced with polymorphism (SalesReport, InventoryReport classes), the format-based conditional should use a Strategy or similar pattern (HtmlFormatter, CsvFormatter), and the class mixes report content generation with output formatting, calling for Extract Class. Simply renaming variables improves surface readability but does not address the structural problems, Extract Method alone does not fix the fundamental design issues, and inlining would spread the complexity to callers. The key insight is that two independent dimensions of variation (report type and output format) are entangled in a single method.",
+    "bonusFact": null
+  }
+]

@@ -1,0 +1,983 @@
+[
+  {
+    "id": "microservices-beg-001",
+    "themeId": "microservices",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the best definition of a microservices architecture?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A single deployable application split into separate source folders for organizational purposes",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "An architectural style where an application is composed of small, independently deployable services, each owning a specific business capability",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A way to deploy the same monolithic codebase to multiple servers for horizontal scaling",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A frontend pattern where the UI is split into reusable component libraries",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Microservices architecture structures an application as a collection of small, loosely coupled services that each implement a specific business capability and can be deployed independently. Unlike a monolith split into folders, each microservice runs as its own process with its own deployment lifecycle. Deploying the same codebase to multiple servers is horizontal scaling of a monolith, not microservices. Reusable UI component libraries are a frontend concern unrelated to microservices architecture.",
+    "bonusFact": "The term 'microservices' was first discussed at a workshop near Venice in May 2011."
+  },
+  {
+    "id": "microservices-beg-002",
+    "themeId": "microservices",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the main difference between a monolithic architecture and a microservices architecture?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Monoliths use REST APIs while microservices use GraphQL exclusively",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Monoliths are deployed as a single unit while microservices are independently deployable services",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Monoliths cannot scale horizontally while microservices can only scale horizontally",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Monoliths are written in one language while microservices require multiple programming languages",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The fundamental difference is that a monolith is built, tested, and deployed as a single unit, whereas microservices are independently deployable services with their own lifecycles. Monoliths can and do use REST APIs, and microservices can use any communication protocol. Monoliths can scale horizontally by running multiple instances behind a load balancer. Microservices do not require multiple languages — polyglot is an option, not a requirement.",
+    "bonusFact": null
+  },
+  {
+    "id": "microservices-beg-003",
+    "themeId": "microservices",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does it mean for a microservice to be 'independently deployable'?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The service can be updated, deployed, and scaled without requiring changes or redeployment of other services",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The service must be deployed on its own dedicated physical server",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The service does not depend on any external configuration or environment variables",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The service can only be deployed manually, not through automated CI/CD pipelines",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Independent deployability means a service can be changed, released, and scaled on its own without forcing other services to be modified or redeployed simultaneously. This is a cornerstone of microservices because it enables faster release cycles and reduces risk. It does not mean the service requires its own physical server — services commonly share infrastructure. Services still use configuration and environment variables, and automated deployment pipelines are strongly encouraged.",
+    "bonusFact": "Independent deployability is considered the single most important property of microservices."
+  },
+  {
+    "id": "microservices-beg-004",
+    "themeId": "microservices",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the primary purpose of an API Gateway in a microservices architecture?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To store shared data that all microservices need to access",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To act as a single entry point for clients, routing requests to the appropriate microservices",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To compile all microservices into a single deployment artifact",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To synchronize the databases of all microservices in real time",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "An API Gateway serves as a single entry point for all client requests, routing them to the appropriate backend microservices. It can also handle cross-cutting concerns like authentication, rate limiting, and response aggregation. It does not store shared data — that would violate the database-per-service principle. It does not compile services together or synchronize databases, as those would undermine the independence of microservices.",
+    "bonusFact": "Popular API gateways include Kong, AWS API Gateway, and Netflix Zuul."
+  },
+  {
+    "id": "microservices-beg-005",
+    "themeId": "microservices",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the difference between synchronous and asynchronous communication between microservices?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Synchronous means the caller waits for a response; asynchronous means the caller sends a message and continues without waiting",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Synchronous uses HTTP while asynchronous can only use WebSockets",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Synchronous is faster because it uses binary protocols while asynchronous uses text-based protocols",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Synchronous communication is for internal services while asynchronous is only for external clients",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In synchronous communication (e.g., HTTP/REST, gRPC), the calling service sends a request and blocks until it receives a response. In asynchronous communication (e.g., message queues, event streams), the caller sends a message and continues processing without waiting for an immediate reply. Asynchronous communication is not limited to WebSockets — it commonly uses message brokers like RabbitMQ or Kafka. Both styles can use binary or text protocols, and both are used for internal service-to-service communication.",
+    "bonusFact": null
+  },
+  {
+    "id": "microservices-beg-006",
+    "themeId": "microservices",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the 'database per service' pattern in microservices?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "All microservices share one large database but access different tables",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Each microservice must use a different database technology from every other service",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Each microservice owns and manages its own private database that other services cannot access directly",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "The database is replicated across all services so each has a local copy of all data",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The database-per-service pattern gives each microservice its own private data store that no other service can access directly. This ensures loose coupling because services can only interact through well-defined APIs, not by reading each other's tables. Sharing a single database creates tight coupling and makes independent deployment difficult. Services may use the same database technology — the pattern does not require different technologies. Full replication of all data across services would defeat the purpose of data ownership.",
+    "bonusFact": "Services can use different DB technologies (polyglot persistence) based on their needs."
+  },
+  {
+    "id": "microservices-beg-007",
+    "themeId": "microservices",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is service discovery in a microservices architecture?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A mechanism that allows services to find and communicate with each other by looking up network locations dynamically",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A testing technique where services are automatically discovered and tested for compatibility",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A process of manually documenting all available services in a wiki",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A deployment pattern where new services are automatically deployed when detected in source control",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Service discovery is the mechanism by which microservices automatically locate each other on the network. Because services can scale up, scale down, or move to different hosts, hardcoding addresses is impractical. Service discovery registries like Consul, Eureka, or Kubernetes DNS allow services to register themselves and query for the locations of other services. It is not a testing technique, a documentation process, or a deployment automation pattern.",
+    "bonusFact": "Kubernetes provides built-in service discovery via DNS and environment variables."
+  },
+  {
+    "id": "microservices-beg-008",
+    "themeId": "microservices",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Why are containers (like Docker) commonly used with microservices?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Containers are required for microservices to communicate over the network",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Containers provide lightweight, consistent environments for packaging and deploying each service independently",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Containers automatically split a monolith into microservices",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Containers replace the need for any orchestration or infrastructure management",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Containers provide lightweight, isolated environments that package a service with all its dependencies, ensuring consistent behavior across development, testing, and production. This aligns perfectly with the microservices goal of independent deployment. Containers are not required for network communication — services can communicate regardless of how they are deployed. Containers do not automatically decompose monoliths. Containers still need orchestration tools like Kubernetes for management at scale.",
+    "bonusFact": null
+  },
+  {
+    "id": "microservices-beg-009",
+    "themeId": "microservices",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which of the following is a key advantage of microservices over monolithic architectures?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Microservices are always simpler to develop and debug than monoliths",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Microservices eliminate the need for automated testing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Teams can develop, deploy, and scale individual services independently, enabling faster delivery",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Microservices guarantee better performance than monoliths in all scenarios",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A major advantage of microservices is that independent teams can develop, deploy, and scale services without coordinating large releases, enabling faster feature delivery and organizational autonomy. Microservices are not inherently simpler — they introduce distributed systems complexity that can make development and debugging harder. Automated testing is even more critical in microservices due to the complexity of inter-service interactions. Monoliths can outperform microservices in scenarios where inter-process communication overhead is significant.",
+    "bonusFact": "Amazon, Netflix, and Uber are famous early adopters of microservices."
+  },
+  {
+    "id": "microservices-beg-010",
+    "themeId": "microservices",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "What does this basic Express.js service represent in a microservices architecture?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "import express from 'express';\nconst app = express();\n\napp.get('/api/products', async (req, res) => {\n  const products = await productRepo.findAll();\n  res.json(products);\n});\n\napp.get('/api/products/:id', async (req, res) => {\n  const product = await productRepo.findById(req.params.id);\n  product ? res.json(product) : res.status(404).end();\n});\n\napp.listen(3001, () => console.log('Product service on 3001'));"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "A monolithic application handling all business domains",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "An API Gateway that routes requests to downstream services",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A single microservice responsible for the Product domain with its own API endpoints",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "A shared library that other microservices import for product data access",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code shows a standalone Express.js application that exclusively handles product-related operations — listing products and retrieving a product by ID. This is a textbook example of a microservice: it has a single responsibility (the Product domain), runs on its own port, and owns its own data access. It is not a monolith because it only handles one domain. It is not an API Gateway because it serves its own data rather than routing to other services. It is not a shared library because it is a running server process.",
+    "bonusFact": null
+  },
+  {
+    "id": "microservices-int-001",
+    "themeId": "microservices",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the Saga pattern used for in a microservices architecture?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To implement distributed two-phase commit transactions across all services simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To manage distributed transactions by executing a sequence of local transactions with compensating actions for rollback",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To aggregate log data from multiple services into a centralized logging system",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To implement a shared database that all services use for transactional consistency",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Saga pattern manages distributed transactions across microservices by breaking them into a sequence of local transactions, each within a single service. If any step fails, compensating transactions are executed to undo previous steps. This avoids the need for distributed two-phase commits, which are impractical in microservices due to tight coupling and performance issues. Centralized logging is an observability concern, not a transaction pattern. A shared database would violate the database-per-service principle.",
+    "bonusFact": "Sagas come in two flavors: choreography (event-driven) and orchestration (coordinator-driven)."
+  },
+  {
+    "id": "microservices-int-002",
+    "themeId": "microservices",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What pattern does this code implement to handle failures when calling a downstream microservice?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class CircuitBreaker {\n  private failures = 0;\n  private lastFailTime = 0;\n  private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';\n  constructor(private threshold: number, private timeout: number) {}\n  async call<T>(fn: () => Promise<T>): Promise<T> {\n    if (this.state === 'OPEN') {\n      if (Date.now() - this.lastFailTime > this.timeout)\n        this.state = 'HALF_OPEN';\n      else throw new Error('Circuit is OPEN');\n    }\n    try { const r = await fn(); this.reset(); return r; }\n    catch (e) { this.recordFailure(); throw e; }\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "The Retry pattern — it retries failed requests a fixed number of times",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "The Circuit Breaker pattern — it stops calling a failing service after a threshold and allows recovery",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The Bulkhead pattern — it isolates failures by limiting concurrent requests per service",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The Rate Limiter pattern — it limits how many requests per second a service can receive",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code implements the Circuit Breaker pattern with three states: CLOSED (normal operation), OPEN (requests are blocked after exceeding a failure threshold), and HALF_OPEN (a test request is allowed after a timeout period). The pattern prevents cascading failures by stopping calls to a service that is likely down. The Retry pattern simply reattempts failed calls without tracking state transitions. The Bulkhead pattern limits concurrency to isolate resource usage. The Rate Limiter pattern controls request throughput, not failure recovery.",
+    "bonusFact": "Netflix's Hystrix library popularized the Circuit Breaker pattern in microservices."
+  },
+  {
+    "id": "microservices-int-003",
+    "themeId": "microservices",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is event-driven communication in microservices and when is it preferred?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Services emit events to a message broker; other services subscribe and react. It is preferred when loose coupling and resilience are important",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Services send direct HTTP requests triggered by UI events. It is preferred for real-time user interactions only",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Services poll a shared database table for new records. It is preferred when strong consistency is required",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Services use WebSocket connections exclusively for bidirectional event streaming between every service pair",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Event-driven communication uses a message broker (like Kafka or RabbitMQ) where producer services emit events and consumer services subscribe to relevant topics. This decouples services because producers do not need to know about consumers, improving resilience and scalability. Direct HTTP calls triggered by UI events are still synchronous request/response patterns. Polling a shared database creates tight coupling and is an anti-pattern. WebSockets are a transport mechanism for client-server communication, not the standard approach for inter-service event-driven architecture.",
+    "bonusFact": "Apache Kafka can handle millions of events per second with durable storage."
+  },
+  {
+    "id": "microservices-int-004",
+    "themeId": "microservices",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the API Composition pattern in microservices?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A pattern where each microservice exposes a GraphQL endpoint that clients query individually",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A pattern where a composer service queries multiple microservices and combines their results into a single response for the client",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A pattern where services share a common API specification generated from a single OpenAPI document",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A pattern where the client SDK automatically merges responses from multiple endpoints",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The API Composition pattern uses a composer service (often the API Gateway) that invokes multiple downstream microservices and aggregates their responses into a single response for the client. This is necessary when a query spans data owned by multiple services. Having each service expose GraphQL does not solve the aggregation problem — the client would still need to make multiple calls. Sharing an API specification is a documentation practice, not a composition pattern. Client-side merging pushes complexity to the client and requires multiple round trips.",
+    "bonusFact": null
+  },
+  {
+    "id": "microservices-int-005",
+    "themeId": "microservices",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is a service mesh and what problem does it solve?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A dedicated infrastructure layer that handles service-to-service communication, providing observability, security, and traffic management without changing application code",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A network topology where every microservice is directly connected to every other microservice via persistent TCP connections",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A shared code library that all microservices import to standardize HTTP client implementations",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A development framework that generates boilerplate code for new microservices from templates",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A service mesh is a dedicated infrastructure layer (typically using sidecar proxies) that transparently handles inter-service communication concerns like load balancing, mutual TLS, retries, circuit breaking, and distributed tracing. It decouples these concerns from application code. A full-mesh TCP topology would be impractical and is not what a service mesh means. A shared library requires each service to adopt it and rebuild on updates, unlike a transparent proxy layer. A code generation framework addresses a different concern entirely.",
+    "bonusFact": "Istio, Linkerd, and Consul Connect are popular service mesh implementations."
+  },
+  {
+    "id": "microservices-int-006",
+    "themeId": "microservices",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is CQRS and why is it useful in a microservices context?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Command Query Responsibility Segregation — it separates read and write models, allowing each to be optimized and scaled independently",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Central Query Routing Service — it routes all database queries through a central service for consistency",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Command Queue Replay System — it replays all commands from a queue to rebuild service state",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Cross-Query Replication Strategy — it replicates query results across services for faster reads",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "CQRS (Command Query Responsibility Segregation) separates the write model (commands) from the read model (queries), allowing each side to use different data models, databases, and scaling strategies. In microservices, this is valuable because read and write workloads often have very different characteristics. A central routing service would create a bottleneck and single point of failure. Command Queue Replay describes event sourcing, which is related but distinct from CQRS. Cross-query replication is not an established pattern name.",
+    "bonusFact": "CQRS is often combined with Event Sourcing but they are independent patterns."
+  },
+  {
+    "id": "microservices-int-007",
+    "themeId": "microservices",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What microservices pattern does this Docker Compose configuration demonstrate?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "// docker-compose.yml (as config)\nconst services = {\n  'order-service': { image: 'order-service:latest', ports: ['3001:3001'] },\n  'order-service-proxy': {\n    image: 'envoyproxy/envoy:v1.28',\n    network_mode: 'service:order-service',\n  },\n  'payment-service': { image: 'payment-service:latest', ports: ['3002:3002'] },\n  'payment-service-proxy': {\n    image: 'envoyproxy/envoy:v1.28',\n    network_mode: 'service:payment-service',\n  },\n};"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "API Gateway pattern — Envoy acts as a centralized gateway for all incoming traffic",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Sidecar pattern — each service has its own Envoy proxy running alongside it for communication concerns",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Ambassador pattern — a single Envoy instance represents all services to external clients",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Load balancer pattern — Envoy distributes traffic evenly across service replicas",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This configuration deploys an Envoy proxy alongside each service (order-service-proxy next to order-service, payment-service-proxy next to payment-service), sharing the same network namespace. This is the Sidecar pattern, where a helper container runs alongside the main service to handle cross-cutting concerns like proxying, logging, or security. An API Gateway would be a single centralized proxy, not one per service. The Ambassador pattern typically refers to a proxy for a single service to external systems. A load balancer distributes traffic across replicas, whereas here each service instance gets its own proxy.",
+    "bonusFact": null
+  },
+  {
+    "id": "microservices-int-008",
+    "themeId": "microservices",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the Strangler Fig pattern used for in microservices?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Gradually migrating from a monolith to microservices by incrementally replacing specific functionality while the old system continues to operate",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Removing unused microservices from production by gradually reducing their traffic to zero",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Implementing feature flags that slowly roll out new microservice endpoints to users",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Throttling traffic to legacy services to force clients to adopt new API versions",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Strangler Fig pattern (named after a fig tree that grows around and eventually replaces its host) is a migration strategy where you incrementally replace parts of a monolithic system with microservices. A routing layer directs traffic to either the old monolith or the new service based on which functionality has been migrated. This allows continuous operation during migration. Removing unused services is decommissioning, not strangling. Feature flags control rollout but don't describe the migration strategy. Throttling traffic to force adoption is not a recognized architectural pattern.",
+    "bonusFact": "Martin Fowler named this pattern after strangler fig trees in Australian rainforests."
+  },
+  {
+    "id": "microservices-int-009",
+    "themeId": "microservices",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which strategy best addresses data consistency across microservices that each own their own database?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use a single distributed database with ACID transactions spanning all services",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Accept eventual consistency and use event-driven patterns (e.g., Sagas, domain events) to synchronize state across services",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Let each service directly write to other services' databases when needed for consistency",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Run a nightly batch job that reconciles data across all service databases",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In microservices, strong consistency across service boundaries is impractical because each service owns its data independently. The recommended approach is to embrace eventual consistency using patterns like Sagas (compensating transactions) and domain events that propagate state changes asynchronously. A single distributed database with cross-service ACID transactions creates tight coupling and defeats the purpose of independent services. Direct writes to other services' databases violates encapsulation. Nightly batch reconciliation introduces unacceptable latency and does not address real-time consistency needs.",
+    "bonusFact": null
+  },
+  {
+    "id": "microservices-int-010",
+    "themeId": "microservices",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What event-driven microservices pattern does this code demonstrate?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "// Order Service\nasync function placeOrder(order: Order) {\n  await orderRepo.save({ ...order, status: 'PENDING' });\n  await eventBus.publish('order.created', {\n    orderId: order.id, items: order.items,\n  });\n}\n// Inventory Service (separate process)\neventBus.subscribe('order.created', async (evt) => {\n  const ok = await inventoryRepo.reserveItems(evt.items);\n  const topic = ok ? 'inventory.reserved' : 'inventory.failed';\n  await eventBus.publish(topic, { orderId: evt.orderId });\n});"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Request/response with HTTP callbacks between the Order and Inventory services",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Choreography-based Saga where services coordinate through domain events without a central orchestrator",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Shared database pattern where both services write to the same event store",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Two-phase commit transaction ensuring both services succeed or both roll back atomically",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code shows a choreography-based Saga: the Order Service publishes an 'order.created' event, and the Inventory Service reacts independently by subscribing to that event and publishing its own result events. There is no central orchestrator — services communicate through events and each decides what to do next. This is not HTTP request/response because the services use an event bus for asynchronous communication. They do not share a database; each service has its own repository. Two-phase commit would require a coordinator that locks both services, which is not happening here.",
+    "bonusFact": "Choreography works well with few services; orchestration scales better for complex workflows."
+  },
+  {
+    "id": "microservices-adv-001",
+    "themeId": "microservices",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is distributed tracing and why is it essential for microservices observability?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It records CPU and memory metrics for each service container to detect resource bottlenecks",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It propagates a correlation ID across service boundaries to track a single request's path through multiple services, enabling end-to-end latency analysis and root cause identification",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It centralizes all service logs into a single searchable index for keyword-based debugging",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It monitors network packet routes between service instances to detect infrastructure-level failures",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Distributed tracing propagates trace context (trace IDs and span IDs) across service boundaries so that a request flowing through multiple services can be visualized as a single trace with timing data for each hop. This is essential because in microservices, a single user request may traverse dozens of services, making it impossible to diagnose latency or failures without end-to-end visibility. Container metrics are infrastructure monitoring, not tracing. Centralized logging is complementary but doesn't show request flow or causality. Network packet monitoring operates at the infrastructure layer, not the application request layer.",
+    "bonusFact": "OpenTelemetry is the CNCF standard for distributed tracing, metrics, and logs."
+  },
+  {
+    "id": "microservices-adv-002",
+    "themeId": "microservices",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does the CAP theorem impact data management decisions in microservices?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It states that distributed systems can achieve Consistency, Availability, and Partition tolerance simultaneously, so microservices have no trade-offs",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It proves that microservices should always choose consistency over availability to prevent data corruption",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "During a network partition, a system must choose between consistency (every read gets the latest write) and availability (every request gets a response), forcing microservices to make explicit trade-offs",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "It applies only to relational databases and has no relevance to microservices using NoSQL data stores",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The CAP theorem states that during a network partition, a distributed system must choose between consistency (all nodes see the same data) and availability (every request receives a response). Since microservices are inherently distributed and network partitions are inevitable, teams must make conscious trade-offs. Many microservices favor availability and eventual consistency (AP systems). The theorem explicitly states you cannot have all three simultaneously during a partition. There is no universal rule to always choose consistency. The CAP theorem applies to all distributed data stores, not just relational databases.",
+    "bonusFact": "Eric Brewer proposed CAP as a conjecture in 2000; it was formally proved in 2002."
+  },
+  {
+    "id": "microservices-adv-003",
+    "themeId": "microservices",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What eventual consistency mechanism does this code implement?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "class OutboxProcessor {\n  async publishPending() {\n    const events = await db.query(\n      'SELECT * FROM outbox WHERE published = false ORDER BY created_at');\n    for (const e of events) {\n      await broker.publish(e.topic, e.payload);\n      await db.query('UPDATE outbox SET published=true WHERE id=$1', [e.id]);\n    }\n  }\n}\nawait db.transaction(async (tx) => {\n  await tx.query('UPDATE orders SET status=$1 WHERE id=$2', ['confirmed', id]);\n  await tx.query('INSERT INTO outbox(topic,payload) VALUES($1,$2)',\n    ['order.confirmed', JSON.stringify({id})]);\n});"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Change Data Capture (CDC) — it streams database changelog entries directly to a message broker",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Transactional Outbox pattern — it atomically writes domain changes and events to the same database, then asynchronously publishes events",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Event Sourcing — it stores all state changes as an immutable sequence of events",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Two-phase commit — it coordinates the database update and message broker publish in a single distributed transaction",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This implements the Transactional Outbox pattern: the domain state change (updating the order) and the event record (inserting into the outbox table) are written in the same local database transaction, guaranteeing atomicity. A separate processor then publishes pending outbox events to the message broker. This avoids the dual-write problem (where the DB write succeeds but the broker publish fails or vice versa). CDC captures changes at the database log level without an explicit outbox table. Event Sourcing stores the events as the source of truth rather than updating a state table. Two-phase commit would require a distributed transaction coordinator spanning the DB and broker.",
+    "bonusFact": "Debezium can automate the outbox pattern by streaming the outbox table via CDC."
+  },
+  {
+    "id": "microservices-adv-004",
+    "themeId": "microservices",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "When should you choose choreography over orchestration for coordinating microservices, and what are the trade-offs?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Always choose orchestration because a central coordinator makes debugging straightforward and choreography has no practical use case",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Choreography suits simple flows with few services and maximizes decoupling, but becomes hard to understand as the number of services grows; orchestration centralizes flow logic making complex workflows more visible but introduces a coordinator dependency",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Choreography is always preferred because orchestration creates a single point of failure that cannot be mitigated",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The choice depends entirely on whether you use REST or messaging — REST requires orchestration and messaging requires choreography",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Choreography (services react to events independently) maximizes decoupling and works well for simple workflows involving few services, but the overall business process becomes implicit and hard to trace as the number of participating services grows. Orchestration (a central coordinator directs the workflow) makes complex processes explicit and easier to monitor, but introduces a dependency on the orchestrator. Neither approach is universally superior. The orchestrator can be made highly available, so it is not an unmitigatable single point of failure. The choice is not dictated by communication protocol — both approaches can use REST or messaging.",
+    "bonusFact": null
+  },
+  {
+    "id": "microservices-adv-005",
+    "themeId": "microservices",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What are micro-frontends and how do they relate to microservices architecture?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Micro-frontends are small CSS frameworks optimized for microservices admin dashboards",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Micro-frontends extend the microservices idea to the frontend by having independently developed, deployed, and composed UI fragments, each owned by a vertical team alongside its backend service",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Micro-frontends are server-side rendered pages that each microservice generates and returns as HTML",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Micro-frontends are lightweight API clients generated from each microservice's OpenAPI specification",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Micro-frontends apply the microservices principle of independent development and deployment to the frontend layer. Each team owns a vertical slice — from the UI fragment to the backend service — enabling autonomous delivery. UI fragments are composed at runtime using techniques like Module Federation, iframes, or Web Components. They are not CSS frameworks or admin dashboards. While server-side rendering can be used as a composition technique, the concept is broader than SSR alone. Generated API clients are a developer experience tool, not a frontend architecture pattern.",
+    "bonusFact": "Webpack Module Federation is a popular tool for composing micro-frontends at runtime."
+  },
+  {
+    "id": "microservices-adv-006",
+    "themeId": "microservices",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "Which approach to service decomposition aligns best with Domain-Driven Design (DDD) principles?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Decompose by technical layer — one service for the API layer, one for business logic, one for data access",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Decompose by bounded context — each service encapsulates a distinct business domain with its own ubiquitous language and data model",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Decompose by database table — create one microservice per table in the existing relational schema",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Decompose by team size — split the monolith so each resulting service can be maintained by exactly two developers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "DDD-aligned decomposition uses bounded contexts as service boundaries, where each service encapsulates a coherent business domain with its own ubiquitous language, data model, and business rules. This produces services with high cohesion and loose coupling. Decomposing by technical layer creates distributed layers, not independent services, and forces cross-service coordination for every feature. Decomposing by database table leads to extremely fine-grained services (nano-services) with excessive inter-service communication. Team size is an organizational input but should not be the primary driver of service boundaries.",
+    "bonusFact": null
+  },
+  {
+    "id": "microservices-adv-007",
+    "themeId": "microservices",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What resilience pattern does this code implement to protect a microservice from cascading failures?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "import { Semaphore } from 'async-mutex';\nclass ServiceClient {\n  private orderSem = new Semaphore(10);\n  private paymentSem = new Semaphore(5);\n  async getOrder(id: string): Promise<Order> {\n    const [, release] = await this.orderSem.acquire();\n    try { return await http.get(`/orders/${id}`); }\n    finally { release(); }\n  }\n  async processPayment(data: PaymentData): Promise<Receipt> {\n    const [, release] = await this.paymentSem.acquire();\n    try { return await http.post('/payments', data); }\n    finally { release(); }\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Circuit Breaker pattern — it opens after failures and blocks requests to a failing downstream service",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Rate Limiting pattern — it restricts the total number of requests the service can handle per second",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Bulkhead pattern — it isolates resource pools per downstream dependency so a slow service cannot exhaust all available connections",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Retry with backoff — it limits concurrent retries to prevent thundering herd problems",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code implements the Bulkhead pattern by using separate semaphores for each downstream dependency (10 concurrent slots for orders, 5 for payments). If the payment service becomes slow and all 5 payment slots are occupied, the order service calls are unaffected because they use a separate semaphore pool. This prevents one slow dependency from consuming all resources. A Circuit Breaker tracks failure counts and state transitions, which is absent here. Rate limiting controls requests per time unit, not concurrent resource pools. Retry with backoff is about reattempting failed calls with increasing delays.",
+    "bonusFact": "Named after ship bulkheads that prevent a hull breach from sinking the whole vessel."
+  },
+  {
+    "id": "microservices-adv-008",
+    "themeId": "microservices",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What are the key considerations for distributed caching in a microservices architecture?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Each service should use only in-process caching to avoid network latency, and caches should never expire to maximize hit rates",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A single global cache shared by all services ensures consistency and eliminates cache invalidation complexity",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Choose appropriate cache invalidation strategies (TTL, event-driven invalidation), consider cache-aside vs read-through patterns, and ensure cache failures are handled gracefully without cascading to the service",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Distributed caching should be avoided entirely in microservices because it violates the database-per-service principle",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Distributed caching in microservices requires careful consideration of invalidation strategies (TTL-based expiration, event-driven cache busting), access patterns (cache-aside where the app manages the cache, or read-through where the cache loads data transparently), and failure handling (the system should degrade gracefully if the cache is unavailable). In-process-only caching limits scalability and leads to inconsistent data across service instances. A single global cache creates tight coupling and a single point of failure. Caching does not violate database-per-service — each service can cache its own data to reduce database load.",
+    "bonusFact": "Redis and Memcached are the two most widely used distributed caching solutions."
+  },
+  {
+    "id": "microservices-adv-009",
+    "themeId": "microservices",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What zero-downtime deployment strategy does this Kubernetes configuration implement?",
+    "codeSnippet": {
+      "language": "typescript",
+      "code": "const deployment = {\n  spec: {\n    replicas: 3,\n    strategy: { type: 'RollingUpdate',\n      rollingUpdate: { maxSurge: 1, maxUnavailable: 0 } },\n    template: { spec: { containers: [{\n      readinessProbe: {\n        httpGet: { path: '/health', port: 3000 },\n        initialDelaySeconds: 5, periodSeconds: 10,\n      },\n    }] } },\n  },\n};"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Blue-green deployment — it maintains two complete environments and switches traffic atomically",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Rolling update with zero unavailability — it replaces pods one at a time, only routing traffic to new pods after they pass readiness checks",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Canary deployment — it routes a small percentage of traffic to the new version before full rollout",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Recreate strategy — it terminates all old pods before starting new ones",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This configuration uses a RollingUpdate strategy with maxUnavailable: 0 (no pods are removed until replacements are ready) and maxSurge: 1 (one extra pod is created during the update). Combined with the readinessProbe that checks /health before routing traffic, this ensures zero-downtime deployments. Blue-green requires two full environments running simultaneously, which is not what RollingUpdate does. Canary deployments route a fraction of traffic to the new version, requiring additional traffic management beyond what is shown. The Recreate strategy terminates all old pods first, causing downtime.",
+    "bonusFact": null
+  },
+  {
+    "id": "microservices-adv-010",
+    "themeId": "microservices",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What are the 'distributed monolith' and 'nano-services' anti-patterns in microservices?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A distributed monolith has services so tightly coupled they must be deployed together; nano-services are so fine-grained that inter-service communication overhead outweighs any benefits",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A distributed monolith is a monolith deployed across multiple regions for latency; nano-services are microservices written in a single file",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A distributed monolith uses microservices for the backend but a monolithic frontend; nano-services are services that handle less than 100 requests per second",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A distributed monolith is the intermediate state during a Strangler Fig migration; nano-services are microservices running on serverless functions",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A distributed monolith occurs when services are technically separate but so tightly coupled (through shared databases, synchronous call chains, or coordinated deployments) that they have all the disadvantages of a monolith plus the added complexity of distribution. Nano-services are an over-decomposition anti-pattern where services are so small that the overhead of network communication, deployment, and operational management far exceeds any organizational or technical benefit. Multi-region deployment of a monolith is a scaling strategy, not an anti-pattern. The definitions are not about file count, throughput, or runtime platform — they are about coupling and granularity.",
+    "bonusFact": "Sam Newman: 'If you deploy multiple services together, you have a distributed monolith.'"
+  }
+]

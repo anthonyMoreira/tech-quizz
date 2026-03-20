@@ -8,6 +8,7 @@ import cleanArchitectureQuestions from './clean-architecture.json';
 import ciCdQuestions from './ci-cd.json';
 import microservicesQuestions from './microservices.json';
 import refactoringQuestions from './refactoring.json';
+import graphDatabaseQuestions from './graph-database.json';
 
 export const themes: readonly Theme[] = [
   {
@@ -58,6 +59,12 @@ export const themes: readonly Theme[] = [
     description: 'Improve code structure without changing its behavior',
     icon: '🔄',
   },
+  {
+    id: 'graph-database',
+    name: 'Graph Database',
+    description: 'Model and query highly connected data with nodes and edges',
+    icon: '🕸️',
+  },
 ] as const;
 
 const allQuestionArrays: Question[][] = [
@@ -69,6 +76,7 @@ const allQuestionArrays: Question[][] = [
   ciCdQuestions as unknown as Question[],
   microservicesQuestions as unknown as Question[],
   refactoringQuestions as unknown as Question[],
+  graphDatabaseQuestions as unknown as Question[],
 ];
 
 export function getAllQuestions(): Question[] {

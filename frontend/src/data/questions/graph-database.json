@@ -1,0 +1,992 @@
+[
+  {
+    "id": "graph-database-beg-001",
+    "themeId": "graph-database",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a graph database?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A database that stores data as charts and visual diagrams",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A database that uses nodes, edges, and properties to represent and store data relationships",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A database that only stores mathematical graph functions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A type of spreadsheet optimized for plotting data points",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A graph database uses nodes (entities), edges (relationships), and properties (key-value attributes) to store and query highly connected data. It is not related to visual charts or diagrams — the term 'graph' refers to the mathematical concept of a graph structure. Option A confuses a graph database with data visualization tools. Option C incorrectly limits graphs to mathematical functions, and option D describes spreadsheet software, not a database system.",
+    "bonusFact": "The mathematical foundation comes from Euler's graph theory in 1736."
+  },
+  {
+    "id": "graph-database-beg-002",
+    "themeId": "graph-database",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "In the property graph model, what are the three fundamental building blocks?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Tables, rows, and columns",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Documents, collections, and indexes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Nodes, edges, and properties",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Keys, values, and namespaces",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The property graph model is built on three core elements: nodes (representing entities), edges (representing relationships between nodes), and properties (key-value pairs that describe attributes of both nodes and edges). Tables, rows, and columns are the building blocks of relational databases. Documents and collections belong to document databases like MongoDB. Keys, values, and namespaces describe key-value stores, not graph databases.",
+    "bonusFact": null
+  },
+  {
+    "id": "graph-database-beg-003",
+    "themeId": "graph-database",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which of the following is a primary advantage of graph databases over relational databases?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "They use less disk space for all types of data",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "They perform relationship traversals much faster by avoiding expensive JOIN operations",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "They do not require any query language to access data",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "They automatically enforce strict schemas on all data",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Graph databases excel at traversing relationships because connections are stored as direct references between nodes, eliminating the need for expensive JOIN operations that relational databases require. Graph databases do not inherently use less disk space — storage depends on the data model and volume. They still require query languages such as Cypher or PGQL. Graph databases are typically schema-optional rather than schema-strict, offering more flexibility than traditional relational models.",
+    "bonusFact": null
+  },
+  {
+    "id": "graph-database-beg-004",
+    "themeId": "graph-database",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which of the following is a common use case for graph databases?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Storing large volumes of flat, unrelated log entries",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Fraud detection in financial transaction networks",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Simple key-value caching for web applications",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Archiving static binary files like images and videos",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Fraud detection is a classic graph database use case because it involves analyzing complex networks of transactions, accounts, and entities to identify suspicious patterns and connections. Flat log storage is better handled by time-series or document databases. Key-value caching is the domain of systems like Redis or Memcached. Binary file archiving belongs to object storage or blob storage systems, not graph databases.",
+    "bonusFact": "Banks use graph databases to detect fraud rings spanning many accounts."
+  },
+  {
+    "id": "graph-database-beg-005",
+    "themeId": "graph-database",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does PGQL stand for?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Parallel Graph Query Logic",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Property Graph Query Language",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Persistent Graph Query Library",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "PostgreSQL Graph Query Layer",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "PGQL stands for Property Graph Query Language. It is a SQL-like declarative language developed by Oracle for querying property graphs, supporting pattern matching, path traversals, and aggregations. It is not related to parallel processing logic, persistence libraries, or PostgreSQL specifically, although its SQL-like syntax may cause confusion with PostgreSQL-related tools.",
+    "bonusFact": "PGQL influenced the SQL/PGQ standard adopted in SQL:2023."
+  },
+  {
+    "id": "graph-database-beg-006",
+    "themeId": "graph-database",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "What does this PGQL query return?",
+    "codeSnippet": {
+      "language": "sql",
+      "code": "SELECT p.name, p.age\nFROM social_graph\nMATCH (p:Person)\nWHERE p.age > 30\nORDER BY p.name"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "All nodes in the graph regardless of their label",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "The name and age of Person nodes where age is greater than 30, sorted alphabetically",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Only the count of persons older than 30",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "All edges connected to persons older than 30",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This PGQL query selects the name and age properties from nodes labeled Person where the age property is greater than 30, ordered alphabetically by name. The MATCH clause specifies the pattern to find Person nodes, the WHERE clause filters by age, and ORDER BY sorts the results. It does not return all nodes, just those matching the Person label and age filter. It returns node properties, not edges, and projects specific columns rather than a count.",
+    "bonusFact": "PGQL uses SQL-like syntax with SELECT, FROM, WHERE, and ORDER BY."
+  },
+  {
+    "id": "graph-database-beg-007",
+    "themeId": "graph-database",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "In Neo4j, what is the name of the query language used to interact with the graph database?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Gremlin",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "SPARQL",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Cypher",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "GraphQL",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Cypher is the declarative query language used by Neo4j to create, read, update, and delete data in a graph database. Gremlin is used by Apache TinkerPop-compatible databases like JanusGraph. SPARQL is the query language for RDF-based graph stores. GraphQL is a data query language for APIs developed by Facebook and is not a database query language, despite the similar name.",
+    "bonusFact": "Cypher syntax uses ASCII-art patterns like (a)-[:KNOWS]->(b)."
+  },
+  {
+    "id": "graph-database-beg-008",
+    "themeId": "graph-database",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a 'node' in the context of a graph database?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A server instance running the database software",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "An entity or data point that can have labels and properties",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A connection between two data points",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "An index used for faster query lookups",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In a graph database, a node represents an entity or data point, such as a person, product, or location. Nodes can have labels that categorize them and properties that store their attributes as key-value pairs. Option A confuses nodes in graph theory with nodes in distributed computing. Option C describes an edge (or relationship), not a node. Option D describes an index, which is a separate concept used for performance optimization.",
+    "bonusFact": "Nodes are also called vertices in graph theory terminology."
+  },
+  {
+    "id": "graph-database-beg-009",
+    "themeId": "graph-database",
+    "difficulty": "beginner",
+    "type": "code-snippet",
+    "prompt": "What does this PGQL query do?",
+    "codeSnippet": {
+      "language": "sql",
+      "code": "SELECT a.name, b.name\nFROM social_graph\nMATCH (a:Person)-[:FRIEND_OF]->(b:Person)"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Finds all Person nodes that have no friends",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Returns pairs of names where person a is a friend of person b",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Counts the total number of friendship relationships in the graph",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Deletes all FRIEND_OF relationships between persons",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This PGQL query uses pattern matching to find all pairs of Person nodes connected by a FRIEND_OF relationship and returns their names. The arrow notation (-[:FRIEND_OF]->) indicates a directed relationship from person a to person b. It does not look for isolated nodes without friends, count relationships, or perform any delete operations — it is a read-only SELECT query that projects the name properties of matched node pairs.",
+    "bonusFact": null
+  },
+  {
+    "id": "graph-database-beg-010",
+    "themeId": "graph-database",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is an 'edge' (or 'relationship') in a graph database?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A connection between two nodes that describes how they are related",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The boundary of the graph that limits how many nodes can be stored",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A special type of node that has no properties",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "An error condition that occurs when two nodes conflict",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "An edge, also called a relationship, is a connection between two nodes that represents how those entities are related, such as FRIEND_OF, PURCHASED, or WORKS_AT. Edges can have a direction, a type, and their own properties. They do not limit graph capacity, are not types of nodes, and do not represent error conditions. Edges are first-class citizens in graph databases, carrying both semantic meaning and optional attributes.",
+    "bonusFact": "Edges can carry properties too, like a 'since' date on a FRIEND_OF."
+  },
+  {
+    "id": "graph-database-int-001",
+    "themeId": "graph-database",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this PGQL query return?",
+    "codeSnippet": {
+      "language": "sql",
+      "code": "SELECT p.name, COUNT(f) AS friend_count\nFROM social_graph\nMATCH (p:Person)-[:FRIEND_OF]->(f:Person)\nGROUP BY p\nORDER BY friend_count DESC"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "The name and number of friends for each person, sorted from most to least friends",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The total count of all friendship edges in the entire graph",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A list of persons who have no friends, sorted alphabetically",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The name of the person with exactly one friend",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This query uses GROUP BY to aggregate results per person, counting the number of FRIEND_OF edges each person has and ordering the results in descending order by friend count. The COUNT(f) aggregation counts matched friend nodes for each person. It does not return a single total count for the whole graph, does not filter for friendless people, and does not restrict results to exactly one friend — it returns all persons who have at least one friend along with their friend counts.",
+    "bonusFact": null
+  },
+  {
+    "id": "graph-database-int-002",
+    "themeId": "graph-database",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is 'index-free adjacency' in the context of native graph databases?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A technique where graph databases do not support any indexing at all",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Each node directly stores physical references to its adjacent nodes, enabling constant-time neighbor lookups",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A method of querying graphs without specifying any node labels",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A partitioning strategy that places adjacent nodes on different servers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Index-free adjacency is an architectural property of native graph databases where each node physically stores direct pointers to its neighboring nodes. This allows constant-time traversal to any neighbor without consulting a global index, making multi-hop queries very fast. It does not mean that graph databases lack indexes entirely — they still support indexing for property lookups. It is not a query technique or a partitioning strategy, but a fundamental storage engine design choice.",
+    "bonusFact": "Neo4j uses index-free adjacency as a core storage principle."
+  },
+  {
+    "id": "graph-database-int-003",
+    "themeId": "graph-database",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does the RDF (Resource Description Framework) model differ from the property graph model?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "RDF uses subject-predicate-object triples while property graphs allow key-value properties on both nodes and edges",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "RDF supports relationships between entities while property graphs do not",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Property graphs are standardized by the W3C while RDF is not",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "RDF can only store string values while property graphs support all data types",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "RDF models data as subject-predicate-object triples and is designed for semantic interoperability across the web, while property graphs store entities as nodes and edges with flexible key-value properties attached to both. Both models support relationships — edges in property graphs and predicates in RDF. RDF is standardized by the W3C (not property graphs). RDF supports various data types through XML Schema types, not just strings. The key distinction is the structural approach: triples versus attributed nodes and edges.",
+    "bonusFact": "SPARQL is the standard query language for RDF triple stores."
+  },
+  {
+    "id": "graph-database-int-004",
+    "themeId": "graph-database",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this PGQL query accomplish?",
+    "codeSnippet": {
+      "language": "sql",
+      "code": "SELECT a.name AS source,\n       b.name AS target,\n       t.amount\nFROM financial_graph\nMATCH (a:Account)-[t:TRANSFER]->(b:Account)\nWHERE t.amount > 10000\n  AND a.country <> b.country"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Finds all transfers between accounts in the same country exceeding 10,000",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Finds cross-border transfers exceeding 10,000 between different accounts",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Calculates the total amount of all transfers in the financial graph",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Deletes all transfers exceeding 10,000 from the financial graph",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This query finds TRANSFER edges between Account nodes where the transfer amount exceeds 10,000 and the source and target accounts are in different countries (a.country <> b.country), making it a cross-border transfer query. Option A incorrectly states same country — the inequality operator ensures different countries. The query does not aggregate totals; it returns individual transfer records. It is a SELECT query, not a DELETE, so no data is removed.",
+    "bonusFact": "This pattern is commonly used for anti-money laundering detection."
+  },
+  {
+    "id": "graph-database-int-005",
+    "themeId": "graph-database",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which graph database feature ensures that all operations within a transaction either fully complete or are entirely rolled back?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Index-free adjacency",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "ACID compliance (specifically Atomicity)",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Graph partitioning",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Label-based node filtering",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "ACID compliance, specifically the Atomicity property, guarantees that all operations within a transaction are treated as a single unit — they either all succeed or all fail together. Neo4j is a well-known ACID-compliant graph database. Index-free adjacency is a storage architecture concept, not a transactional guarantee. Graph partitioning is a scaling strategy for distributing data. Label-based filtering is a query feature, not a transactional property.",
+    "bonusFact": "Neo4j has been fully ACID-compliant since its first release."
+  },
+  {
+    "id": "graph-database-int-006",
+    "themeId": "graph-database",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "In graph data modeling, what is a 'supernode' and why is it problematic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A node with an extremely high number of connections that can cause performance bottlenecks during traversals",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A node that has been promoted to serve as the root of the entire graph",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A special node type that can only store metadata about the graph schema",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A backup node that duplicates data for fault tolerance purposes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A supernode is a node with a disproportionately high number of relationships (edges), such as a celebrity account in a social network with millions of followers. Supernodes cause performance issues because queries traversing through them must enumerate vast numbers of connections, creating hot spots in storage and processing. They are not root nodes, schema metadata containers, or backup mechanisms. Strategies to mitigate supernodes include partitioning their edges or limiting traversal depth.",
+    "bonusFact": null
+  },
+  {
+    "id": "graph-database-int-007",
+    "themeId": "graph-database",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this PGQL path query find?",
+    "codeSnippet": {
+      "language": "sql",
+      "code": "SELECT a.name, b.name, COUNT(e) AS hops\nFROM social_graph\nMATCH (a:Person)-[e:FRIEND_OF]->*(b:Person)\nWHERE a.name = 'Alice'\n  AND b.name = 'Bob'"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Only direct friendships between Alice and Bob",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "All variable-length paths of FRIEND_OF relationships from Alice to Bob, with the number of hops",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "All persons named Alice or Bob in the graph",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The shortest path between any two persons in the graph",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The ->* syntax in PGQL denotes a variable-length path pattern, meaning it matches paths of any length consisting of FRIEND_OF edges from Alice to Bob. The COUNT(e) counts the number of edges (hops) in each matched path. This is not limited to direct friendships — it includes indirect chains of friendships. It does not simply list persons by name, and it finds all paths rather than only the shortest path between two specific named persons.",
+    "bonusFact": "Variable-length paths are key for 'degrees of separation' queries."
+  },
+  {
+    "id": "graph-database-int-008",
+    "themeId": "graph-database",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is Oracle PGX (Parallel Graph AnalytiX)?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A visual tool for designing graph database schemas",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "An in-memory engine for parallel execution of graph analytics algorithms",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A migration tool for converting relational tables to graph format",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A backup and replication service for Oracle graph databases",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Oracle PGX (Parallel Graph AnalytiX) is a high-performance, in-memory graph analytics engine that can load property graphs and run over 80 prebuilt parallel algorithms such as PageRank, shortest path, and community detection at scale. It is not a schema design tool, a migration utility, or a backup service. PGX accelerates complex analytical computations that would be too slow to run directly on disk-based storage.",
+    "bonusFact": "PGX supports algorithms like PageRank and community detection."
+  },
+  {
+    "id": "graph-database-int-009",
+    "themeId": "graph-database",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the key benefit of using labels on nodes in a graph database?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Labels encrypt node data for security purposes",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Labels categorize nodes into groups, enabling efficient filtering and targeted pattern matching in queries",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Labels automatically create backup copies of the node",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Labels restrict which users can access the node",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Labels categorize nodes into logical groups (such as Person, Product, or City), allowing the query engine to efficiently filter and match specific subsets of nodes during pattern matching. For example, MATCH (p:Person) only considers nodes with the Person label. Labels do not provide encryption, create backups, or control user access — those are separate concerns handled by other database features like security roles and replication.",
+    "bonusFact": "A single node can have multiple labels, like :Person:Employee."
+  },
+  {
+    "id": "graph-database-int-010",
+    "themeId": "graph-database",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What result does this PGQL query produce?",
+    "codeSnippet": {
+      "language": "sql",
+      "code": "SELECT c.name, AVG(r.rating) AS avg_rating\nFROM review_graph\nMATCH (u:User)-[r:REVIEWED]->(c:Course)\nGROUP BY c\nHAVING AVG(r.rating) >= 4.0\nORDER BY avg_rating DESC"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "All courses sorted by their creation date",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Courses with an average user rating of 4.0 or higher, sorted from highest to lowest average",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Users who have reviewed more than 4 courses",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The single course with the highest individual rating",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This query groups REVIEWED relationships by Course, calculates the average rating for each course, filters to only include courses with an average rating of 4.0 or above using HAVING, and sorts the results in descending order by average rating. It does not sort by creation date, filter users by review count, or return a single course — it returns all qualifying courses. The HAVING clause filters aggregated results, unlike WHERE which filters individual rows.",
+    "bonusFact": null
+  },
+  {
+    "id": "graph-database-adv-001",
+    "themeId": "graph-database",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does the CAP theorem apply to distributed graph databases?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Distributed graph databases can simultaneously guarantee strong consistency, full availability, and partition tolerance without trade-offs",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "During a network partition, a distributed graph database must choose between consistency and availability, and many opt for eventual consistency to maintain availability",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The CAP theorem only applies to relational databases and has no relevance to graph databases",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Graph databases are exempt from the CAP theorem because they use index-free adjacency",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The CAP theorem states that in the presence of a network partition, a distributed system must choose between consistency and availability. Distributed graph databases face this same trade-off, with many choosing eventual consistency to maintain high availability. No distributed system can guarantee all three properties simultaneously, regardless of the data model. The CAP theorem applies universally to distributed systems, not just relational databases. Index-free adjacency is an unrelated storage optimization that does not exempt a system from distributed systems constraints.",
+    "bonusFact": null
+  },
+  {
+    "id": "graph-database-adv-002",
+    "themeId": "graph-database",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the main challenge with edge-cut partitioning in distributed graph databases?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It requires all nodes to be stored on a single machine, limiting scalability",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Traversals that cross partition boundaries require expensive inter-machine communication, increasing query latency",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It prevents any edges from being stored in the database",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It automatically deletes nodes that have connections to other partitions",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Edge-cut partitioning distributes nodes across machines, but edges that connect nodes on different partitions (cut edges) require inter-machine communication during traversal, adding network latency and reducing query performance. The strategy does not store all nodes on one machine — that would defeat the purpose of partitioning. It does not prevent edge storage or delete cross-partition nodes. The key trade-off is balancing partition size against minimizing the number of edges that cross boundaries.",
+    "bonusFact": "Community-based partitioning tries to keep dense subgraphs together."
+  },
+  {
+    "id": "graph-database-adv-003",
+    "themeId": "graph-database",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What does this PGQL query detect in a financial graph?",
+    "codeSnippet": {
+      "language": "sql",
+      "code": "SELECT a1.id, a2.id, a3.id,\n       t1.amount, t2.amount, t3.amount\nFROM financial_graph\nMATCH (a1:Account)-[t1:TRANSFER]->(a2:Account)\n       -[t2:TRANSFER]->(a3:Account)\n       -[t3:TRANSFER]->(a1:Account)\nWHERE t1.amount > 5000\n  AND t2.amount > 5000\n  AND t3.amount > 5000"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "All accounts with more than three outgoing transfers",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Circular transfer patterns (potential money laundering rings) where three accounts transfer more than 5,000 to each other in a cycle",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The shortest path between any three accounts in the graph",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "All transfers that have been reversed or refunded",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This query matches a cycle of three Account nodes where each transfers more than 5,000 to the next, and the last transfers back to the first (a3 → a1), forming a closed loop. This circular pattern is a classic indicator of potential money laundering rings in fraud detection. It does not count outgoing transfers, find shortest paths, or detect reversed transactions. The pattern matching explicitly describes a three-node cycle with TRANSFER edges exceeding a monetary threshold.",
+    "bonusFact": "Cycle detection is a primary use case for graph databases in finance."
+  },
+  {
+    "id": "graph-database-adv-004",
+    "themeId": "graph-database",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the SQL/PGQ standard introduced in SQL:2023?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A replacement for all existing SQL syntax that forces databases to adopt a graph-only model",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "An extension to the SQL standard that adds property graph query capabilities, allowing graph pattern matching alongside traditional relational queries",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A compression algorithm for storing graph data in relational tables more efficiently",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A security framework for encrypting graph queries in transit",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "SQL/PGQ (SQL Property Graph Queries) is an extension to the SQL standard adopted in SQL:2023 that adds property graph definition and pattern matching capabilities directly within SQL. It allows developers to define property graphs over relational data and query them using graph patterns alongside traditional SQL operations. It does not replace SQL or force a graph-only model — it augments existing SQL. It is neither a compression algorithm nor a security framework, but a query language extension for graph analytics.",
+    "bonusFact": "Oracle Database 23ai was one of the first to implement SQL/PGQ."
+  },
+  {
+    "id": "graph-database-adv-005",
+    "themeId": "graph-database",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What does this PGQL query compute?",
+    "codeSnippet": {
+      "language": "sql",
+      "code": "SELECT v.name,\n       v.betweenness_centrality\nFROM MATCH (v) ON social_graph\nORDER BY v.betweenness_centrality DESC\nLIMIT 10"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "The 10 nodes with the fewest connections in the graph",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "The top 10 most central nodes based on how often they appear on shortest paths between other nodes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The 10 most recently created nodes in the graph",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A random sample of 10 nodes from the social graph",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This query retrieves nodes with the highest betweenness centrality, a graph metric that measures how often a node appears on the shortest paths between all other pairs of nodes. Nodes with high betweenness centrality are influential connectors or bridges in the network. The query orders by this metric in descending order and limits to 10 results. It does not find the least connected nodes, most recent nodes, or a random sample — it specifically ranks nodes by their structural importance as intermediaries in the graph.",
+    "bonusFact": "Betweenness centrality identifies key influencers in social networks."
+  },
+  {
+    "id": "graph-database-adv-006",
+    "themeId": "graph-database",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "In Oracle Database 23ai, how are SQL property graphs defined over existing relational data?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "By exporting the relational data to a separate graph database and importing it back",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "By creating virtual graph views over existing tables using CREATE PROPERTY GRAPH, without duplicating data",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "By converting all tables into a single denormalized collection",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "By replacing the relational schema with a graph schema through an irreversible migration",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Oracle Database 23ai allows defining property graphs as virtual views over existing relational tables using the CREATE PROPERTY GRAPH DDL statement. This approach maps table rows to nodes and edges without copying or moving data, enabling graph queries on existing relational data. There is no need to export data to a separate system or denormalize tables. The graph definition is non-destructive and does not replace the relational schema — both views coexist, allowing developers to use SQL and graph queries side by side.",
+    "bonusFact": null
+  },
+  {
+    "id": "graph-database-adv-007",
+    "themeId": "graph-database",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What strategy can mitigate the performance impact of supernodes in a graph database?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Delete the supernode entirely to eliminate the bottleneck",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Partition the supernode's edges across multiple physical segments and use relationship type filtering to limit traversal scope",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Convert the graph database to a relational database to avoid the problem",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Disable all indexes on the supernode to reduce overhead",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Supernode mitigation involves distributing a high-degree node's edges across multiple segments to balance the load and using relationship type filtering to narrow the scope of traversals. Deleting the supernode would lose valuable data and is not a practical solution. Converting to a relational database would not solve the underlying connectivity problem and would lose graph query benefits. Disabling indexes would worsen performance, not improve it. The goal is to manage the supernode's connections efficiently, not remove them.",
+    "bonusFact": null
+  },
+  {
+    "id": "graph-database-adv-008",
+    "themeId": "graph-database",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What does this PGQL graph definition do?",
+    "codeSnippet": {
+      "language": "sql",
+      "code": "CREATE PROPERTY GRAPH bank_graph\n  VERTEX TABLES (\n    customers KEY (cust_id)\n      LABEL Customer PROPERTIES (cust_id, name, city),\n    accounts KEY (acct_id)\n      LABEL Account PROPERTIES (acct_id, balance)\n  )\n  EDGE TABLES (\n    transfers KEY (txn_id)\n      SOURCE KEY (src_acct) REFERENCES accounts\n      DESTINATION KEY (dst_acct) REFERENCES accounts\n      LABEL Transfer PROPERTIES (txn_id, amount)\n  )"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "It queries the bank_graph for all transfer transactions",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It defines a property graph mapping relational tables to vertices and edges without duplicating data",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It deletes the existing bank_graph and recreates it from scratch",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It creates backup copies of the customers and accounts tables",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This CREATE PROPERTY GRAPH statement defines a virtual graph view called bank_graph over existing relational tables. It maps the customers and accounts tables as vertex tables with labels and properties, and the transfers table as an edge table connecting accounts. The graph is a view — it does not duplicate data or create physical copies. This is not a query, a delete operation, or a backup. It leverages the SQL/PGQ standard to overlay graph semantics on existing relational structures.",
+    "bonusFact": "This approach enables graph queries without data migration."
+  },
+  {
+    "id": "graph-database-adv-009",
+    "themeId": "graph-database",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "Which graph algorithm is used to identify densely connected clusters of nodes within a larger network?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Dijkstra's shortest path algorithm",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Community detection (e.g., Louvain method)",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Breadth-first search (BFS)",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Topological sort",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Community detection algorithms, such as the Louvain method, identify groups of nodes that are more densely connected to each other than to the rest of the network. Dijkstra's algorithm finds the shortest path between two nodes, not clusters. BFS is a graph traversal strategy that visits nodes level by level but does not identify communities. Topological sort orders nodes in a directed acyclic graph based on dependency relationships. Community detection is essential in social network analysis, customer segmentation, and biological network clustering.",
+    "bonusFact": "The Louvain method optimizes modularity to detect communities."
+  },
+  {
+    "id": "graph-database-adv-010",
+    "themeId": "graph-database",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What does this PGQL query find in a knowledge graph?",
+    "codeSnippet": {
+      "language": "sql",
+      "code": "SELECT p1.name AS person,\n       p2.name AS colleague,\n       s.name AS shared_skill\nFROM knowledge_graph\nMATCH (p1:Person)-[:HAS_SKILL]->(s:Skill)\n       <-[:HAS_SKILL]-(p2:Person)\nWHERE p1.name <> p2.name\n  AND p1.department = p2.department"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "All persons who have no skills listed in the knowledge graph",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Pairs of colleagues in the same department who share at least one common skill",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "The total number of unique skills across all departments",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Skills that are exclusively held by only one person in the graph",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This query uses a convergent pattern where two Person nodes (p1 and p2) both have HAS_SKILL edges pointing to the same Skill node (s). The WHERE clause ensures they are different people in the same department. The result is pairs of colleagues who share common skills. It does not find skillless persons, count total skills, or find exclusive skills. The bidirectional pattern matching through a shared intermediate node is a powerful graph pattern for finding commonalities between entities.",
+    "bonusFact": null
+  }
+]

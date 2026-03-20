@@ -15,6 +15,7 @@ vi.mock('prismjs/components/prism-typescript', () => ({}));
 vi.mock('prismjs/components/prism-java', () => ({}));
 vi.mock('prismjs/components/prism-python', () => ({}));
 vi.mock('prismjs/components/prism-csharp', () => ({}));
+vi.mock('prismjs/components/prism-sql', () => ({}));
 
 describe('CodeSnippet', () => {
   it('renders code text', () => {

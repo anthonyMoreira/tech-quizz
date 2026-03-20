@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tech-quizz</title>
+    <script>
+      // Single Page App redirect for GitHub Pages
+      // When GitHub Pages encounters a 404, it serves this page.
+      // We redirect to the app root so Vue Router can handle routing.
+      const segment = 1; // number of path segments to keep (repo name)
+      const l = window.location;
+      const base = l.pathname.split('/').slice(0, 1 + segment).join('/') + '/';
+      l.replace(l.origin + base);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

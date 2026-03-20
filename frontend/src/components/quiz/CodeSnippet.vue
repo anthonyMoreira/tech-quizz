@@ -8,6 +8,7 @@
   import 'prismjs/components/prism-java';
   import 'prismjs/components/prism-python';
   import 'prismjs/components/prism-csharp';
+  import 'prismjs/components/prism-sql';
 
   const props = defineProps<{
     language: string;

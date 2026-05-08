@@ -9,6 +9,7 @@ import ciCdQuestions from './ci-cd.json';
 import microservicesQuestions from './microservices.json';
 import refactoringQuestions from './refactoring.json';
 import graphDatabaseQuestions from './graph-database.json';
+import apacheKafkaQuestions from './apache-kafka.json';
 
 export const themes: readonly Theme[] = [
   {
@@ -65,6 +66,12 @@ export const themes: readonly Theme[] = [
     description: 'Model and query highly connected data with nodes and edges',
     icon: '🕸️',
   },
+  {
+    id: 'apache-kafka',
+    name: 'Apache Kafka',
+    description: 'Master distributed event streaming and real-time data pipelines',
+    icon: '⚡',
+  },
 ] as const;
 
 const allQuestionArrays: Question[][] = [
@@ -77,6 +84,7 @@ const allQuestionArrays: Question[][] = [
   microservicesQuestions as unknown as Question[],
   refactoringQuestions as unknown as Question[],
   graphDatabaseQuestions as unknown as Question[],
+  apacheKafkaQuestions as unknown as Question[],
 ];
 
 export function getAllQuestions(): Question[] {

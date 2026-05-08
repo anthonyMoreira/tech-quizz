@@ -1,0 +1,3256 @@
+[
+  {
+    "id": "apache-kafka-beg-001",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is Apache Kafka primarily used for?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Distributed event streaming and real-time data pipelines",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Relational database management and ACID transactions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "In-memory caching and session management",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Static file hosting and content delivery",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka is a distributed event streaming platform designed for high-throughput, fault-tolerant messaging and real-time data pipelines. It is not a relational database (option B), nor is it primarily used for caching (option C) or static file hosting (option D), though it excels at streaming data between systems.",
+    "bonusFact": "Kafka was originally developed at LinkedIn in 2010 and later open-sourced through the Apache Software Foundation in 2011."
+  },
+  {
+    "id": "apache-kafka-beg-002",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a Kafka topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A category or feed name to which records are published",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A physical server that stores Kafka messages",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A consumer group that reads from Kafka",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A configuration file for Kafka brokers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A Kafka topic is a logical category or feed name where records (messages) are published by producers and consumed by consumers. It is not a physical server (option B), not a consumer group (option C), and not a configuration file (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-003",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a partition in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A subdivision of a topic for parallel processing and scalability",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A backup copy of an entire Kafka cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A network segment separating producers from consumers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A temporary buffer for storing messages before deletion",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A partition is a subdivision or shard of a Kafka topic that allows for parallel processing and horizontal scaling. It is not a backup of the cluster (option B), not a network segment (option C), and not simply a temporary buffer (option D), though partitions do have configurable retention.",
+    "bonusFact": "Each partition is an ordered, immutable sequence of records that is continually appended to, forming a commit log."
+  },
+  {
+    "id": "apache-kafka-beg-004",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a Kafka broker?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A Kafka server that stores data and serves client requests",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A client application that produces messages",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A message routing protocol used by Kafka",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A schema registry for message validation",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A Kafka broker is a server instance in a Kafka cluster that stores data and handles producer and consumer requests. It is not a producer client (option B), not a protocol (option C), and not a schema registry (option D), although schema registries can complement Kafka deployments.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-005",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of replication in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To provide fault tolerance and data durability",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To improve read performance by caching messages",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To compress messages for storage efficiency",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To route messages to multiple topics automatically",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Replication in Kafka creates multiple copies of each partition across different brokers to ensure fault tolerance and data durability if a broker fails. It is not primarily for caching (option B), compression (option C), or automatic routing (option D).",
+    "bonusFact": "The replication factor determines how many copies of each partition exist, with a common production setting of 3 replicas."
+  },
+  {
+    "id": "apache-kafka-beg-006",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a producer in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A client application that publishes messages to topics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A server component that creates new partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A tool that generates schema definitions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A background process that compacts log segments",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A producer is a client application that publishes (writes) records to Kafka topics. It is not a server component for partition creation (option B), not a schema tool (option C), and not a compaction process (option D), though log compaction is a separate Kafka feature.",
+    "bonusFact": "Producers can choose which partition to send a message to based on a key, or let Kafka distribute messages in a round-robin fashion if no key is provided."
+  },
+  {
+    "id": "apache-kafka-beg-007",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a consumer in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A client application that reads messages from topics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A broker that processes incoming producer requests",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A partition that stores consumed messages",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A monitoring tool that tracks cluster health",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A consumer is a client application that reads (consumes) records from Kafka topics. It is not a broker (option B), not a partition (option C), and not a monitoring tool (option D), although Kafka does provide metrics for monitoring.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-008",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a consumer group in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A set of consumers that coordinate to consume partitions from topics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A collection of topics that are grouped together",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A cluster of brokers that work together",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A batch of messages grouped for processing",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A consumer group is a set of consumer instances that work together to consume partitions from one or more topics, with each partition assigned to only one consumer in the group. It is not a collection of topics (option B), not a broker cluster (option C), and not a message batch (option D).",
+    "bonusFact": "Consumer groups enable Kafka to provide both message queuing (with a single group) and publish-subscribe (with multiple groups) semantics."
+  },
+  {
+    "id": "apache-kafka-beg-009",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is an offset in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A unique sequential ID for each record within a partition",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The time delay between producer and consumer",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The number of replicas for a partition",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The network latency between brokers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "An offset is a unique, sequential identifier (position) for each record within a partition that consumers use to track their reading position. It is not a time delay (option B), not a replica count (option C), and not network latency (option D).",
+    "bonusFact": "Offsets are 0-indexed and increase monotonically, making it easy for consumers to resume from where they left off or replay messages."
+  },
+  {
+    "id": "apache-kafka-beg-010",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the leader in Kafka's partition replication model?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The replica that handles all reads and writes for a partition",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The first broker started in the cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The consumer with the lowest group ID",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The topic with the most partitions",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The leader is the replica of a partition that handles all read and write requests for that partition, while followers replicate the data. It is not the first broker (option B), not related to consumer IDs (option C), and not related to topic size (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-011",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which property controls the number of acknowledgments a producer requires before considering a request complete?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "acks",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "retries",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "buffer.memory",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "linger.ms",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'acks' configuration controls how many acknowledgments the producer requires from brokers (0, 1, or all). 'retries' controls retry attempts (option B), 'buffer.memory' controls producer buffer size (option C), and 'linger.ms' controls batching delay (option D).",
+    "bonusFact": "Setting acks=all (or acks=-1) ensures the leader and all in-sync replicas acknowledge the write, providing the strongest durability guarantee."
+  },
+  {
+    "id": "apache-kafka-beg-012",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the producer configuration 'batch.size' control?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum size in bytes of a batch of records sent to a partition",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The number of partitions in a topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The timeout for producer requests",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The number of consumers in a group",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'batch.size' configuration sets the maximum size in bytes for batches of records sent to each partition, improving throughput. It does not control partition count (option B), request timeout (option C), or consumer group size (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-013",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of the producer's 'linger.ms' configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To add a delay before sending batches to improve throughput",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To set the timeout for broker acknowledgments",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To control how long messages are retained in topics",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To specify the producer's session timeout",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'linger.ms' setting adds an artificial delay before sending batches, allowing more records to accumulate and improving throughput at the cost of latency. It is not for acknowledgment timeout (option B), message retention (option C), or session timeout (option D).",
+    "bonusFact": "Setting linger.ms to a small value like 10-100ms can significantly improve throughput in high-volume scenarios with minimal latency impact."
+  },
+  {
+    "id": "apache-kafka-beg-014",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What determines which partition a producer sends a keyed message to?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The hash of the message key modulo the number of partitions",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The size of the message payload",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The timestamp of the message",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The producer's client ID",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "For keyed messages, Kafka uses a hash of the key modulo the partition count to determine the target partition, ensuring all messages with the same key go to the same partition. Message size (option B), timestamp (option C), and client ID (option D) do not determine partition assignment for keyed messages.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-015",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What happens when a producer sets acks=0?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The producer does not wait for any acknowledgment from the broker",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The producer waits for all replicas to acknowledge",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The producer disables message sending entirely",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The producer requires zero consumers to be active",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With acks=0, the producer does not wait for any broker acknowledgment, providing the lowest latency but no durability guarantee. Option B describes acks=all, option C is incorrect as messages are still sent, and option D is unrelated to acknowledgments.",
+    "bonusFact": "acks=0 is sometimes called 'fire and forget' and is suitable for use cases where some data loss is acceptable in exchange for maximum throughput."
+  },
+  {
+    "id": "apache-kafka-beg-016",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the role of the 'buffer.memory' producer configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Sets the total memory available for buffering records waiting to be sent",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Controls the size of each individual message",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Defines the memory allocated to the broker",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Specifies the consumer's fetch buffer size",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'buffer.memory' configuration sets the total bytes of memory the producer can use to buffer records waiting to be sent to brokers. It does not control individual message size (option B), broker memory (option C), or consumer settings (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-017",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the 'compression.type' producer configuration specify?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The compression algorithm used for batches (e.g., gzip, snappy, lz4, zstd)",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Whether topics should be compacted or deleted",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The encryption method for secure transmission",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The serialization format for messages",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'compression.type' setting specifies which compression algorithm (none, gzip, snappy, lz4, or zstd) the producer uses for batches. It is not related to topic cleanup policies (option B), encryption (option C), or serialization (option D).",
+    "bonusFact": "Compression happens on the producer side and remains compressed on disk and over the network, with decompression typically occurring at the consumer."
+  },
+  {
+    "id": "apache-kafka-beg-018",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is idempotence in Kafka producers?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A feature ensuring exactly-once message delivery per partition even with retries",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The ability to produce messages without network connectivity",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A mode where producers ignore all errors silently",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The automatic creation of topics when producing",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Idempotent producers ensure that retries do not result in duplicate messages on Kafka partitions, achieving exactly-once semantics per partition. It does not allow offline operation (option B), error ignoring (option C), or automatic topic creation (option D).",
+    "bonusFact": "Enabling idempotence (enable.idempotence=true) automatically sets acks=all, retries to a high value, and max.in.flight.requests.per.connection=5."
+  },
+  {
+    "id": "apache-kafka-beg-019",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a partitioner in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A component that determines which partition a record is sent to",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A tool that splits topics into smaller subtopics",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A process that divides consumer groups",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A configuration that sets the number of partitions",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A partitioner is a component in the producer that decides which partition a record should be sent to based on the key and other factors. It does not split topics (option B), divide consumer groups (option C), or configure partition counts (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-020",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does acks=1 mean for a Kafka producer?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The leader replica acknowledges the write before the producer continues",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Exactly one consumer must acknowledge receipt of the message",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Only one partition can receive the message",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The producer sends only one message per batch",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With acks=1, the producer waits for the leader replica to acknowledge the write, providing moderate durability. It is not about consumer acknowledgments (option B), partition limits (option C), or batch size (option D).",
+    "bonusFact": "acks=1 provides a balance between latency and durability, but messages could be lost if the leader fails before replication completes."
+  },
+  {
+    "id": "apache-kafka-beg-021",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of the 'group.id' consumer configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Identifies the consumer group this consumer belongs to",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Sets the priority level of the consumer",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Specifies the number of partitions to consume",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Defines the consumer's network group",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'group.id' property identifies which consumer group a consumer belongs to, enabling coordinated consumption and load balancing. It is not for priority (option B), partition count (option C), or network grouping (option D).",
+    "bonusFact": "Consumers with the same group.id share the load of consuming partitions, while consumers with different group.ids each receive all messages."
+  },
+  {
+    "id": "apache-kafka-beg-022",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does 'auto.offset.reset' control in a Kafka consumer?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Where to start reading when no committed offset exists (earliest or latest)",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "How often the consumer commits offsets automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Whether to reset all offsets to zero on startup",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The timeout before resetting a failed consumer",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'auto.offset.reset' setting determines where a consumer starts reading when it has no committed offset: 'earliest' starts from the beginning, 'latest' starts from the end. It is not about commit frequency (option B), forced reset to zero (option C), or timeout behavior (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-023",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is offset commit in Kafka consumers?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The process of storing the consumer's position in a partition",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Sending acknowledgment back to the producer",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Deleting processed messages from topics",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Committing transactions to the broker",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Offset commit is the process where a consumer stores its current position (offset) in a partition, typically in Kafka's internal __consumer_offsets topic. It is not acknowledgment to producers (option B), message deletion (option C), or transaction commits (option D), though Kafka does support transactions separately.",
+    "bonusFact": "Offset commits can be automatic (via enable.auto.commit) or manual, with manual commits providing more control over message processing guarantees."
+  },
+  {
+    "id": "apache-kafka-beg-024",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What happens during a consumer rebalance?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Partitions are redistributed among consumers in a group",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Messages are moved between different topics",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Brokers are restarted to balance load",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Producer connections are reset",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A consumer rebalance occurs when partition assignments are redistributed among consumers in a group, typically when consumers join or leave the group. It does not move messages (option B), restart brokers (option C), or affect producer connections (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-025",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of 'enable.auto.commit' in consumers?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Automatically commits offsets at regular intervals",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Enables automatic topic creation",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Automatically acknowledges messages to producers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Commits database transactions automatically",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'enable.auto.commit' setting, when true, makes the consumer automatically commit offsets periodically based on 'auto.commit.interval.ms'. It is not for topic creation (option B), producer acknowledgments (option C), or database transactions (option D).",
+    "bonusFact": "Disabling auto-commit (enable.auto.commit=false) gives you precise control over when offsets are committed, essential for exactly-once processing semantics."
+  },
+  {
+    "id": "apache-kafka-beg-026",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does 'max.poll.records' control in a Kafka consumer?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum number of records returned in a single poll() call",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The total number of records a consumer can ever read",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The maximum partition count the consumer can handle",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The polling timeout in milliseconds",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'max.poll.records' setting limits how many records are returned in a single call to poll(), helping control processing batch sizes. It is not a lifetime limit (option B), partition count (option C), or timeout value (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-027",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the poll() method in a Kafka consumer used for?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "ConsumerRecords<String, String> records = \n    consumer.poll(Duration.ofMillis(100));"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Fetching records from subscribed topics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Committing offsets to Kafka",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Checking broker health status",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Requesting partition rebalance",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The poll() method fetches batches of records from the topics the consumer is subscribed to. It is not for committing offsets (option B), health checks (option C), or triggering rebalances (option D), although it does participate in the rebalance protocol.",
+    "bonusFact": "The poll() method must be called regularly to keep the consumer alive within its consumer group, as it also sends heartbeats to the coordinator."
+  },
+  {
+    "id": "apache-kafka-beg-028",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the __consumer_offsets topic in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "An internal topic storing consumer group offset commits",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A topic for storing consumer configuration settings",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A debug topic for tracking consumer errors",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A metrics topic for monitoring consumer lag",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The __consumer_offsets is an internal Kafka topic that stores committed offsets for all consumer groups. It is not for configuration (option B), error logging (option C), or metrics (option D), although monitoring tools may read from it.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-029",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does 'session.timeout.ms' control for a consumer?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "How long before a consumer is considered dead if no heartbeat is received",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum time a poll() call can take",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "How long messages are retained in memory",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The timeout for network socket connections",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'session.timeout.ms' defines how long the broker waits for a consumer heartbeat before considering it dead and triggering a rebalance. It is not for poll duration (option B, that's max.poll.interval.ms), memory retention (option C), or socket timeout (option D).",
+    "bonusFact": "The default session.timeout.ms is 10 seconds, which balances failure detection speed against stability during network hiccups."
+  },
+  {
+    "id": "apache-kafka-beg-030",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the subscribe() method do in a Kafka consumer?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "consumer.subscribe(Arrays.asList(\"my-topic\"));"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Subscribes the consumer to one or more topics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Creates new topics on the Kafka cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Starts consuming messages immediately",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Commits the current offset position",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The subscribe() method registers the consumer's interest in one or more topics, enabling dynamic partition assignment. It does not create topics (option B), start consumption immediately (option C - you need poll() for that), or commit offsets (option D).",
+    "bonusFact": "Consumers can subscribe to topics using exact names or a regex pattern to automatically match multiple topics."
+  },
+  {
+    "id": "apache-kafka-beg-031",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A client library for building stream processing applications",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A separate cluster component like Kafka Connect",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A protocol for streaming data over HTTP",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A topic type optimized for streaming",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka Streams is a lightweight client library for building real-time stream processing applications that read from and write to Kafka. It is not a separate server (option B), not an HTTP protocol (option C), and not a topic type (option D).",
+    "bonusFact": "Kafka Streams applications run as standard Java applications and don't require a separate processing cluster like Spark or Flink."
+  },
+  {
+    "id": "apache-kafka-beg-032",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a KStream in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "An abstraction of a record stream where each record is an independent event",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A compacted topic with unique keys",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A Kubernetes stream for container logs",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A configuration file format",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A KStream represents a stream of records where each record is an independent event or fact. It is not a compacted topic (option B, that's more like KTable), not related to Kubernetes (option C), and not a configuration format (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-033",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a KTable in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "An abstraction of a changelog stream representing the latest value per key",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A database table stored in Kafka",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A Kubernetes configuration table",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A monitoring dashboard for Kafka",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A KTable represents a changelog stream where each record represents an update, and only the latest value for each key is retained semantically. It is not a database table (option B), not Kubernetes-related (option C), and not a dashboard (option D).",
+    "bonusFact": "You can think of a KTable as similar to a database table where updates for the same key replace the previous value."
+  },
+  {
+    "id": "apache-kafka-beg-034",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a topology in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The directed graph of stream processing operations",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The physical layout of Kafka brokers",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The network configuration between consumers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The partition distribution across topics",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A topology in Kafka Streams is the directed acyclic graph (DAG) that defines the stream processing logic and operations. It is not about broker layout (option B), consumer networking (option C), or partition distribution (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-035",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is Kafka Connect?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A framework for streaming data between Kafka and external systems",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A network protocol for broker communication",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A database connection pooling library",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A client for establishing SSH tunnels",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka Connect is a framework and runtime for reliably streaming data between Kafka and external systems like databases, key-value stores, and file systems. It is not a network protocol (option B), database connection pooler (option C), or SSH client (option D).",
+    "bonusFact": "Kafka Connect provides both source connectors (importing data into Kafka) and sink connectors (exporting data from Kafka)."
+  },
+  {
+    "id": "apache-kafka-beg-036",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a source connector in Kafka Connect?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A connector that imports data from external systems into Kafka",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A connector that exports data from Kafka to external systems",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The original Kafka topic in a replication setup",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A connector that compresses source code",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A source connector imports data from external systems (databases, message queues, etc.) into Kafka topics. Option B describes a sink connector, option C misunderstands the term, and option D is unrelated to Kafka Connect.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-037",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a sink connector in Kafka Connect?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A connector that exports data from Kafka to external systems",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A connector that imports data into Kafka",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A connector that deletes old messages",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A network sink for logging purposes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A sink connector exports data from Kafka topics to external systems like databases, search indexes, or data warehouses. Option B describes a source connector, option C describes a cleanup policy, and option D is unrelated.",
+    "bonusFact": "Popular sink connectors include JDBC Sink for databases, Elasticsearch Sink for search, and S3 Sink for data lakes."
+  },
+  {
+    "id": "apache-kafka-beg-038",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What are tasks in Kafka Connect?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Units of work that actually move data, created by connectors",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Scheduled jobs that run on Kafka brokers",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Consumer group assignments",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Partitions in a Connect topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Tasks are the units of parallelism in Kafka Connect; each connector creates one or more tasks that actually perform the data copying. They are not broker jobs (option B), consumer assignments (option C), or partitions (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-039",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a worker in Kafka Connect?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A process that executes connectors and tasks",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A thread within a Kafka broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A consumer in a consumer group",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A partition replica",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A Connect worker is a process (JVM) that executes connectors and their tasks. Workers can run in standalone or distributed mode. They are not broker threads (option B), consumers (option C), or replicas (option D).",
+    "bonusFact": "Distributed mode Connect workers coordinate through Kafka topics, enabling fault tolerance and scalability."
+  },
+  {
+    "id": "apache-kafka-beg-040",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the difference between standalone and distributed mode in Kafka Connect?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Standalone runs one worker; distributed allows multiple workers with fault tolerance",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Standalone is for production; distributed is for testing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Standalone uses REST API; distributed uses CLI only",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Standalone processes one record; distributed batches records",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Standalone mode runs a single worker process suitable for development or edge cases, while distributed mode allows multiple workers to share load and provide fault tolerance. Option B reverses the recommendation, option C is incorrect (distributed also has REST API), and option D mischaracterizes the modes.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-041",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which command-line tool is used to create a Kafka topic?",
+    "codeSnippet": {
+      "language": "bash",
+      "code": "kafka-topics --create \\\n  --topic my-topic \\\n  --bootstrap-server localhost:9092 \\\n  --partitions 3 \\\n  --replication-factor 2"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "kafka-topics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "kafka-create-topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "kafka-admin",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "kafka-config",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The kafka-topics tool is used to create, delete, describe, and manage topics. There is no kafka-create-topic tool (option B), kafka-admin is not the correct name (option C), and kafka-config is for configuration management, not topic creation (option D).",
+    "bonusFact": "Modern Kafka versions use --bootstrap-server instead of the deprecated --zookeeper flag for topic management."
+  },
+  {
+    "id": "apache-kafka-beg-042",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which tool can produce messages to a Kafka topic from the command line?",
+    "codeSnippet": {
+      "language": "bash",
+      "code": "kafka-console-producer \\\n  --topic my-topic \\\n  --bootstrap-server localhost:9092"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "kafka-console-producer",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "kafka-producer",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "kafka-publish",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "kafka-write",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The kafka-console-producer tool sends messages from the command line to Kafka topics. The other tool names (options B, C, D) do not exist in the standard Kafka distribution.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-043",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which tool consumes messages from a Kafka topic via the command line?",
+    "codeSnippet": {
+      "language": "bash",
+      "code": "kafka-console-consumer \\\n  --topic my-topic \\\n  --from-beginning \\\n  --bootstrap-server localhost:9092"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "kafka-console-consumer",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "kafka-consumer",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "kafka-read",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "kafka-subscribe",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The kafka-console-consumer tool reads and displays messages from Kafka topics. The other tool names (options B, C, D) are not standard Kafka commands.",
+    "bonusFact": "The --from-beginning flag makes the consumer read from the earliest available offset rather than the latest."
+  },
+  {
+    "id": "apache-kafka-beg-044",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the kafka-consumer-groups tool do?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Lists, describes, and manages consumer groups and their offsets",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Creates new consumer applications",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Compiles consumer code",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Monitors network connections",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The kafka-consumer-groups tool is used to list, describe, and reset consumer groups and their committed offsets. It does not create applications (option B), compile code (option C), or monitor networks (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-045",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of the log.retention.hours configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Sets how long Kafka retains messages before deletion",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Controls how long broker logs are kept for debugging",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Defines consumer session timeout",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Specifies producer connection timeout",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The log.retention.hours (or log.retention.ms) configuration determines how long Kafka retains messages in topics before they are eligible for deletion. It is not for broker debug logs (option B), consumer timeouts (option C), or producer timeouts (option D).",
+    "bonusFact": "Retention can also be controlled by size (log.retention.bytes) rather than time, with Kafka deleting data when either limit is reached."
+  },
+  {
+    "id": "apache-kafka-beg-046",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the min.insync.replicas configuration control?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The minimum number of replicas that must acknowledge a write for acks=all",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The minimum number of brokers required in a cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The minimum number of consumers in a group",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The minimum partition count for a topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The min.insync.replicas setting specifies the minimum number of replicas that must acknowledge a write when acks=all is used, ensuring stronger durability guarantees. It is not about broker count (option B), consumer count (option C), or partition count (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-047",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is log compaction in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A cleanup policy that retains only the latest value for each key",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Compression of messages using gzip or snappy",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Consolidation of multiple partitions into one",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Deletion of broker log files",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Log compaction is a cleanup policy (cleanup.policy=compact) that ensures Kafka retains at least the last known value for each key. It is not message compression (option B), partition consolidation (option C), or log file deletion (option D).",
+    "bonusFact": "Log compaction is ideal for changelog topics where you need the latest state per key, such as database change streams or configuration updates."
+  },
+  {
+    "id": "apache-kafka-beg-048",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the bootstrap server in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The initial broker(s) a client connects to for cluster discovery",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The first broker that must be started in a cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A special server type for initializing topics",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The server that bootstraps consumer groups",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The bootstrap server is the initial broker (or list of brokers) that clients connect to, which then provides metadata about the full cluster. It is not necessarily the first broker started (option B), not a special server type (option C), and not specifically for consumer groups (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-049",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is KRaft in modern Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Kafka's built-in consensus protocol replacing ZooKeeper",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A compression algorithm for messages",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A monitoring tool for Kafka clusters",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A security framework for authentication",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "KRaft (Kafka Raft) is Kafka's internal consensus mechanism that eliminates the need for ZooKeeper, becoming the default in Kafka 3.3+. It is not a compression algorithm (option B), monitoring tool (option C), or security framework (option D).",
+    "bonusFact": "KRaft mode simplifies Kafka deployment and operations by removing the external ZooKeeper dependency, reducing operational complexity."
+  },
+  {
+    "id": "apache-kafka-beg-050",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of the message key in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To determine partition assignment and enable log compaction",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To encrypt message contents",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To set message priority",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To authenticate producers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Message keys determine which partition a message goes to (via hashing) and enable log compaction to keep the latest value per key. Keys are not for encryption (option B), priority (option C), or authentication (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-051",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a serializer in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A component that converts objects into bytes for transmission",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A tool that arranges messages in order",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A process that creates serial numbers for messages",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A configuration that enables sequential processing",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A serializer converts Java objects into byte arrays so they can be sent over the network and stored in Kafka. It is not for ordering (option B), generating IDs (option C), or processing configuration (option D).",
+    "bonusFact": "Common serializers include StringSerializer, IntegerSerializer, and more advanced ones like Avro, Protobuf, and JSON serializers."
+  },
+  {
+    "id": "apache-kafka-beg-052",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a deserializer in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A component that converts bytes back into objects",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A tool that removes serialization from topics",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A process that validates message order",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A configuration for parallel processing",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A deserializer converts byte arrays received from Kafka back into Java objects. It is not for removing serialization (option B), validating order (option C), or parallelization (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-053",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "Which producer configuration specifies the key serializer?",
+    "codeSnippet": {
+      "language": "properties",
+      "code": "key.serializer=org.apache.kafka.common.serialization.StringSerializer\nvalue.serializer=org.apache.kafka.common.serialization.StringSerializer"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "key.serializer",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "serializer.key",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "key.format",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "key.encoder",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'key.serializer' property specifies the class used to serialize message keys. The other property names (options B, C, D) are not valid Kafka configurations.",
+    "bonusFact": "You must specify both key.serializer and value.serializer even if your messages don't have keys."
+  },
+  {
+    "id": "apache-kafka-beg-054",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of a schema registry in Kafka ecosystems?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To store and version schemas for message serialization formats",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To register new topics automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To manage consumer group schemas",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To configure broker settings centrally",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A schema registry (like Confluent Schema Registry) stores and versions schemas for formats like Avro, Protobuf, and JSON Schema, ensuring producer/consumer compatibility. It is not for topic registration (option B), consumer group management (option C), or broker configuration (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-055",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is Avro in the context of Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A binary serialization format with schema support",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A Kafka broker implementation",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A consumer group protocol",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A monitoring framework",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Apache Avro is a binary serialization format that provides compact, fast, and schema-based serialization, commonly used with Kafka. It is not a broker (option B), protocol (option C), or monitoring tool (option D).",
+    "bonusFact": "Avro schemas are written in JSON and support schema evolution, allowing you to change message structure over time without breaking consumers."
+  },
+  {
+    "id": "apache-kafka-beg-056",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is consumer lag in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The difference between the latest offset and the consumer's committed offset",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The network latency between consumer and broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The time a consumer spends processing each message",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The delay before a consumer starts up",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Consumer lag is the difference between the latest offset in a partition and the offset the consumer has committed, indicating how far behind the consumer is. It is not network latency (option B), processing time (option C), or startup delay (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-057",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the 'fetch.min.bytes' consumer configuration control?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The minimum data the broker should return for a fetch request",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The minimum message size to accept",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The minimum number of bytes to commit",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The minimum partition size",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'fetch.min.bytes' setting makes the consumer wait until at least this many bytes are available before returning from a fetch request, reducing request frequency. It is not about message size filtering (option B), commit size (option C), or partition size (option D).",
+    "bonusFact": "Increasing fetch.min.bytes can improve throughput at the cost of latency, as the consumer waits for more data to accumulate."
+  },
+  {
+    "id": "apache-kafka-beg-058",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of 'max.poll.interval.ms'?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Maximum time between poll() calls before a consumer is considered dead",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Maximum duration of a single poll() call",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Interval between automatic offset commits",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Maximum time to wait for messages in poll()",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'max.poll.interval.ms' setting defines the maximum delay between poll() invocations before the consumer is considered dead and kicked out of the group. It is not the poll() duration limit (option B), commit interval (option C), or poll timeout (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-059",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What happens if you increase the number of partitions in a topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Enables greater parallelism for consumers and higher throughput",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Automatically increases replication factor",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Reduces storage requirements",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Decreases message retention time",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Increasing partitions allows more consumers to process data in parallel, improving throughput and scalability. It does not change replication (option B), reduce storage (option C), or affect retention (option D).",
+    "bonusFact": "You can increase partitions but cannot decrease them; if you need fewer partitions, you must create a new topic."
+  },
+  {
+    "id": "apache-kafka-beg-060",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of the 'request.timeout.ms' configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Maximum time a client waits for a broker response",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Maximum time between consumer requests",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Timeout for establishing network connections",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Maximum message processing time",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'request.timeout.ms' setting controls how long a client (producer or consumer) waits for a response from a broker before timing out. It is not about request frequency (option B), connection establishment (option C), or processing time (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-061",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a stateless operation in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "An operation that processes each record independently without maintaining state",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "An operation that doesn't produce any output",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "An operation that runs without a Kafka cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "An operation that doesn't use memory",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Stateless operations like map, filter, and flatMap process each record independently without maintaining any state between records. They do produce output (option B is wrong), require Kafka (option C is wrong), and use memory (option D is wrong).",
+    "bonusFact": "Stateless operations are simpler and more scalable than stateful ones since they don't require state stores or changelog topics."
+  },
+  {
+    "id": "apache-kafka-beg-062",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a stateful operation in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "An operation that maintains state across multiple records",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "An operation that only processes static data",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "An operation that requires manual state management",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "An operation that doesn't scale horizontally",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Stateful operations like aggregations, joins, and windowing maintain state across records using state stores. They are not for static data (option B), don't require manual management (option C - Kafka Streams handles it), and do scale (option D is wrong).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-063",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the filter() operation in Kafka Streams?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KStream<String, Long> filtered = \n    stream.filter((key, value) -> value > 100);"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Keeps only records that match a predicate",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Removes duplicate records",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Sorts records by key",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Compresses records",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The filter() operation is a stateless transformation that keeps only records matching the given predicate. It does not remove duplicates (option B), sort records (option C), or compress data (option D).",
+    "bonusFact": "The filter() operation is one of the simplest and most commonly used transformations in stream processing."
+  },
+  {
+    "id": "apache-kafka-beg-064",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the map() operation do in Kafka Streams?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KStream<String, String> mapped = \n    stream.map((key, value) -> \n        KeyValue.pair(key.toUpperCase(), value));"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Transforms each record into a new record, possibly changing key and value",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Creates a geographic map of data distribution",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Groups records by their keys",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Joins two streams together",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The map() operation applies a function to each record, producing a new record with potentially different key and value. It is not for geographic mapping (option B), grouping (option C), or joining (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-065",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is windowing in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Grouping records into time-based buckets for aggregation",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Displaying stream data in a GUI window",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Limiting the number of records processed",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Splitting a stream into multiple topics",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Windowing groups records into time-based windows (tumbling, hopping, sliding, or session windows) for time-bounded aggregations. It is not for GUI display (option B), record limiting (option C), or topic splitting (option D).",
+    "bonusFact": "Common window types include tumbling windows (fixed, non-overlapping), hopping windows (fixed, overlapping), and session windows (activity-based)."
+  },
+  {
+    "id": "apache-kafka-beg-066",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is ISR (In-Sync Replicas) in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The set of replicas that are fully caught up with the leader",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Internet-Secured Replication for encrypted data",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Initial Startup Replicas created when a topic is made",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Isolated Storage Regions for data locality",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "ISR (In-Sync Replicas) is the set of replicas that are fully synchronized with the leader partition. Only ISR members can be elected as leader if the current leader fails. Options B, C, and D are incorrect interpretations of the acronym.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-067",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of transactions in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To enable atomic writes across multiple partitions and topics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To process financial transactions only",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To compress multiple messages together",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To prioritize high-value messages",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka transactions allow atomic, all-or-nothing writes across multiple partitions and topics, enabling exactly-once semantics. They are not limited to financial data (option B), not for compression (option C), and not for prioritization (option D).",
+    "bonusFact": "Transactional producers use enable.idempotence=true and set a transactional.id to enable exactly-once delivery guarantees."
+  },
+  {
+    "id": "apache-kafka-beg-068",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does 'unclean.leader.election.enable' control?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Whether replicas not in ISR can be elected as leader",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Whether to validate leader credentials",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Whether to clean up election logs",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Whether to enable automatic leader rebalancing",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The 'unclean.leader.election.enable' setting determines whether out-of-sync replicas can become leader, trading availability for potential data loss. It is not about credentials (option B), log cleanup (option C), or rebalancing (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-069",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What authentication mechanism does Kafka support?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "SASL (Simple Authentication and Security Layer) and SSL/TLS",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Only basic username/password authentication",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Only OAuth2",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "No built-in authentication",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka supports SASL (with mechanisms like PLAIN, SCRAM, GSSAPI/Kerberos) and SSL/TLS for authentication and encryption. It is not limited to basic auth (option B) or OAuth2 only (option C), and does have authentication (option D is wrong).",
+    "bonusFact": "Kafka can also use SSL/TLS for both encryption in transit and client authentication using certificates."
+  },
+  {
+    "id": "apache-kafka-beg-070",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a broker rack awareness in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Distributing replicas across different racks/availability zones for fault tolerance",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Monitoring which physical rack each broker is mounted in",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A tool for organizing broker configuration files",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A performance optimization for network routing",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Rack awareness (configured via broker.rack) ensures replicas are distributed across different physical racks or cloud availability zones to improve fault tolerance. It is not just monitoring (option B), not a config tool (option C), and while it can affect network, it's primarily for fault tolerance (option D is incomplete).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-071",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the --from-beginning flag do in kafka-console-consumer?",
+    "codeSnippet": {
+      "language": "bash",
+      "code": "kafka-console-consumer --topic my-topic \\\n  --from-beginning \\\n  --bootstrap-server localhost:9092"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Reads messages from the earliest available offset",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Reads only the first message in the topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Resets all consumer groups to offset 0",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Starts reading from when the consumer started",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The --from-beginning flag makes the consumer read from the earliest available offset in the topic, not just the first message (option B), not resetting groups (option C), and not from consumer start time (option D).",
+    "bonusFact": "Without --from-beginning, the console consumer reads only new messages produced after it starts."
+  },
+  {
+    "id": "apache-kafka-beg-072",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "How can you describe a topic's configuration using CLI tools?",
+    "codeSnippet": {
+      "language": "bash",
+      "code": "kafka-topics --describe \\\n  --topic my-topic \\\n  --bootstrap-server localhost:9092"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Use kafka-topics with --describe flag",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Use kafka-describe-topic command",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Use kafka-config --describe-topic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use kafka-admin --show-topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The kafka-topics tool with --describe flag shows topic configuration, partitions, replicas, and ISR. The other command names (options B, C, D) do not exist in standard Kafka.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-073",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the default number of partitions when creating a topic if not specified?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Depends on the num.partitions broker configuration (typically 1)",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Always 3 partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Equal to the number of brokers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Topics cannot be created without specifying partition count",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The default partition count is determined by the broker's num.partitions configuration, which is typically 1 unless changed. It is not always 3 (option B), not broker-count (option C), and you can create topics without specifying (option D is wrong).",
+    "bonusFact": "It's a best practice to explicitly set partitions and replication factor rather than relying on defaults."
+  },
+  {
+    "id": "apache-kafka-beg-074",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What happens if a producer tries to write to a topic that doesn't exist?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "By default, the topic is auto-created if auto.create.topics.enable=true",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The producer immediately crashes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The message is silently dropped",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The message is sent to a dead letter queue",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "If auto.create.topics.enable is true (the default), Kafka automatically creates the topic when a producer first writes to it. The producer doesn't crash (option B), messages aren't dropped silently (option C), and there's no automatic dead letter queue (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-075",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the role of the group coordinator in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Manages consumer group membership and partition assignment",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Coordinates message ordering across all topics",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Synchronizes time across all brokers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Manages producer transactions only",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The group coordinator (a broker) manages consumer group membership, tracks heartbeats, and triggers rebalances. It does not coordinate message ordering globally (option B), sync time (option C), or handle only producers (option D).",
+    "bonusFact": "Each consumer group is assigned to one group coordinator, which is selected based on a hash of the group ID."
+  },
+  {
+    "id": "apache-kafka-beg-076",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of the seekToBeginning() consumer method?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "consumer.seekToBeginning(\n    consumer.assignment());"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Moves the consumer offset to the earliest available offset",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Rewinds to the first message ever produced to the topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Starts a new consumer from scratch",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Moves to the beginning of the current batch",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The seekToBeginning() method repositions the consumer to the earliest available offset in assigned partitions, which may not be message #1 if retention has deleted earlier messages. It doesn't restart the consumer (option C), and is about partition offsets, not batches (option D).",
+    "bonusFact": "You can use seek(), seekToBeginning(), and seekToEnd() to precisely control a consumer's position in partitions."
+  },
+  {
+    "id": "apache-kafka-beg-077",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a record in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A message consisting of a key, value, timestamp, and headers",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A log entry about broker operations",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A consumer's committed offset",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A configuration setting in a properties file",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A record (or message) in Kafka contains a key, value, timestamp, and optional headers. It is not a broker log (option B), an offset (option C), or a configuration (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-078",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What are headers in a Kafka record?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Optional key-value metadata attached to messages",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The first few bytes of the message value",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "HTTP headers for REST API calls",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The partition and offset information",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Headers are optional key-value pairs of metadata that can be attached to Kafka records, useful for routing, tracing, or other metadata. They are not part of the value (option B), not HTTP headers (option C), and not partition/offset info (option D).",
+    "bonusFact": "Headers are particularly useful for storing correlation IDs, message types, or routing information without modifying the message payload."
+  },
+  {
+    "id": "apache-kafka-beg-079",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the timestamp in a Kafka record?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A timestamp indicating when the event occurred or was produced",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The exact time the consumer reads the message",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The broker's system time when storing the message",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A timeout value for message expiration",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Each record has a timestamp that can be set by the producer (CreateTime) or by the broker upon receipt (LogAppendTime), configured via message.timestamp.type. It is not consumer read time (option B), not always broker time (option C), and not an expiration (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-080",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the groupBy() operation in Kafka Streams?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KGroupedStream<String, Long> grouped = \n    stream.groupBy((key, value) -> value.getUserId());"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Groups records by a new key for aggregation",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Creates consumer groups automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Partitions topics by a field",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Filters records by group membership",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The groupBy() operation groups records by a (potentially new) key, preparing them for aggregation operations. It does not create consumer groups (option B), repartition topics (option C, though it may trigger repartitioning), or filter (option D).",
+    "bonusFact": "After groupBy(), you can apply aggregations like count(), reduce(), or aggregate() to compute results per key."
+  },
+  {
+    "id": "apache-kafka-beg-081",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the log.segment.bytes configuration control?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum size of a single log segment file",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The total size of all logs on a broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The size of messages that can be produced",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The memory allocated for log caching",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The log.segment.bytes setting controls the maximum size of individual log segment files before Kafka creates a new one. It is not the total broker log size (option B), message size (option C), or cache size (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-082",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of JMX metrics in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To expose broker, producer, and consumer metrics for monitoring",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To format JSON messages",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To encrypt data in transit",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To serialize Java objects",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "JMX (Java Management Extensions) metrics provide detailed monitoring data about Kafka components including brokers, producers, and consumers. They are not for JSON formatting (option B), encryption (option C), or serialization (option D).",
+    "bonusFact": "Kafka exposes hundreds of JMX metrics including request rates, byte rates, consumer lag, and partition counts."
+  },
+  {
+    "id": "apache-kafka-beg-083",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What tool can you use to monitor consumer group lag?",
+    "codeSnippet": {
+      "language": "bash",
+      "code": "kafka-consumer-groups --describe \\\n  --group my-group \\\n  --bootstrap-server localhost:9092"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "kafka-consumer-groups with --describe flag",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "kafka-lag-monitor",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "kafka-topics --lag",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "kafka-performance-test",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The kafka-consumer-groups tool with --describe shows consumer lag, current offsets, and log end offsets for each partition. The other tool names (options B, C, D) either don't exist or don't provide lag information.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-084",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the --reset-offsets operation do in kafka-consumer-groups?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Changes the committed offsets for a consumer group",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Deletes all messages from the topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Restarts all consumers in the group",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Resets broker configurations to defaults",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The --reset-offsets operation allows you to reposition a consumer group's offsets to specific positions, enabling replay or skipping of messages. It does not delete messages (option B), restart consumers (option C), or reset broker configs (option D).",
+    "bonusFact": "You can reset offsets to various positions: --to-earliest, --to-latest, --to-offset, --to-datetime, or --shift-by."
+  },
+  {
+    "id": "apache-kafka-beg-085",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of log.flush.interval.messages?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Number of messages before Kafka flushes data to disk",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Interval between consumer poll calls",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Number of messages per batch",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Maximum messages per partition",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The log.flush.interval.messages setting controls how many messages are written before Kafka forces a flush to disk, though relying on OS page cache is often sufficient. It is not about consumer polling (option B), producer batching (option C), or partition limits (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-086",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a converter in Kafka Connect?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Translates data between Connect format and byte format for Kafka",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Converts topics from one type to another",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Changes partition count dynamically",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Transforms consumer groups",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Converters in Kafka Connect translate between Connect's internal data format and the serialized byte format used in Kafka topics (e.g., JsonConverter, AvroConverter). They don't convert topics (option B), partitions (option C), or groups (option D).",
+    "bonusFact": "You configure separate converters for keys and values using key.converter and value.converter properties."
+  },
+  {
+    "id": "apache-kafka-beg-087",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a Single Message Transform (SMT) in Kafka Connect?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A lightweight transformation applied to individual messages in Connect",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A mode that processes one message at a time",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A transform that handles only single-partition topics",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A serialization format for messages",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Single Message Transforms (SMTs) are lightweight, per-message transformations in Connect pipelines for simple operations like adding fields, routing, or filtering. They are not about processing mode (option B), partition count (option C), or serialization (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-088",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the tasks.max configuration control in a connector?",
+    "codeSnippet": {
+      "language": "json",
+      "code": "{\n  \"name\": \"jdbc-source\",\n  \"config\": {\n    \"connector.class\": \"JdbcSourceConnector\",\n    \"tasks.max\": \"3\"\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum number of parallel tasks for the connector",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum number of messages per task",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The timeout for task completion",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The maximum number of connectors",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The tasks.max setting specifies the maximum number of task instances that can run in parallel for a connector, enabling parallelism. It is not about message count (option B), timeout (option C), or connector count (option D).",
+    "bonusFact": "The actual number of tasks may be less than tasks.max if the connector determines fewer tasks are needed based on the workload."
+  },
+  {
+    "id": "apache-kafka-beg-089",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "How can you pause a connector in Kafka Connect distributed mode?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use the REST API PUT /connectors/{name}/pause endpoint",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Send a SIGSTOP signal to the connector process",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Set connector.pause=true in the configuration",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Delete and recreate the connector",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In distributed mode, you pause connectors via the REST API using PUT /connectors/{name}/pause. There's no connector process to signal (option B), no pause configuration (option C), and deletion is not pausing (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-090",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the default port for Kafka Connect REST API?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "8083",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "9092",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "8080",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "2181",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka Connect's REST API defaults to port 8083. Port 9092 is the default Kafka broker port (option B), 8080 is a common web port (option C), and 2181 was the default ZooKeeper port (option D).",
+    "bonusFact": "You can change the Connect REST API port using the rest.port configuration in the worker properties file."
+  },
+  {
+    "id": "apache-kafka-beg-091",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the to() method in Kafka Streams?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "stream.filter((k, v) -> v > 100)\n      .to(\"output-topic\");"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Writes records to an output topic",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Converts stream to a table",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Limits stream processing time",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Transforms record format",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The to() method is a terminal operation that writes records from a stream to a specified Kafka topic. It does not convert to KTable (option B), set time limits (option C), or transform format (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-092",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What does the count() operation do in Kafka Streams?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KTable<String, Long> counts = \n    grouped.count();"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Counts the number of records per key",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Counts total messages in a topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Returns the partition count",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Counts active consumers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The count() aggregation counts records per key in a grouped stream, returning a KTable. It is not a total topic count (option B), partition count (option C), or consumer count (option D).",
+    "bonusFact": "count() is a stateful operation that maintains counts in a state store backed by a changelog topic for fault tolerance."
+  },
+  {
+    "id": "apache-kafka-beg-093",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the application.id in Kafka Streams?",
+    "codeSnippet": {
+      "language": "properties",
+      "code": "application.id=my-stream-app\nbootstrap.servers=localhost:9092"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "A unique identifier for the Streams application and its consumer group",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The process ID of the application",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A license key for Kafka Streams",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The name of the input topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The application.id uniquely identifies a Streams application and serves as the consumer group ID and prefix for internal topics. It is not a process ID (option B), license key (option C), or topic name (option D).",
+    "bonusFact": "All instances of a Streams application must use the same application.id to coordinate processing of partitions."
+  },
+  {
+    "id": "apache-kafka-beg-094",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is a state store in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A local database for storing intermediate state in stream processing",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A configuration file for application state",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A remote database connection",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A memory cache for brokers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "State stores are local, embedded databases (typically RocksDB) used by Kafka Streams to maintain state for aggregations, joins, and windowing. They are not config files (option B), remote databases (option C), or broker caches (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-095",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of changelog topics in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To back up state stores for fault tolerance and recovery",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To log changes to Kafka configurations",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To track version control of application code",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To record broker operational logs",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Changelog topics are internal Kafka topics that backup state store contents, enabling state recovery if a Streams instance fails. They are not for config logging (option B), code versioning (option C), or broker logs (option D).",
+    "bonusFact": "Kafka Streams automatically creates and manages changelog topics with log compaction enabled to keep only the latest state per key."
+  },
+  {
+    "id": "apache-kafka-beg-096",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the default replication factor if not specified when creating a topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Determined by the default.replication.factor broker configuration",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Always 1",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Equal to the number of brokers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Always 3 for production clusters",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The default replication factor is set by the broker's default.replication.factor configuration. It is not hardcoded to 1 (option B), not automatically broker-count (option C), and not always 3 (option D).",
+    "bonusFact": "Best practice is to explicitly set replication factor to 3 for production topics rather than relying on defaults."
+  },
+  {
+    "id": "apache-kafka-beg-097",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What happens when all replicas of a partition are unavailable?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The partition becomes unavailable unless unclean leader election is enabled",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Kafka automatically creates new replicas",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Messages are rerouted to other partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The topic is automatically deleted",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When all replicas are down, the partition becomes unavailable for reads and writes unless unclean.leader.election.enable=true allows an out-of-sync replica to become leader. Kafka doesn't auto-create replicas (option B), reroute (option C), or delete topics (option D).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-beg-098",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the purpose of the client.id configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "An identifier for the client used in logs and metrics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A unique authentication token",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The consumer group ID",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The IP address of the client",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The client.id is a logical name for the client application that appears in logs and metrics, helping with debugging and monitoring. It is not for authentication (option B), not the group ID (option C), and not an IP address (option D).",
+    "bonusFact": "Setting a meaningful client.id makes it easier to track request rates and troubleshoot issues in multi-client environments."
+  },
+  {
+    "id": "apache-kafka-beg-099",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the assign() method in Kafka consumers used for?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "consumer.assign(Arrays.asList(\n    new TopicPartition(\"my-topic\", 0),\n    new TopicPartition(\"my-topic\", 1)\n));"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Manually assigns specific partitions to the consumer",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Assigns the consumer to a consumer group",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Allocates memory for buffering",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Assigns a deserializer to the consumer",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The assign() method manually assigns specific topic partitions to a consumer, bypassing consumer group management. It is not for group assignment (option B - that's group.id), memory allocation (option C), or deserializer configuration (option D).",
+    "bonusFact": "You cannot use both subscribe() and assign() in the same consumer - they are mutually exclusive assignment strategies."
+  },
+  {
+    "id": "apache-kafka-beg-100",
+    "themeId": "apache-kafka",
+    "difficulty": "beginner",
+    "type": "text",
+    "prompt": "What is the recommended way to handle deserialization errors in consumers?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Configure an error handling deserializer or dead letter queue pattern",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Let the consumer crash and restart automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Skip all error messages silently",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Delete the problematic topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Best practice is to use error handling deserializers (like LoggingDeserializer) or implement a dead letter queue pattern to capture and analyze problematic messages. Letting consumers crash (option B), silent skipping (option C), and topic deletion (option D) are not robust error handling strategies.",
+    "bonusFact": "The ErrorHandlingDeserializer can wrap your regular deserializer and handle deserialization failures gracefully, logging errors while allowing consumption to continue."
+  }
+]

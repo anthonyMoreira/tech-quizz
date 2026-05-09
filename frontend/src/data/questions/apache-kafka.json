@@ -7526,5 +7526,331 @@
     ],
     "explanation": "The request purgatory is a broker-side data structure that holds requests that cannot be completed immediately. For example, a produce request with acks=all is placed in purgatory until all ISR members acknowledge, or a fetch request with fetch.min.bytes is held until enough data is available. Requests are completed when their conditions are satisfied or they expire. Option B confuses purgatory with authentication failure handling. Option C fabricates a priority reordering mechanism. Option D describes the quota manager, not purgatory.",
     "bonusFact": "Kafka uses a hierarchical timing wheel for efficient expiration."
+  },
+  {
+    "id": "apache-kafka-adv-031",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka's log cleaner handle the dirty ratio and when does compaction actually run?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Compaction runs when the ratio of dirty bytes to total bytes exceeds min.cleanable.dirty.ratio, prioritizing partitions with the highest dirty ratio",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Compaction runs on a fixed schedule regardless of the dirty ratio",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Compaction runs whenever a new record is written to a compacted topic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Compaction only runs when a broker restarts",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The log cleaner thread continuously scans partitions with cleanup.policy=compact and calculates the dirty ratio (bytes in dirty segments / total bytes). When this ratio exceeds min.cleanable.dirty.ratio (default 0.5), the partition becomes eligible for compaction. The cleaner prioritizes the partition with the highest dirty ratio. Option B is wrong because compaction is triggered by dirty ratio, not a schedule. Option C would be extremely inefficient. Option D is factually incorrect; compaction runs continuously in the background.",
+    "bonusFact": "Lower min.cleanable.dirty.ratio means more frequent compaction."
+  },
+  {
+    "id": "apache-kafka-adv-032",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the Kafka Streams processor topology and how does it differ from the DSL-generated topology?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The Processor API builds topologies directly with source/processor/sink nodes, offering more control than the DSL which generates processor nodes from high-level operations",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The Processor API is for batch processing while the DSL is for stream processing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The Processor API cannot use state stores while the DSL can",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The Processor API is deprecated in favor of the DSL",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Processor API allows developers to build topologies by explicitly defining source nodes, processor nodes, and sink nodes with full control over record forwarding, state store access, and scheduling (via punctuators). The DSL provides higher-level operations (filter, map, join) that are compiled into the same kind of processor topology under the hood. Option B incorrectly classifies the Processor API as batch-only. Option C is wrong because the Processor API has full access to state stores. Option D is factually incorrect; both APIs are actively maintained.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-033",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What advanced pattern does this Kafka consumer implementation use?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();\nfor (ConsumerRecord<String, String> record : records) {\n  process(record);\n  offsets.put(\n    new TopicPartition(record.topic(), record.partition()),\n    new OffsetAndMetadata(record.offset() + 1));\n  if (offsets.size() % 100 == 0) {\n    consumer.commitAsync(offsets, null);\n    offsets.clear();\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Per-partition offset tracking with periodic micro-commits every 100 partition updates to minimize reprocessing on failure",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Batch processing with automatic offset reset every 100 records",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Manual partition assignment with custom seek positions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Transaction-based processing with commit checkpoints",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code tracks offsets per partition in a map and commits them asynchronously every 100 partition-offset updates. The offset is set to record.offset() + 1 because committed offsets represent the next offset to read. This fine-grained commit strategy reduces the window of potential reprocessing on failure compared to committing only after the entire batch. Option B mischaracterizes the mechanism as a reset. Option C is wrong because no assign() or seek() calls are present. Option D incorrectly identifies this as transactional when it uses commitAsync without transactions.",
+    "bonusFact": "Committed offset = last processed offset + 1 (next to read)."
+  },
+  {
+    "id": "apache-kafka-adv-034",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the difference between Kafka's cooperative rebalance protocol and the new server-side consumer group protocol (KIP-848)?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "KIP-848 moves partition assignment to the group coordinator on the broker, eliminating client-side assignment and reducing rebalance round-trips",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "KIP-848 replaces TCP with gRPC for consumer-broker communication",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "KIP-848 removes the concept of consumer groups entirely",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "KIP-848 only works with KTable-based applications, not KStream",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The cooperative rebalance protocol still performs partition assignment on the client side (in the group leader consumer). KIP-848 moves the assignment logic to the group coordinator on the broker, reducing the number of network round-trips during rebalancing and simplifying the client protocol. The broker can make assignment decisions more efficiently with its global view of the cluster. Option B fabricates a protocol change. Option C is wrong because consumer groups still exist. Option D incorrectly restricts KIP-848 to KTable applications.",
+    "bonusFact": "KIP-848 became generally available in Kafka 4.0."
+  },
+  {
+    "id": "apache-kafka-adv-035",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the effect of enabling end-to-end encryption (application-level) on Kafka's operational capabilities?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Log compaction, SMTs, KSQL queries, and schema validation become ineffective since the broker and intermediaries cannot read the payload",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "End-to-end encryption has no operational impact because Kafka decrypts data automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "End-to-end encryption is built into Kafka and works seamlessly with all features",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only log compaction is affected; all other features work normally with encrypted data",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Application-level encryption (encrypting payloads before producing) means the broker stores opaque byte arrays. This breaks any feature that needs to inspect message content: log compaction cannot compare values for the same key, SMTs cannot transform fields, stream processing (KSQL/Kafka Streams) cannot query or aggregate, and schema validation cannot verify structure. Option B is wrong because Kafka does not decrypt application-encrypted data. Option C is incorrect because Kafka only provides transport encryption (TLS), not payload encryption. Option D understates the impact.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-036",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka's tiered storage handle data retrieval when a consumer reads from a remote segment?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The broker fetches the required data from remote storage on demand, caches it locally, and serves it to the consumer transparently",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The consumer is redirected to read directly from the remote storage system",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Remote segments are fully restored to local disk before any consumer can access them",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Consumers cannot read from remote segments and must wait for data to be brought back to local storage manually",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With tiered storage, when a consumer requests data from an offset that resides in a remote segment, the broker transparently fetches the required data from the remote storage backend (e.g., S3, HDFS), caches it in a local cache, and serves it to the consumer. The consumer is unaware of the storage tier. Option B is incorrect because the broker mediates all access. Option C is wrong because only the requested portions are fetched, not entire segments necessarily restored. Option D fabricates a manual restoration requirement.",
+    "bonusFact": "Remote reads add latency compared to page cache reads."
+  },
+  {
+    "id": "apache-kafka-adv-037",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's incremental cooperative rebalance and how does it minimize consumer downtime?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It performs rebalances in multiple phases, only revoking partitions that need to move while other partitions continue processing",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It pre-assigns partitions to consumers before they join the group",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It rebalances partitions one at a time instead of all at once",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It skips the rebalance entirely and lets consumers negotiate directly",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The incremental cooperative rebalance protocol splits the rebalance into two phases. In the first phase, partitions that need to move are revoked from their current owners. In the second phase, those partitions are assigned to their new owners. Crucially, partitions that do not need to move continue being processed during the rebalance, dramatically reducing downtime. Option B is wrong because assignment happens during the rebalance, not before. Option C oversimplifies the mechanism. Option D is incorrect because the coordinator still orchestrates the process.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-038",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What is the issue with this Kafka Connect SMT chain configuration?",
+    "codeSnippet": {
+      "language": "properties",
+      "code": "transforms=filter,route,rename\ntransforms.filter.type=org.apache.kafka.connect.transforms.Filter\ntransforms.filter.predicate=isDelete\ntransforms.route.type=org.apache.kafka.connect.transforms.RegexRouter\ntransforms.route.regex=.*\ntransforms.route.replacement=archive-$0\ntransforms.rename.type=org.apache.kafka.connect.transforms.ReplaceField$Value\ntransforms.rename.renames=old_name:new_name"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "The Filter transform drops records before they reach the router, so filtered records will never be archived, which may not be the intended behavior",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "SMT chains are not supported in Kafka Connect",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "RegexRouter cannot use $0 as a back-reference",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "ReplaceField must be applied before RegexRouter",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "SMT chains execute in the order they are listed. The Filter transform runs first and drops records matching the isDelete predicate before they reach the RegexRouter. If the intent was to archive all records (including deletions) to the archive topic, the filter should be placed after the router. Transform ordering in Kafka Connect is critical and a common source of bugs. Option B is wrong because SMT chains are fully supported. Option C is incorrect because $0 is a valid regex back-reference. Option D fabricates an ordering requirement.",
+    "bonusFact": "SMT order matters: transforms execute left to right."
+  },
+  {
+    "id": "apache-kafka-adv-039",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's control batch records in the log?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Special records written by the broker (not producers) that contain transaction markers (commit/abort) and leader epoch information",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Records used to control the rate at which consumers read from partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Records that control the compaction behavior of specific keys",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Administrative records that store topic configuration changes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Control batch records are special records in the Kafka log that are written by the broker itself, not by producers. They include transaction markers (COMMIT and ABORT) that indicate transaction boundaries, and leader epoch records. Consumers with read_committed isolation level use these markers to determine which records are part of committed transactions. Option B fabricates a rate-control function. Option C incorrectly ties control records to compaction. Option D confuses control records with configuration management.",
+    "bonusFact": "Control records have a special flag in the record batch header."
+  },
+  {
+    "id": "apache-kafka-adv-040",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka Streams handle state store restoration after a task migration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It replays the state store's changelog topic from the last checkpoint to rebuild the local state before processing resumes",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It copies the state store files from the previous instance over the network",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It queries the previous instance's state store via RPC to fetch the current state",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It starts with an empty state store and relies on the application to rebuild state from scratch",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When a Kafka Streams task migrates to a new instance, the state store is rebuilt by replaying records from the internal changelog topic. A checkpoint file tracks the last restored offset, so restoration resumes from that point rather than from the beginning. Standby replicas (if configured) can reduce restoration time by maintaining an up-to-date copy. Option B is wrong because state is restored from the changelog topic, not copied between instances. Option C fabricates an RPC mechanism. Option D ignores the changelog-based restoration mechanism.",
+    "bonusFact": "Standby replicas reduce state restoration time significantly."
   }
 ]

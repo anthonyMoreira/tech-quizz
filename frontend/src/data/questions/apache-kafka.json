@@ -9482,5 +9482,331 @@
     ],
     "explanation": "The KRaft metadata log uses a snapshot-based compaction strategy where a full snapshot of the current metadata state is periodically written. Log records before the snapshot offset can then be deleted since they are no longer needed for recovery. This differs from topic log compaction, which scans the log and retains only the latest value for each key. The approaches reflect different needs: metadata requires full state snapshots, while topics need per-key deduplication. Option B ignores the fundamental differences. Option C is wrong because snapshots prevent indefinite growth. Option D fabricates maintenance windows.",
     "bonusFact": "Snapshots are triggered by metadata log size thresholds."
+  },
+  {
+    "id": "apache-kafka-adv-091",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's sticky consumer assignment and how does it reduce rebalance overhead?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It minimizes partition movement by preserving existing assignments and only reassigning the minimum number of partitions needed to achieve balance",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It permanently assigns partitions to consumers and never rebalances",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It uses a hash of the consumer ID to deterministically assign partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It forces all partitions to move to new consumers during each rebalance",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The StickyAssignor (KIP-54) tracks the current assignment and only moves partitions that need to move to achieve balanced distribution. When a consumer leaves or joins, most partitions stay with their current consumer, only moving the minimum necessary. This reduces the rebalance disruption compared to the RangeAssignor or RoundRobinAssignor, which recalculate all assignments from scratch. Option B incorrectly claims permanent assignment. Option C describes a hash-based approach, not stickiness. Option D describes the worst-case scenario that stickiness specifically prevents.",
+    "bonusFact": "StickyAssignor provides both balance and minimum movement."
+  },
+  {
+    "id": "apache-kafka-adv-092",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's ProducerStateManager and how does it enable idempotency?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It maintains a mapping of producer IDs to their last 5 sequence numbers per partition, allowing the broker to detect and reject duplicate batches",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It stores the complete message history for each producer for replay purposes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It manages producer connections and distributes them across brokers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It tracks which topics each producer is authorized to write to",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The ProducerStateManager on each broker partition maintains a cache of the last 5 record batches (sequence numbers) per producer ID. When a produce request arrives, the broker compares the sequence number with the cached state. If the sequence number is already seen, it is a duplicate and is rejected. If it is higher than expected, it indicates a gap. This window of 5 allows up to max.in.flight.requests.per.connection=5 while maintaining ordering. Option B overstates the storage scope. Option C describes connection management. Option D describes ACLs.",
+    "bonusFact": "Producer state is checkpointed to the .snapshot file per partition."
+  },
+  {
+    "id": "apache-kafka-adv-093",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What advanced Kafka Streams pattern does this topology implement?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KStream<String, String> events = builder.stream(\"events\");\nKStream<String, String> rekeyed = events\n    .selectKey((k, v) -> extractField(v, \"region\"))\n    .through(\"events-by-region\");\n\nKTable<String, Long> regionCounts = rekeyed\n    .groupByKey()\n    .count(Materialized.as(\"region-counts\"));"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Repartitions events by region using an intermediate topic to enable correct key-based aggregation on the new key",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Creates a backup of the events topic organized by region",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Joins events with a region lookup table",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Filters events to only keep those with a valid region field",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This topology re-keys records by extracting a region field from the value using selectKey(). The through() operator materializes the rekeyed stream to an intermediate topic (events-by-region), ensuring that records with the same region are in the same partition. This explicit repartitioning is necessary for the downstream groupByKey().count() to produce correct per-region counts. Option B mischaracterizes the intermediate topic as a backup. Option C describes a join, not rekeying. Option D ignores the repartitioning purpose.",
+    "bonusFact": "through() is deprecated; use repartition() in newer versions."
+  },
+  {
+    "id": "apache-kafka-adv-094",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the difference between Kafka's max.request.size (producer) and message.max.bytes (broker)?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "max.request.size limits the total produce request payload on the client side; message.max.bytes limits the maximum record batch size the broker accepts",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "They are the same setting with different names on client and broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "max.request.size applies to individual messages; message.max.bytes applies to the entire topic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "max.request.size is always larger than message.max.bytes by design",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "max.request.size is a producer-side setting that limits the total size of a produce request (which can contain multiple record batches for different partitions). message.max.bytes is a broker-side setting that limits the maximum size of a single record batch that the broker will accept. For large messages to work, max.request.size must be >= the message size, and message.max.bytes on the broker must also accommodate it. Additionally, the consumer's max.partition.fetch.bytes must be large enough. Option B ignores the different scopes. Option C mischaracterizes what each controls. Option D is not guaranteed.",
+    "bonusFact": "Also configure replica.fetch.max.bytes for replication."
+  },
+  {
+    "id": "apache-kafka-adv-095",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's log.message.downconversion.enable configuration and when should it be disabled?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Controls whether the broker converts messages from newer to older formats for older consumers; disabling it reduces CPU overhead when all clients are on the same version",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Controls whether messages are converted from text to binary format",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Enables automatic downgrading of the broker's Kafka version",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Controls whether large messages are split into smaller chunks for older consumers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When older consumers request data in an older message format version, the broker must convert (down-convert) records from the current format to the older format. This is CPU-intensive, especially for compressed batches that must be decompressed, converted, and recompressed. When all clients support the current message format, disabling down-conversion avoids this overhead and returns an error instead if a client requests an old format. Option B confuses format version with serialization. Option C fabricates a version downgrade. Option D mischaracterizes as message splitting.",
+    "bonusFact": "Down-conversion bypasses zero-copy, impacting performance."
+  },
+  {
+    "id": "apache-kafka-adv-096",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka handle the split-brain scenario in KRaft mode?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Raft's quorum-based voting ensures only one leader can be elected with a majority of votes, and epoch numbers prevent stale leaders from accepting writes",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "KRaft uses a distributed lock service to prevent multiple leaders",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "KRaft relies on NTP clock synchronization to detect and resolve split-brain",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "KRaft does not handle split-brain; it is the operator's responsibility to prevent it",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Raft protocol in KRaft prevents split-brain through majority-based voting. A leader candidate must receive votes from a majority of the quorum (e.g., 2 out of 3). Since only one candidate can get a majority, only one leader exists. Each election increments the epoch (term), and any request with a stale epoch is rejected. If a network partition isolates a leader with a minority, it cannot commit new metadata changes because it cannot get majority acknowledgment. Option B describes a different coordination mechanism. Option C incorrectly ties resolution to clock synchronization. Option D understates KRaft's safety guarantees.",
+    "bonusFact": "The pre-vote extension further reduces unnecessary elections."
+  },
+  {
+    "id": "apache-kafka-adv-097",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What is the problem with this approach to reading the same Kafka topic in multiple consumer groups?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "// Service A - analytics\nProperties propsA = new Properties();\npropsA.put(\"group.id\", \"analytics-group\");\npropsA.put(\"auto.offset.reset\", \"latest\");\n\n// Service B - alerting (same topic)\nProperties propsB = new Properties();\npropsB.put(\"group.id\", \"alerting-group\");\npropsB.put(\"auto.offset.reset\", \"latest\");\n\n// Both subscribe to \"metrics\" topic"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Using auto.offset.reset=latest means both groups will miss any messages produced before they first start, potentially losing historical data on initial deployment",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Two consumer groups cannot subscribe to the same topic simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The alerting group will steal messages from the analytics group",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Using different group IDs will cause a rebalance loop",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With auto.offset.reset=latest, both consumer groups will only consume messages produced after they first connect. Any historical data already in the topic when the groups start will be skipped. This is fine for steady-state operation but can cause data loss during initial deployment or when a group's offsets expire. Using 'earliest' would ensure all existing data is consumed. Option B is wrong because Kafka's consumer group model explicitly supports multiple independent groups reading the same topic. Option C confuses independent groups with partition sharing. Option D is incorrect because different group IDs create separate, independent groups.",
+    "bonusFact": "Each consumer group independently tracks its own offsets."
+  },
+  {
+    "id": "apache-kafka-adv-098",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka Streams' topology description and how is it used for testing?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The topology can be described and tested with TopologyTestDriver, which simulates a Kafka cluster in-memory for unit testing without requiring a real broker",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The topology description is only used for visualization and has no testing capability",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Testing requires an embedded Kafka broker that runs within the test JVM",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Kafka Streams topologies cannot be unit tested and require integration tests",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "TopologyTestDriver provides an in-memory simulation of the Kafka Streams runtime, allowing developers to unit test topologies without a running Kafka cluster. It supports feeding input records via TestInputTopic and reading output via TestOutputTopic, making tests fast, deterministic, and isolated. The topology.describe() method also provides a human-readable description of the topology graph. Option B ignores the testing capabilities. Option C describes a heavier approach (embedded Kafka) that is slower. Option D is factually incorrect.",
+    "bonusFact": "TopologyTestDriver processes records synchronously for determinism."
+  },
+  {
+    "id": "apache-kafka-adv-099",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of setting log.flush.interval.messages=1 on Kafka broker performance and durability?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Forces fsync after every message, dramatically reducing throughput but ensuring no data loss even on power failure; generally unnecessary with replication",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Has no performance impact because modern SSDs handle single-message writes efficiently",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Improves throughput by forcing the OS to write data to disk immediately",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only affects log compaction frequency, not write durability",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Setting log.flush.interval.messages=1 forces the broker to call fsync() after every message, ensuring data reaches persistent storage. This can reduce throughput by 10-100x because fsync blocks until the OS flushes its write buffers to disk. In practice, replication to multiple brokers provides sufficient durability without fsync, as data loss only occurs if all replicas fail simultaneously before the OS page cache writes to disk. Option B ignores the overhead of fsync even on SSDs. Option C incorrectly claims throughput improvement. Option D confuses flushing with compaction.",
+    "bonusFact": "Kafka defaults to delegating flush to the OS for performance."
+  },
+  {
+    "id": "apache-kafka-adv-100",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What are the implications of Kafka's at-rest data format on disaster recovery and data migration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Kafka's log files are self-contained with record batches in a portable binary format, allowing direct file copy for backup, but offsets and partition metadata require separate handling",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Kafka data files are encrypted and cannot be read without the running broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Kafka stores data in a proprietary format that requires version-matched tools for extraction",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Kafka data is always stored in Avro format regardless of the producer's serialization choice",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka stores records in a well-defined binary format (.log files with record batches). These files can be copied directly for backup or migration using file system tools. However, recovery also requires the offset index files (.index, .timeindex), partition metadata, and consumer group offsets. Tools like kafka-dump-log.sh can inspect the raw files. For full disaster recovery, MirrorMaker 2 or tiered storage to a durable backend is recommended. Option B is wrong because Kafka does not encrypt data at rest by default. Option C overstates the proprietary nature. Option D confuses serialization with storage format.",
+    "bonusFact": "kafka-dump-log.sh can decode and inspect raw log segment files."
   }
 ]

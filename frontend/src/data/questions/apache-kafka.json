@@ -6201,5 +6201,331 @@
     ],
     "explanation": "Kafka Streams assigns tasks based on partition number, so a join between two streams is processed locally when the same task handles the same partition index of both topics. For this to work, records with the same key must be in the same partition on both topics\u2014requiring the same partition count and the same partitioner. If the topics are not co-partitioned, Kafka Streams throws a TopologyException at startup. Option B is wrong; replica placement is irrelevant to Streams task assignment. Option C is wrong; Streams manages its own consumer group per application. Option D is wrong; serialisation format is handled by the Serde configuration.",
     "bonusFact": "Use a repartition topic (via through() or repartition()) to fix co-partitioning mismatches before a join."
+  },
+  {
+    "id": "apache-kafka-int-091",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the effect of setting acks=0 on a Kafka producer?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The producer fires and forgets\u2014no acknowledgment is waited for, giving maximum throughput but no durability guarantee",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The producer waits for all replicas to acknowledge before moving to the next record",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The producer waits for the partition leader to acknowledge but not the followers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The producer sends records in batches of zero, disabling batching entirely",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "acks=0 means the producer does not wait for any acknowledgment from the broker. The record is written to the network buffer and the producer moves on immediately. This provides the lowest latency and highest throughput but records may be lost if the broker crashes before writing to disk, or if the record never arrives. acks=1 waits for the leader; acks=all waits for all ISR replicas. Option B describes acks=all. Option C describes acks=1. Option D is fabricated and describes nothing related to acks.",
+    "bonusFact": "acks=0 is appropriate for metrics, logs, or other data where occasional loss is acceptable."
+  },
+  {
+    "id": "apache-kafka-int-092",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When using Kafka with SSL/TLS, what does the ssl.endpoint.identification.algorithm=https configuration enforce?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Enables hostname verification by checking the broker's certificate CN or SAN against the hostname the client is connecting to",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Forces all connections to use HTTPS instead of the native Kafka wire protocol",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Enables certificate pinning so only a specific certificate thumbprint is accepted",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Disables hostname verification for compatibility with self-signed certificates",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Setting ssl.endpoint.identification.algorithm=https enables RFC 2818-style hostname verification: the client checks that the broker's TLS certificate contains the hostname (in the CN or Subject Alternative Names) that it is connecting to. This prevents man-in-the-middle attacks. Setting it to an empty string disables hostname verification. Option B is wrong; Kafka's native binary protocol is unchanged; the 'https' here refers to the hostname verification algorithm, not the HTTP protocol. Option C describes certificate pinning, which is a separate mechanism. Option D is wrong; it enables, not disables, hostname verification.",
+    "bonusFact": "ssl.endpoint.identification.algorithm defaults to 'https' (enabled) since Kafka 2.0 for all client connections."
+  },
+  {
+    "id": "apache-kafka-int-093",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the Kafka consumer group 'generation ID', and how is it used?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A monotonically increasing integer assigned by the group coordinator after each rebalance, used to detect and reject stale offset commits",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The number of records the group has consumed since it was created",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The Kafka broker version that created the consumer group",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The maximum number of consumers that can join the group before a rebalance is forced",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Each time a consumer group rebalances, the group coordinator increments the generation ID. Offset commit requests include the generation ID; if a commit arrives with an outdated generation ID (e.g., from a slow consumer that missed the rebalance), the coordinator rejects it with a CommitFailedException. This prevents stale consumers from committing offsets that belong to a newer generation's partition assignment. Options B, C, and D describe concepts unrelated to the generation ID.",
+    "bonusFact": "CommitFailedException during a rebalance is a signal to restart the consumer's processing loop with the new partition assignment."
+  },
+  {
+    "id": "apache-kafka-int-094",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does Kafka's log retention work when both retention.ms and retention.bytes are configured?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Whichever limit is reached first triggers deletion; both act as independent upper bounds",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "retention.ms takes precedence; retention.bytes is ignored when both are set",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "retention.bytes takes precedence; retention.ms only applies when retention.bytes=-1",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Both must be exceeded simultaneously before any deletion occurs",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When both retention.ms and retention.bytes are set, Kafka deletes segments as soon as either condition is satisfied. retention.ms causes deletion of segments older than the specified time, while retention.bytes causes deletion of the oldest segments once the total partition size exceeds the byte limit. Either trigger independently removes segments. Option B is wrong; there is no fixed precedence. Option C is wrong; both can apply simultaneously. Option D is wrong; Kafka deletes when the first condition is met, not when both are exceeded.",
+    "bonusFact": "Set retention.bytes=-1 to disable size-based retention and rely solely on time-based retention."
+  },
+  {
+    "id": "apache-kafka-int-095",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What is the behaviour of this consumer when it receives a non-retriable exception from poll()?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "try {\n    while (!shutdown.get()) {\n        ConsumerRecords<String, String> records =\n            consumer.poll(Duration.ofMillis(200));\n        process(records);\n        consumer.commitSync();\n    }\n} catch (WakeupException e) {\n    if (!shutdown.get()) throw e;\n} finally {\n    consumer.close();\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Non-retriable exceptions from poll() (e.g., AuthorizationException) propagate out of the catch block and are not handled, stopping the consumer",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "All exceptions are silently swallowed by the catch block and the consumer continues polling",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The consumer retries poll() indefinitely until the exception stops occurring",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "WakeupException from shutdown triggers a commitSync() before closing",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This is a standard graceful shutdown pattern. WakeupException is caught to distinguish a deliberate shutdown signal (shutdown flag set) from a spurious wakeup. If shutdown is not set, it rethrows. However, other runtime exceptions (AuthorizationException, SerializationException, etc.) are not caught and will propagate out of the try block, halting the consumer loop. The finally block ensures the consumer is closed. Option B is wrong; only WakeupException is caught. Option C is wrong; there is no retry loop. Option D is wrong; WakeupException does not trigger commitSync()\u2014the consumer closes directly in finally.",
+    "bonusFact": "Add a catch block for non-retriable exceptions to log and alert, then close gracefully rather than crashing silently."
+  },
+  {
+    "id": "apache-kafka-int-096",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the relationship between Kafka's log end offset (LEO) and the high-watermark (HW)?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "LEO is the next offset to be written; HW is the highest offset replicated by all ISR members; consumers can only read up to HW",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "LEO equals HW when there are no followers; they diverge only during compaction",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "HW is always greater than LEO because it includes future pre-allocated offsets",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "LEO tracks consumer position; HW tracks producer position",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The log end offset is the offset of the next record to be written to the partition (i.e., the current write position on the leader). The high-watermark is the highest offset for which all in-sync replicas have confirmed receipt. LEO >= HW always because the leader writes first, then followers replicate. Consumers are restricted to reading records below the HW to ensure they only see durably replicated data. Option B is wrong; the LEO/HW gap exists whenever there is replication lag, not just during compaction. Option C is wrong; HW is always <= LEO. Option D inverts the correct definitions.",
+    "bonusFact": "The difference (LEO - HW) is the replication lag in number of messages still to be acknowledged by all ISR replicas."
+  },
+  {
+    "id": "apache-kafka-int-097",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the function of the Kafka Streams suppress() operator applied to a KTable?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Buffers intermediate KTable updates and emits only the final result per key when a window closes, reducing downstream record volume",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Prevents the KTable from emitting any updates, making it read-only for joins",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Suppresses duplicate keys in the input stream before aggregation",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Delays KTable state store initialization until the first record arrives",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "suppress() (introduced in Kafka Streams 2.1) holds back intermediate KTable result records and emits only the final value for each key once the window is definitively closed (based on the grace period). Without suppress(), every update to the aggregation emits a new KTable record, creating many intermediate results. With suppress(), only one final result per window per key is emitted, which is more efficient for downstream consumers. Option B is wrong; suppress() does not make the KTable read-only. Option C is wrong; it does not deduplicate input records. Option D is wrong; suppress() affects output emission, not state store initialization.",
+    "bonusFact": "suppress() with StrictBufferConfig throws a StreamsException if the in-memory buffer is exhausted."
+  },
+  {
+    "id": "apache-kafka-int-098",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "In a Kafka cluster with 3 brokers and a topic configured with replication.factor=3 and min.insync.replicas=2, how many broker failures can the cluster tolerate while still accepting producer writes with acks=all?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "One broker failure\u2014two brokers remain in the ISR, satisfying min.insync.replicas=2",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Two broker failures\u2014the remaining broker can still serve as the single leader",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Zero broker failures\u2014any failure causes min.insync.replicas to drop below the threshold",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Two broker failures\u2014acks=all only requires the leader to acknowledge",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With 3 replicas and min.insync.replicas=2, at least 2 replicas must be in the ISR for acks=all writes to succeed. If one broker fails, the remaining two brokers can still satisfy the requirement. If two brokers fail, only one replica remains, which is below min.insync.replicas=2, so the broker rejects writes with NotEnoughReplicasException. Option B is wrong; two failures leave only 1 ISR member, below the minimum of 2. Option C is wrong; one failure is tolerated. Option D is wrong; acks=all requires all ISR replicas to acknowledge, not just the leader.",
+    "bonusFact": "The formula for write tolerance is: max_failures = replication_factor - min.insync.replicas."
+  },
+  {
+    "id": "apache-kafka-int-099",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this AdminClient call accomplish, and what permission is required?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "try (AdminClient admin = AdminClient.create(props)) {\n    Map<ConfigResource, Collection<AlterConfigOp>> ops = Map.of(\n        new ConfigResource(ConfigResource.Type.TOPIC, \"orders\"),\n        List.of(new AlterConfigOp(\n            new ConfigEntry(\"retention.ms\", \"86400000\"),\n            AlterConfigOp.OpType.SET\n        ))\n    );\n    admin.incrementalAlterConfigs(ops).all().get();\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Changes the retention.ms of the 'orders' topic to 1 day (86400000 ms); requires ALTER permission on the topic",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Creates a new topic named 'orders' with 1-day retention; requires CREATE permission",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Reads the current retention.ms value of the 'orders' topic; requires DESCRIBE permission",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Deletes all records older than 86400000 ms from the 'orders' topic; requires DELETE permission",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "incrementalAlterConfigs() modifies existing topic configurations without resetting other configs (unlike the deprecated alterConfigs() which replaces all configs). Setting retention.ms=86400000 configures the topic to retain records for 86,400,000 ms = 24 hours = 1 day. This operation requires the ALTER ACL on the topic resource. Option B is wrong; createTopics() is used to create topics, not alterConfigs. Option C is wrong; describeConfigs() is used to read configs. Option D is wrong; retention deletion happens asynchronously via the log cleaner, not via this API call.",
+    "bonusFact": "incrementalAlterConfigs() was introduced in Kafka 2.3 to allow partial config updates without touching unrelated settings."
+  },
+  {
+    "id": "apache-kafka-int-100",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the Kafka consumer's group.id configuration, and what happens if two applications use the same group.id?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "group.id identifies the consumer group; two applications with the same ID will share partition assignments and each record is delivered to only one of them",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "group.id is just a label for monitoring; duplicate IDs are harmless and each application receives all records independently",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Two applications with the same group.id will both receive every record, effectively doubling processing",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The second application to use a group.id will be rejected with an authentication error",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "group.id uniquely identifies a consumer group. All consumers sharing the same group.id form a single group\u2014Kafka delivers each record to exactly one consumer within the group by assigning partitions exclusively. If two unrelated applications accidentally share a group.id, they will compete for partition assignments, each receiving only a subset of records, which typically causes data processing errors for both. Option B is wrong; group.id is functional, not cosmetic. Option C describes fan-out, which requires different group IDs. Option D is wrong; Kafka has no such rejection mechanism based on group.id uniqueness.",
+    "bonusFact": "Use different group.id values for independent consumers that each need a full copy of the data."
   }
 ]

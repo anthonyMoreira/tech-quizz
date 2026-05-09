@@ -5229,5 +5229,331 @@
     ],
     "explanation": "RequestHandlerAvgIdlePercent measures how much time the broker's request handler thread pool is idle. When it drops toward 0%, the broker is CPU-saturated and cannot process incoming requests fast enough, leading to request queuing and increased latency. BytesInPerSec (option B) growing is normal for a healthy cluster; it doesn't indicate overload by itself. LeaderCount increasing (option C) indicates partition leadership imbalance but not necessarily overload. A high NetworkProcessorAvgIdlePercent (option D) actually means the network threads are idle, which is a good sign.",
     "bonusFact": "Alert when RequestHandlerAvgIdlePercent falls below 20% to catch broker saturation early."
+  },
+  {
+    "id": "apache-kafka-int-061",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the function of the Kafka broker's auto.create.topics.enable configuration, and what risk does enabling it carry in production?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It auto-creates topics when first produced or consumed; the risk is creating topics with wrong partition/replication settings due to typos",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It automatically increases partition counts when throughput exceeds a threshold",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It creates backup topics for every user topic to protect against accidental deletion",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It enables the broker to create topics only when explicitly requested via the Admin API",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When auto.create.topics.enable=true (the default), Kafka creates a topic with default settings (num.partitions, default.replication.factor) the first time a producer writes to it or a consumer subscribes. In production this is risky because a typo in a topic name causes a new topic to be silently created with potentially suboptimal settings, making the misconfiguration hard to detect. Option B describes an auto-scaling feature that Kafka does not have. Option C is fabricated. Option D is wrong; with this setting enabled, topics are auto-created without an explicit Admin API call.",
+    "bonusFact": "Disable auto.create.topics.enable=false in production and manage topics with infrastructure-as-code tools like Terraform."
+  },
+  {
+    "id": "apache-kafka-int-062",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is Kafka's 'follower fetching' (also known as consuming from the closest replica) and what problem does it solve?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Consumers can fetch from the nearest in-sync replica instead of always going to the leader, reducing cross-AZ network costs",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Followers fetch data faster from leaders by using a dedicated high-bandwidth network interface",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Consumers can read from out-of-sync replicas to improve read throughput at the cost of stale data",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Brokers replicate data by pulling from the nearest broker to reduce replication latency",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Introduced in Kafka 2.4, follower fetching (client.rack on the consumer + broker.rack on brokers) allows consumers to read from the closest in-sync replica, typically in the same availability zone. This avoids cross-AZ data transfer costs and reduces latency for consumers co-located with a follower. The data is always consistent because only ISR replicas are eligible. Option B describes an internal network optimisation that doesn't exist. Option C is wrong because follower fetching still uses ISR replicas, not out-of-sync ones. Option D mixes up the follower fetch direction.",
+    "bonusFact": "Set client.rack on the consumer to match the broker.rack of the nearest broker to enable follower fetching."
+  },
+  {
+    "id": "apache-kafka-int-063",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What is the effect of calling consumer.pause() on a TopicPartition during message processing?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "consumer.subscribe(List.of(\"orders\"));\nwhile (true) {\n    ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));\n    for (TopicPartition partition : records.partitions()) {\n        consumer.pause(Set.of(partition));\n        processAsync(records.records(partition));\n        // consumer.resume(Set.of(partition)) called in async callback\n    }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Stops the consumer from fetching new records for that partition; poll() still runs but returns empty for paused partitions",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Permanently removes the partition from the consumer's assignment until the next rebalance",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Commits the current offset for the partition and stops all further processing",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Causes poll() to block until resume() is called from another thread",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "consumer.pause(partitions) tells the consumer to stop fetching new records from the specified partitions on subsequent poll() calls, which still return immediately but with no records for paused partitions. This allows async processing patterns where back-pressure is needed without triggering a rebalance or session timeout. Option B is wrong; pausing is temporary and the assignment is not changed. Option C is wrong; pause does not commit offsets. Option D is wrong; poll() never blocks waiting for resume\u2014it simply returns empty for paused partitions.",
+    "bonusFact": "consumer.pause() + resume() is commonly used to implement back-pressure when writing to slow downstream systems."
+  },
+  {
+    "id": "apache-kafka-int-064",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does the Kafka tombstone record (null value) work in a log-compacted topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It marks a key for deletion; after delete.retention.ms the tombstone and all older records for that key are removed",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It is an empty record that the log cleaner uses as a checkpoint to pause compaction",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It instructs the broker to replicate only tombstone records to followers to save bandwidth",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It permanently retains a null value for the key so consumers know the key was deleted",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In a compacted topic, producing a record with a null value for a key is a tombstone. It signals to consumers that the key was deleted. The log cleaner retains the tombstone for delete.retention.ms (default 24 h) to ensure consumers that may be slightly behind have time to observe it. After that period, the tombstone itself is eligible for removal by the next compaction cycle. Option B is fabricated. Option C is wrong; replication works on all record types uniformly. Option D is wrong; the tombstone is eventually deleted, not permanently retained.",
+    "bonusFact": "Consumers must handle null-value records gracefully; tombstones are a normal part of event-sourced architectures."
+  },
+  {
+    "id": "apache-kafka-int-065",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What does the KRaft configuration process.roles=broker,controller mean for a Kafka node?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The node acts as both a broker (serving client requests) and a controller (managing cluster metadata) simultaneously",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The node alternates between broker and controller roles depending on cluster load",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The node is a standby that can take either role in case of failure",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The node runs two separate JVM processes\u2014one for each role",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In KRaft mode, process.roles can be set to broker, controller, or broker,controller. The combined role (broker,controller) is commonly used in small clusters or development environments where a single node serves client traffic and participates in the controller quorum. In larger production clusters, dedicated controller nodes (process.roles=controller) are recommended to isolate controller workloads. Option B is wrong; roles are static, not dynamic. Option C describes a standby model that does not exist in KRaft. Option D is wrong; it is a single JVM with both capabilities.",
+    "bonusFact": "Confluent recommends separating controller and broker roles in clusters with more than a few dozen brokers."
+  },
+  {
+    "id": "apache-kafka-int-066",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the significance of the leader.epoch in Kafka partition replication?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It is a monotonically increasing counter that increments on every leader change, helping followers detect stale data from old leaders",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It tracks how many messages the leader has written since the last ISR change",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It represents the position in the log up to which all ISR replicas have caught up",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It is the Kafka version number used during inter-broker communication handshakes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The leader epoch is a generation counter that the controller increments every time a new leader is elected for a partition. Each offset written under a leader is tagged with the current epoch. Followers use the leader epoch to determine whether their log is consistent with the current leader's, discarding any log entries that were written in a previous epoch but not confirmed in the current one. This prevents log divergence after leader failover. Option B describes a different metric. Option C describes the high-watermark. Option D is unrelated.",
+    "bonusFact": "Leader epochs replaced the older HighWatermark-based log truncation mechanism introduced in KIP-101."
+  },
+  {
+    "id": "apache-kafka-int-067",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "In Kafka Connect, what is the difference between a Source Connector and a Sink Connector?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Source Connectors import data from external systems into Kafka; Sink Connectors export data from Kafka to external systems",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Source Connectors produce to Kafka and consume from it; Sink Connectors only produce",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Source Connectors handle schema validation; Sink Connectors handle data transformation",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Source Connectors run on dedicated brokers; Sink Connectors run on consumer nodes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Source Connectors pull data from an external system (e.g., a relational database via JDBC, or a file system) and publish records to one or more Kafka topics. Sink Connectors subscribe to Kafka topics and push records to an external system (e.g., Elasticsearch, S3, or a database). Both types run on Kafka Connect workers. Option B inverts and conflates the roles. Option C is wrong; both connector types can use converters and SMTs for schema and transformation. Option D is incorrect; all connectors run on Connect worker processes.",
+    "bonusFact": "The Confluent Hub hosts hundreds of pre-built connectors for common source and sink systems."
+  },
+  {
+    "id": "apache-kafka-int-068",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the high-watermark (HW) in Kafka, and what guarantee does it provide to consumers?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The highest offset acknowledged by all ISR replicas; consumers can only read records up to the high-watermark",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The total number of records written to a partition since it was created",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The offset of the most recently committed consumer group offset",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The maximum offset a producer can write to before the partition is considered full",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The high-watermark is the offset up to which all in-sync replicas have acknowledged receipt. Consumers are only allowed to read records below the high-watermark, ensuring they never see data that has not yet been replicated and therefore could be lost on a leader failure. The log end offset (LEO) is the offset of the last written record; records between the HW and LEO exist on the leader but are not yet replicated to all ISR members. Options B, C, and D describe unrelated concepts.",
+    "bonusFact": "The gap between the log end offset and the high-watermark indicates replication lag on the leader."
+  },
+  {
+    "id": "apache-kafka-int-069",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What potential issue does this Kafka Streams topology have?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KStream<String, Order> orders = builder.stream(\"orders\");\nKStream<String, Payment> payments = builder.stream(\"payments\");\nKStream<String, Enriched> joined = orders.join(\n    payments,\n    (order, payment) -> new Enriched(order, payment),\n    JoinWindows.ofTimeDifferenceWithNoGrace(Duration.ofMinutes(5))\n);"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Using ofTimeDifferenceWithNoGrace drops late-arriving records immediately with no grace period for out-of-order events",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "KStream-KStream join requires both streams to have the same number of partitions, which is not guaranteed here",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The join emits one output per input record from orders only; payments records that have no matching order are silently dropped",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The Enriched constructor will cause a NullPointerException if either stream emits a tombstone",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "JoinWindows.ofTimeDifferenceWithNoGrace() sets a zero-length grace period, meaning any record arriving even slightly after the window closes is immediately discarded. In production, out-of-order records are common due to network delays, so using ofTimeDifferenceAndGrace() with a meaningful grace period (e.g., 1 minute) is safer. Option B is partially true (both streams must be co-partitioned) but is not a problem with this specific code as written\u2014it would be a runtime error, not a topology design issue. Option C is wrong; a KStream-KStream join is an inner join that emits results for both sides within the window. Option D is a valid concern but not the primary design issue.",
+    "bonusFact": "A grace period allows late records to be included in join results, improving correctness for unordered event streams."
+  },
+  {
+    "id": "apache-kafka-int-070",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the Kafka producer's enable.idempotence configuration, and what does it guarantee?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Guarantees exactly-once delivery to a single partition by assigning sequence numbers and deduplicating retried batches at the broker",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Guarantees exactly-once delivery across all partitions and topics in a multi-step pipeline",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Prevents duplicate consumer reads by tracking offsets at the producer side",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Ensures that each record is written to exactly one replica, reducing disk usage",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "enable.idempotence=true causes the broker to track a (producer ID, partition, sequence number) triple for each batch. If a retry delivers a batch the broker has already written, it detects the duplicate sequence number and discards the duplicate, providing exactly-once semantics within a single producer session for a single partition. It does not span multiple partitions or topics\u2014that requires Kafka transactions. Option B describes transactional semantics. Option C is wrong; idempotence is purely a producer-to-broker concern. Option D is wrong; it has nothing to do with replica count.",
+    "bonusFact": "enable.idempotence was introduced in Kafka 0.11 and is the foundation of Kafka's exactly-once story."
   }
 ]

@@ -6548,5 +6548,331 @@
     ],
     "explanation": "Share groups (KIP-932, introduced in Kafka 4.0) add queue-like semantics to Kafka. Unlike traditional consumer groups where each partition is assigned to exactly one consumer, share groups allow multiple consumers to process records from the same partitions with per-record acknowledgment and delivery tracking. Option B fabricates cross-cluster offset sharing. Option C describes a scenario that already works with regular consumer groups. Option D invents a connection-sharing feature.",
     "bonusFact": "Share groups enable traditional queue patterns in Kafka."
+  },
+  {
+    "id": "apache-kafka-adv-001",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the epoch mechanism in Kafka's idempotent producer and how does it prevent zombie instances?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Each producer instance receives a monotonically increasing epoch; the broker rejects requests from older epochs, fencing off zombie producers",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The epoch is a timestamp attached to each message that expires after a fixed duration",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The epoch tracks how many partitions a producer has written to across its lifetime",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The epoch is used to order messages across different topics within a transaction",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When an idempotent or transactional producer initializes, the broker assigns it a producer ID and an epoch. If a new instance starts with the same transactional.id, it gets a higher epoch, and the broker rejects any in-flight requests from the old (zombie) producer with the lower epoch. This is called fencing. Option B incorrectly describes the epoch as a timestamp with TTL. Option C fabricates a partition tracking function. Option D mischaracterizes how cross-topic ordering works in transactions.",
+    "bonusFact": "The epoch is incremented each time initTransactions() is called."
+  },
+  {
+    "id": "apache-kafka-adv-002",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka's KRaft controller quorum handle metadata replication differently from partition replication?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "KRaft uses Raft consensus with a quorum of controller nodes, while partition replication uses ISR-based leader-follower pull replication",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "KRaft replicates metadata to all brokers synchronously, while partition replication is always asynchronous",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "KRaft stores metadata in memory only, while partition data is persisted to disk",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Both use exactly the same replication protocol but on different topics",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "KRaft uses the Raft consensus protocol where a quorum of controller nodes vote on metadata changes and the active controller pushes updates to followers. In contrast, partition replication uses a pull-based model where follower replicas fetch data from the leader, and the ISR tracks which followers are caught up. Option B oversimplifies both mechanisms. Option C is wrong because KRaft persists its metadata log to disk. Option D ignores fundamental protocol differences between Raft and ISR-based replication.",
+    "bonusFact": "KRaft stores metadata in the __cluster_metadata topic."
+  },
+  {
+    "id": "apache-kafka-adv-003",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What subtle issue can occur with this exactly-once Kafka Streams configuration?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "Properties props = new Properties();\nprops.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG,\n    StreamsConfig.EXACTLY_ONCE_V2);\nprops.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 100);\nprops.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 8);\nprops.put(StreamsConfig.STATE_DIR_CONFIG, \"/tmp/state\");"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Frequent 100ms commits with exactly-once create excessive transactional overhead, degrading throughput significantly",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The state directory /tmp/state will cause data loss since /tmp is cleared on reboot",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "8 stream threads will cause a deadlock with exactly-once processing",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "EXACTLY_ONCE_V2 is not compatible with the commit interval setting",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With exactly-once semantics, each commit triggers a full transaction cycle (begin, produce, commit offsets, commit transaction). A 100ms commit interval causes this overhead to occur very frequently, potentially reducing throughput by 50% or more compared to at-least-once. Option B is a valid concern in production but is not an EOS-specific issue. Option C is wrong because multiple threads work with EOS v2 (which uses a single producer per thread group). Option D is incorrect; the settings are compatible but the combination creates performance issues.",
+    "bonusFact": "EOS v2 uses fewer producers than v1, reducing overhead."
+  },
+  {
+    "id": "apache-kafka-adv-004",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the leader epoch in Kafka partition replication and what problem does it solve?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A monotonically increasing number assigned to each new leader that prevents followers from truncating to the wrong offset after leader changes",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A timestamp that marks when the current leader was elected",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A counter tracking the number of messages the leader has produced",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A version number for the partition's configuration changes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The leader epoch (KIP-101) is incremented each time a new leader is elected for a partition. Followers use this epoch to determine the correct truncation point when recovering after a failure, preventing data divergence where a follower might truncate to a high watermark from a previous leader and miss or duplicate records. Option B confuses the epoch with a timestamp. Option C describes the log-end offset, not the epoch. Option D mischaracterizes the epoch as a configuration version.",
+    "bonusFact": "Leader epoch replaced high-watermark-based truncation."
+  },
+  {
+    "id": "apache-kafka-adv-005",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the fetch session cache in Kafka and how does it optimize consumer performance?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The broker caches partition metadata for each consumer session, so incremental fetch requests only specify changed partitions",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The consumer caches fetched messages locally to avoid redundant network requests",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The broker caches deserialized messages in memory for faster re-reads",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The consumer caches the broker's fetch response headers to reduce latency",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The fetch session cache (KIP-227) allows the broker to maintain a session for each consumer, remembering which partitions and offsets were requested. Subsequent fetch requests only need to include changes (new partitions, removed partitions), reducing the request size significantly for consumers reading many partitions. Option B describes client-side caching, which is not what this mechanism does. Option C fabricates a message deserialization cache. Option D invents a header caching mechanism.",
+    "bonusFact": "Fetch sessions reduce request size by up to 90%."
+  },
+  {
+    "id": "apache-kafka-adv-006",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of using a very large number of partitions (e.g., 100,000+) on a Kafka cluster?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Increased memory usage, slower leader elections, more open file handles, and longer controller failover times",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Better consumer throughput with no downsides since Kafka is designed for unlimited partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Automatic partition merging is triggered to reduce the count",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The cluster switches to a special high-partition mode with different replication semantics",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Very high partition counts increase memory usage (metadata, replica fetchers, index files), open file handles (each partition has multiple segment files), and controller failover time (propagating metadata for all partitions). Leader elections become slower because more partitions must be processed. Option B ignores well-documented scaling limits. Option C fabricates an automatic merging feature. Option D invents a special replication mode.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-007",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What issue does this Kafka Streams topology have?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KStream<String, Order> orders = builder.stream(\"orders\");\nKStream<String, Payment> payments = builder.stream(\"payments\");\n\norders.join(payments,\n    (order, payment) -> new EnrichedOrder(order, payment),\n    JoinWindows.ofTimeDifferenceWithNoGrace(\n        Duration.ofSeconds(30)))\n  .to(\"enriched-orders\");"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "A stream-stream join with no grace period will drop late-arriving records that fall outside the 30-second window",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Stream-stream joins are not supported in Kafka Streams",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The join will produce duplicates because both streams use the same key",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The 30-second window is too short for any practical use case",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Using ofTimeDifferenceWithNoGrace means records that arrive even slightly after the 30-second join window closes are silently dropped. In production, network delays, consumer lag, or processing backlogs can cause records to arrive late. A grace period (via ofTimeDifferenceAndGrace) would allow late arrivals to still be joined. Option B is wrong because stream-stream joins are a core Kafka Streams feature. Option C misunderstands joins; same-key matching is correct behavior. Option D makes a subjective claim without understanding the use case.",
+    "bonusFact": "Use JoinWindows.ofTimeDifferenceAndGrace() for late data."
+  },
+  {
+    "id": "apache-kafka-adv-008",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka's zero-copy optimization improve broker performance?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Data is transferred directly from the page cache to the network socket via sendfile(), bypassing user-space copies",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Messages are stored in a compressed format that requires no decompression before sending",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Brokers share memory between producer and consumer threads to avoid copying data",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The JVM allocates messages outside the heap to avoid garbage collection overhead",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka uses the Linux sendfile() system call (via Java's FileChannel.transferTo) to transfer data directly from the OS page cache to the network socket without copying it through user-space memory. This reduces CPU usage and context switches significantly. Option B confuses zero-copy with compression handling. Option C fabricates a shared memory mechanism between producers and consumers. Option D describes off-heap allocation, which is a different optimization.",
+    "bonusFact": "Zero-copy can reduce CPU usage by up to 50% on consumers."
+  },
+  {
+    "id": "apache-kafka-adv-009",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's Eligible Leader Replicas (ELR) introduced in KIP-966?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A subset of replicas guaranteed to have data up to the high watermark, making them safe for leader election even outside the ISR",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Replicas that have been manually designated as preferred leaders by administrators",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Replicas that are located in the same rack as the current leader",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Replicas that have been recently promoted from read-only to read-write status",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Eligible Leader Replicas (ELR) is a new concept where replicas that fall out of the ISR but are guaranteed to have data up to the high watermark are tracked separately. These replicas are safe for leader election because they have all committed data, unlike truly out-of-sync replicas used in unclean election. Option B confuses ELR with preferred replicas. Option C incorrectly ties ELR to rack placement. Option D fabricates a read-only/read-write status for replicas.",
+    "bonusFact": "ELR was introduced as preview in Kafka 4.0 (KIP-966)."
+  },
+  {
+    "id": "apache-kafka-adv-010",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the pre-vote mechanism in KRaft (KIP-996) and what problem does it solve?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Nodes check their eligibility for leadership before initiating an election, reducing unnecessary elections from network partitions",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Voters cast a preliminary vote to predict the election outcome before the actual vote",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The controller pre-selects the next leader before the current leader fails",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Brokers vote on whether to accept new topics before they are created",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The pre-vote mechanism (KIP-996) prevents disruptive leader elections caused by nodes that are partitioned from the cluster. Before initiating an actual election, a node sends pre-vote requests to check if other nodes would support its candidacy. If a node is partitioned and has a stale log, it will not get pre-votes and will not start a real election that would increment the epoch and disrupt the current leader. Option B mischaracterizes pre-vote as a prediction mechanism. Option C describes proactive failover, not pre-vote. Option D is entirely unrelated to leader elections.",
+    "bonusFact": "Pre-vote is based on the Raft protocol's PreVote extension."
   }
 ]

@@ -6847,5 +6847,331 @@
     ],
     "explanation": "Kafka Streams supports standby replicas configured via num.standby.replicas. A standby task runs on a different Streams instance and continuously replays the same changelog topic as the active task, keeping its state store nearly up to date. If the active task's instance fails and a rebalance reassigns the partition to the instance holding the standby, it resumes from a much more recent checkpoint than a cold restore would require\u2014sometimes just seconds of catch-up instead of replaying the entire changelog. Option B is wrong; standby tasks are about state store replication, not thread management. Option C is wrong; state is stored locally in RocksDB, not in an external database. Option D is wrong; standbys do not perform compaction or corruption detection.",
     "bonusFact": "Setting num.standby.replicas=1 doubles the state store storage but can reduce failover time from minutes to seconds."
+  },
+  {
+    "id": "apache-kafka-adv-011",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the KRaft metadata log snapshot mechanism, and why is it necessary?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Snapshots capture the full metadata state at a point in time so that new or recovering brokers can bootstrap without replaying the entire Raft log from offset 0",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Snapshots are taken before every controller election to provide a rollback point if the election fails",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Snapshots compress the __cluster_metadata topic to free disk space on controller nodes",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Snapshots copy the current partition assignment to ZooKeeper for compatibility with legacy tools",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Without snapshots, a broker rejoining the cluster after a long absence would need to replay every entry in the __cluster_metadata Raft log from the beginning to reconstruct the current state\u2014potentially millions of records. The snapshot mechanism periodically serialises the complete metadata state (broker registrations, topic configs, partition assignments, etc.) into a binary snapshot file. A new or recovering broker loads the latest snapshot and then replays only the log entries that occurred after the snapshot, drastically reducing startup time. Option B is wrong; snapshots are not election-triggered rollback points. Option C is wrong; compaction is a separate process. Option D is wrong; KRaft does not interact with ZooKeeper.",
+    "bonusFact": "Controller snapshots are triggered by metadata.log.max.record.bytes.between.snapshots (default 20 MiB) or a configurable record count."
+  },
+  {
+    "id": "apache-kafka-adv-012",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What happens in Kafka's RecordAccumulator when the producer's batch.size is reached before linger.ms expires?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The full batch is immediately handed to the Sender thread and dispatched to the broker without waiting for linger.ms to expire",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The producer discards overflow records beyond batch.size and logs a warning",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The producer opens a new batch for the same partition and waits for both batches to fill before sending",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The producer blocks the send() call until linger.ms expires to ensure full batch delivery",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "batch.size and linger.ms are complementary thresholds in the RecordAccumulator. A batch is sent when either condition is true: batch.size bytes are accumulated OR linger.ms has elapsed. When the batch fills up before the timer expires, it is sent immediately without waiting for the timer. This prevents the timer from being the bottleneck at high throughput. Option B is wrong; records beyond batch.size open a new batch for the same partition. Option C is wrong; a new batch is opened but it is sent independently. Option D is wrong; send() is non-blocking\u2014batching happens asynchronously in the Sender thread.",
+    "bonusFact": "The Sender thread drains the RecordAccumulator and groups ready batches per broker to minimise the number of TCP round-trips."
+  },
+  {
+    "id": "apache-kafka-adv-013",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the JoinGroup/SyncGroup rebalance protocol flow in Kafka's classic consumer group model?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "All members send JoinGroup to the coordinator; the coordinator elects a leader consumer; the leader sends SyncGroup with the computed assignment; all members receive their assignments in the SyncGroup response",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The coordinator sends a JoinGroup broadcast to all consumers; each consumer responds with its desired partitions in SyncGroup",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Consumers send JoinGroup with their current offsets; the coordinator merges offsets and distributes the merged view in SyncGroup",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "JoinGroup is sent once per broker; SyncGroup is sent once per partition to acknowledge leader assignment",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In the classic protocol, all consumers send a JoinGroup request to the group coordinator. The coordinator waits for all current members (or until the rebalance timeout) and then responds with a JoinGroup response\u2014one consumer is designated the leader (typically the first to join). The leader receives the full member list and their metadata, computes the partition assignment using the configured assignor, and sends SyncGroup with the full assignment map. All other consumers also send SyncGroup (with an empty assignment). The coordinator distributes each member's partitions via the SyncGroup response. Option B inverts the direction. Option C is wrong; offsets are not part of the join protocol. Option D is wrong; these are per-consumer-group messages, not per-broker or per-partition.",
+    "bonusFact": "During the JoinGroup phase, all partitions are stopped\u2014this is the 'stop-the-world' effect that KIP-848 eliminates."
+  },
+  {
+    "id": "apache-kafka-adv-014",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is Kafka Tiered Storage (introduced in Kafka 3.6) and what problem does it solve?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It offloads older log segments to remote object storage (e.g., S3) while keeping recent segments local, decoupling retention from broker disk size",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It creates two on-disk storage tiers: an SSD tier for active segments and an HDD tier for older segments on the same broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It replicates data across brokers in multiple geographic tiers for multi-region high availability",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It compresses older segments with a higher-ratio codec to save disk space on brokers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Historically, Kafka's retention was limited by the local disk capacity of brokers. Tiered Storage (KIP-405, early access in 3.6, GA in later versions) adds a remote storage layer. The broker actively uploads closed log segments to a remote object store (S3, GCS, Azure Blob). Consumers can fetch records from remote storage via the broker, which acts as a proxy. Local retention can be set very short (e.g., a few hours) while remote retention spans months, enabling long-term data access without scaling broker disks. Option B describes a single-broker tiered disk concept not implemented in Kafka. Option C describes multi-region replication (MirrorMaker 2). Option D describes compression, a separate feature.",
+    "bonusFact": "With Tiered Storage, broker scaling decisions are decoupled from data retention policies for the first time."
+  },
+  {
+    "id": "apache-kafka-adv-015",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What subtle bug exists in this transactional read-process-write Kafka Streams pattern implemented with the low-level Processor API?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "public void process(Record<String, String> record) {\n    String result = transform(record.value());\n    context().forward(record.withValue(result));\n    // state store update happens here\n    stateStore.put(record.key(), result);\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Forwarding the record before updating the state store means a crash after forward() but before put() leaves the state store inconsistent with the emitted output",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "context().forward() must be called outside the process() method to avoid re-entrant processor calls",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "stateStore.put() after forward() causes the Kafka Streams commit to fail with a state store version conflict",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "record.withValue() creates an immutable copy, so stateStore.put() will store the original unmodified value instead of the transformed one",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In Kafka Streams, the state store is checkpointed atomically with the source offsets on commit. If you forward (emit) the output record before updating the state store, a crash between the forward() and the store put() leaves the store with stale state while downstream has already received the output. On recovery, the input record will be reprocessed (because the offset was not committed), the state store will produce a different or duplicate result, and the output is emitted again. The correct order is: update the state store first, then forward. This way, a crash before forward() leads to a reprocess without any downstream record having been emitted, preserving at-least-once semantics correctly. Options B, C, and D are incorrect.",
+    "bonusFact": "Kafka Streams with exactly_once_v2 commits the state store and output atomically, eliminating this ordering concern."
+  },
+  {
+    "id": "apache-kafka-adv-016",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does MirrorMaker 2 prevent infinite replication loops in an active-active multi-cluster setup?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "MM2 renames replicated topics with a source-cluster prefix (e.g., us-east.orders) and uses replication.policy.filter to exclude topics that already contain the target cluster's prefix",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "MM2 uses ZooKeeper to track which records have been replicated and skips records that already have a replication flag",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "MM2 assigns a UUID to each record during replication; duplicate UUIDs are detected and discarded on the target",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "MM2 sets a TTL on each replicated record; expired records are automatically discarded without re-replication",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "MirrorMaker 2 uses a naming convention to prevent loops. When cluster A replicates topic 'orders' to cluster B, it is renamed to 'A.orders'. MM2 on cluster B replicates back to cluster A only topics that match its source pattern, but A.orders on cluster B does not match the pattern for B-originated topics, so it is not re-replicated back. The DefaultReplicationPolicy implements this by detecting the source prefix in the topic name and filtering it out. Option B is wrong; MM2 does not use ZooKeeper for loop detection. Option C is wrong; there is no UUID-based deduplication. Option D is wrong; Kafka records have no TTL mechanism in the wire protocol.",
+    "bonusFact": "Setting topics.exclude=.*[.].* on a cluster prevents it from replicating already-prefixed (mirrored) topics."
+  },
+  {
+    "id": "apache-kafka-adv-017",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the Kafka Streams Processor API's StateStore.init() contract, and why is it critical for correctness?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "init() registers the store with the ProcessorContext and restores its state from the changelog topic before processing starts; failing to call super.init() breaks state restoration",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "init() pre-populates the store with data from the source topic using a full table scan before the first record is processed",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "init() sets the retention policy for the state store and must be called before any put() operations",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "init() is optional; Kafka Streams auto-discovers and initialises state stores via reflection at topology build time",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When building a custom StateStore, init(ProcessorContext context, StateStore root) must register the store with the context (context.register(root, stateRestoreCallback)) and perform state restoration via the callback. The stateRestoreCallback is called by Kafka Streams during startup to replay all changelog topic entries for this store into the store, rebuilding state from the persistent log. If init() is not implemented correctly or the callback is not registered, state will not be restored after a failure, resulting in incorrect processing. Option B is wrong; init() restores from the changelog, not the source topic. Option C is wrong; retention is a topic-level configuration. Option D is wrong; init() is mandatory for correct state management.",
+    "bonusFact": "The state restore process fires StateRestoreListener callbacks, which can be used for monitoring restore progress."
+  },
+  {
+    "id": "apache-kafka-adv-018",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of the Kafka producer's ProducerInterceptor interface, and at what point in the send pipeline is it invoked?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "onSend() is called before serialisation and partitioning, allowing mutation or enrichment of the record; onAcknowledgement() is called after broker acknowledgment or failure",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "onSend() is called after the record is written to disk on the broker; onAcknowledgement() is called when the consumer commits the offset",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "ProducerInterceptor is only invoked for transactional producers; regular producers bypass it",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "onSend() is called once per batch, not per record, to avoid overhead for high-throughput producers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "ProducerInterceptor.onSend() is invoked in the application thread when send() is called, before the record is serialised and placed in the RecordAccumulator. This gives the interceptor access to the full ProducerRecord, enabling enrichment (e.g., adding headers, modifying values) or observability (e.g., metrics counting). onAcknowledgement() runs on the Sender I/O thread after the broker response (success or failure). Multiple interceptors can be chained and are applied in order. Option B is wrong; interceptors run client-side, not on the broker. Option C is wrong; interceptors apply to all producers. Option D is wrong; onSend() is per record.",
+    "bonusFact": "Avoid heavy computation in onAcknowledgement() as it runs on the producer's I/O thread and can delay other in-flight sends."
+  },
+  {
+    "id": "apache-kafka-adv-019",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the 'cooperative sticky' rebalance protocol in Kafka consumers, and how does it differ from 'eager sticky' (StickyAssignor)?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Cooperative sticky (CooperativeStickyAssignor) revokes only partitions that must move; eager sticky (StickyAssignor) revokes all partitions first and then reassigns them, still causing a brief stop-the-world",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Cooperative sticky uses server-side assignment; eager sticky uses client-side assignment",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Cooperative sticky is available only in KRaft mode; eager sticky requires ZooKeeper",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The two assignors produce identical partition assignments; the only difference is in the protocol metadata format",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "StickyAssignor (eager sticky) was introduced to reduce unnecessary partition movements by keeping assignments as sticky as possible across rebalances. However, it still uses the eager protocol: all partitions are revoked before reassignment, causing a brief processing pause. CooperativeStickyAssignor (cooperative sticky) uses the cooperative rebalance protocol: only partitions that need to move are revoked, while all other partitions continue to be consumed without interruption. This may require two rebalance rounds but eliminates the stop-the-world effect. Option B is wrong; both use client-side assignment. Option C is wrong; both work in ZooKeeper mode and KRaft mode. Option D is wrong; the protocol is fundamentally different.",
+    "bonusFact": "CooperativeStickyAssignor is the recommended default assignor for production workloads since Kafka 2.4."
+  },
+  {
+    "id": "apache-kafka-adv-020",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka Streams Processor API code do, and what potential issue should be addressed?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "public void init(ProcessorContext<String, Long> context) {\n    this.context = context;\n    this.store = context.getStateStore(\"counts\");\n    context.schedule(\n        Duration.ofSeconds(30),\n        PunctuationType.WALL_CLOCK_TIME,\n        ts -> store.all().forEachRemaining(\n            kv -> context.forward(new Record<>(kv.key, kv.value, ts))\n        )\n    );\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Periodically emits all key-value pairs in the store every 30s; the issue is that store.all() returns an unclosed iterator, risking a resource leak",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Periodically clears the state store every 30s; the issue is that forward() should be called before clearing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Schedules a compaction of the state store every 30s using wall-clock time",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Periodically snapshots the state store to a Kafka topic every 30s; the issue is that it bypasses the changelog topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The punctuation forwards all entries in the 'counts' state store every 30 seconds using WALL_CLOCK_TIME. The critical issue is that store.all() returns a KeyValueIterator that must be explicitly closed after use to release underlying RocksDB resources. Using forEachRemaining() without wrapping in try-with-resources or calling iterator.close() manually leaks file handles, which can exhaust system resources over time. The fix is to use try (KeyValueIterator<...> it = store.all()) { ... }. Option B is wrong; there is no clearing operation. Option C is wrong; this emits records, not compacts the store. Option D is wrong; forwarding via context is the standard output mechanism.",
+    "bonusFact": "Always close state store iterators; RocksDB iterators hold native memory references that are not garbage-collected promptly."
   }
 ]

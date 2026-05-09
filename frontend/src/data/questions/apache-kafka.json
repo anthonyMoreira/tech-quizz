@@ -4583,5 +4583,328 @@
     ],
     "explanation": "num.recovery.threads.per.data.dir controls how many threads Kafka uses to recover log segments in each data directory during an unclean shutdown recovery, and to flush log segments during an orderly shutdown. Increasing it speeds up recovery after a crash, especially when there are many log segments to validate. Option B describes the replication fetch threads on the follower side (num.replica.fetchers). Option C describes network I/O threads (num.network.threads). Option D is wrong; log compaction is handled by the log.cleaner.threads configuration.",
     "bonusFact": "Increasing num.recovery.threads.per.data.dir can significantly reduce broker startup time after an unclean shutdown."
+  },
+  {
+    "id": "apache-kafka-int-041",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What happens to a Kafka Streams application when its state store needs to be restored after a crash?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It replays the corresponding changelog topic from the last committed position to rebuild the state store",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It queries other Streams instances via the Interactive Queries API to download missing state",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It re-reads the entire source topic from offset 0 to reconstruct the state",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It discards the corrupted state store and starts with an empty state, reprocessing from the latest offset",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Each stateful Kafka Streams operation backed by a persistent state store (RocksDB) has an associated changelog topic. On recovery, the Streams runtime replays the changelog topic from the last checkpointed offset to bring the state store back to its pre-crash state before resuming processing. Option B is wrong; Interactive Queries lets clients query remote state, but state restoration is done locally from the changelog. Option C is wrong; replaying the full source topic would be far slower and is not the mechanism used. Option D is wrong; Kafka Streams always attempts to restore state from the changelog rather than discarding it.",
+    "bonusFact": "Standby replicas (num.standby.replicas) keep a warm copy of the state store to minimise restore time after failover."
+  },
+  {
+    "id": "apache-kafka-int-042",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which SASL mechanism provides username/password authentication with server-side credential storage and iterative hashing?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "SASL/SCRAM (Salted Challenge Response Authentication Mechanism)",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "SASL/PLAIN",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "SASL/GSSAPI (Kerberos)",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "SASL/OAUTHBEARER",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "SASL/SCRAM stores hashed credentials using PBKDF2 with a salt and iteration count directly in ZooKeeper (or KRaft metadata) rather than transmitting the password. The client proves knowledge of the password through a challenge-response handshake without sending it in clear text. SASL/PLAIN (option B) sends the password in the clear over the wire unless wrapped in TLS. SASL/GSSAPI (option C) uses Kerberos tickets, not passwords. SASL/OAUTHBEARER (option D) uses OAuth 2.0 tokens.",
+    "bonusFact": "Kafka supports SCRAM-SHA-256 and SCRAM-SHA-512; SHA-512 is recommended for stronger security."
+  },
+  {
+    "id": "apache-kafka-int-043",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "In a Kafka ACL, what does the DESCRIBE permission on a topic allow a client to do?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "View topic metadata such as partition count, ISR, and leader information",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Consume records from the topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Produce records to the topic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Delete records from the topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The DESCRIBE ACL grants clients the ability to fetch metadata about a resource\u2014such as a topic's configuration, partition count, ISR list, and leader assignments\u2014without allowing them to produce or consume data. READ permission is required to consume records. WRITE permission is required to produce records. DELETE permission is required to delete records or the topic itself. Separating DESCRIBE from READ/WRITE allows operators to grant monitoring access without exposing data.",
+    "bonusFact": "kafka-topics.sh --describe requires DESCRIBE permission on the topic and optionally on the cluster."
+  },
+  {
+    "id": "apache-kafka-int-044",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka AdminClient code accomplish?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "try (AdminClient admin = AdminClient.create(props)) {\n    NewTopic topic = new NewTopic(\"payments\", 12, (short) 3);\n    topic.configs(Map.of(\n        \"retention.ms\", \"604800000\",\n        \"cleanup.policy\", \"compact\"\n    ));\n    admin.createTopics(List.of(topic)).all().get();\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Creates a topic named 'payments' with 12 partitions, replication factor 3, 7-day retention, and log compaction",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Creates a topic with 12 partitions and deletes records older than 1 day",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Creates a topic with 3 partitions and replication factor 12",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Modifies an existing topic named 'payments' to add compaction without changing partitions",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "new NewTopic(\"payments\", 12, (short) 3) creates a topic named 'payments' with 12 partitions and a replication factor of 3. The configs map sets retention.ms=604800000 (7 days = 7 \u00d7 86400 \u00d7 1000 ms) and cleanup.policy=compact. admin.createTopics() issues the creation request; .all().get() blocks until the broker confirms. Option B miscounts the retention (604800000 ms = 7 days, not 1 day). Option C swaps the partition and replication-factor arguments. Option D is wrong because createTopics() creates a new topic, not modifies an existing one.",
+    "bonusFact": "Use admin.alterConfigs() to update configs on an existing topic without recreating it."
+  },
+  {
+    "id": "apache-kafka-int-045",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the Kafka producer's partitioner.class configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To define a custom strategy for mapping records to partitions based on the record key or value",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To assign consumer threads to specific partitions within a consumer group",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To control how many partitions are created when auto-creating a topic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To configure which broker receives the partition leader assignment",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "partitioner.class specifies the Partitioner implementation the producer uses to determine which partition a record is sent to. The default (UniformStickyPartitioner in recent versions) hashes the key using MurmurHash2 when a key is present or uses sticky batching when no key is given. Custom partitioners can implement domain-specific logic such as routing by region or customer tier. Option B is wrong; consumer thread-to-partition assignment is determined by the consumer group's assignor, not the producer. Option C is wrong; that is controlled by num.partitions. Option D is wrong; partition leader assignment is a broker/controller responsibility.",
+    "bonusFact": "A consistent partitioner.class is critical: changing it can break key-based ordering if the hash algorithm changes."
+  },
+  {
+    "id": "apache-kafka-int-046",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does Kafka handle a message that is larger than the broker's message.max.bytes configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The broker rejects the produce request with a RecordTooLargeException",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The broker automatically splits the message into smaller chunks and reassembles on consumption",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The broker stores the message but marks it as oversized and skips it during replication",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The broker increases message.max.bytes dynamically to accommodate the oversized message",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "message.max.bytes (default 1 MB) is a hard limit on the broker. Any produce request containing a batch larger than this value is rejected immediately with a RecordTooLargeException. Kafka does not split or chunk messages\u2014message splitting is an application responsibility. Options B, C, and D describe behaviours that Kafka does not implement. To send large messages, increase message.max.bytes on the broker (and match it with replica.fetch.max.bytes and max.partition.fetch.bytes) or use a reference pattern to store the payload externally.",
+    "bonusFact": "Consider storing large payloads in object storage and publishing only the reference/URL in Kafka."
+  },
+  {
+    "id": "apache-kafka-int-047",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the role of the Kafka Streams topology.optimization=ALL configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It enables Kafka Streams to merge redundant source nodes and reuse repartition topics, reducing the number of internal topics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It enables multi-threaded processing by automatically parallelising stateless operations",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It enables RocksDB compression for all state stores to reduce disk usage",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It activates exactly-once processing semantics without requiring additional configuration",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "topology.optimization=ALL (default NO_OPTIMIZATION) instructs Kafka Streams to apply compile-time topology rewrites. The most impactful optimisation merges shared source topics read by multiple operations into a single source node, and reuses repartition topics that would otherwise be duplicated. This reduces the number of internal Kafka topics and the associated consumer overhead. Option B is wrong; parallelism is controlled by num.stream.threads, not this setting. Option C is wrong; RocksDB compression is configured separately. Option D is wrong; exactly-once requires processing.guarantee=exactly_once_v2.",
+    "bonusFact": "topology.optimization=ALL was introduced in Kafka Streams 2.1 as an opt-in performance improvement."
+  },
+  {
+    "id": "apache-kafka-int-048",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is Kafka's preferred replica election and when does it occur?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It promotes the first replica in the replica list (preferred replica) to leader if it is in the ISR, restoring the original leader assignment",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It elects the replica with the lowest broker ID as leader to balance load",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It elects the replica with the most up-to-date log as leader, regardless of ISR membership",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It forces all replicas to re-sync before electing a new leader to prevent data loss",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The preferred replica is the first entry in a partition's replica list, which was chosen by Kafka's partition assignment algorithm to evenly distribute leaders across brokers. Over time, leader imbalances can develop due to broker restarts. Preferred replica election (triggered automatically if auto.leader.rebalance.enable=true, or manually via kafka-leader-election.sh) promotes the preferred replica back to leader if it is in the ISR, restoring the original balance. Option B is wrong; it is the first in the replica list, not the lowest broker ID. Option C describes unclean election. Option D describes ISR catch-up, a different process.",
+    "bonusFact": "Run kafka-leader-election.sh --election-type PREFERRED to manually trigger a preferred replica election."
+  },
+  {
+    "id": "apache-kafka-int-049",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which Kafka Connect error handling configuration sends failed records to a dead letter queue topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "errors.deadletterqueue.topic.name combined with errors.tolerance=all",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "errors.retry.timeout with errors.retry.delay.max.ms",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "errors.log.enable=true with errors.log.include.messages=true",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "connector.class=DeadLetterQueueConnector with a topic.name property",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Setting errors.deadletterqueue.topic.name to a topic name and errors.tolerance=all on a connector tells Kafka Connect to route records that fail transformation or conversion to the specified DLQ topic instead of stopping the connector. Without errors.tolerance=all, the connector fails on the first error. errors.retry.timeout (option B) controls retry duration before giving up. errors.log.enable (option C) logs errors but does not route failed records to a topic. Option D is fabricated; there is no DeadLetterQueueConnector class.",
+    "bonusFact": "Headers on DLQ records contain the original topic, partition, offset, and the exception that caused the failure."
+  },
+  {
+    "id": "apache-kafka-int-050",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between a Kafka producer callback and using the Future returned by send()?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The callback is invoked asynchronously by the I/O thread; Future.get() blocks the calling thread until the broker responds",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The callback is called before the record is sent; Future.get() waits for the record to be appended locally",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Both are equivalent; the callback is just syntactic sugar over Future.get()",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Callbacks support error handling; Future.get() always succeeds and never throws exceptions",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When you call producer.send(record, callback), the callback is invoked on the producer's I/O thread once the broker responds (success or error), so it does not block the application thread. Calling Future.get() blocks the calling thread until the acknowledgment arrives, effectively making the send synchronous. Option B is wrong; callbacks are invoked after broker acknowledgment, not before sending. Option C is wrong; they have fundamentally different threading models. Option D is wrong; Future.get() throws ExecutionException on failure, wrapping the underlying Kafka exception.",
+    "bonusFact": "Avoid performing heavy work inside a callback as it runs on the producer I/O thread and can delay other sends."
   }
 ]

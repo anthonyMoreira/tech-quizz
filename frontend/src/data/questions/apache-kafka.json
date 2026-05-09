@@ -8830,5 +8830,331 @@
     ],
     "explanation": "KIP-112 introduced JBOD disk failure handling where a broker with multiple log directories (log.dirs) can survive individual disk failures. Partitions on the failed disk go offline and are reassigned to other brokers, while partitions on healthy disks continue serving requests. Before KIP-112, any disk failure would bring down the entire broker. Option B describes the pre-KIP-112 behavior. Option C is wrong because data is not automatically migrated within the same broker. Option D confuses JBOD with RAID-1 mirroring; JBOD stores each partition on a single disk.",
     "bonusFact": "JBOD reduces the blast radius of disk failures."
+  },
+  {
+    "id": "apache-kafka-adv-071",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's controlled.shutdown.max.retries and how does it affect broker lifecycle?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Defines how many times the broker retries leadership transfer during controlled shutdown before giving up and forcing shutdown",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Sets the maximum number of restart attempts after a broker crash",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Controls how many times the controller retries metadata updates to other brokers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Limits the number of partitions that can be transferred during shutdown",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "During controlled shutdown, the broker attempts to transfer leadership of all its partitions to other ISR members. controlled.shutdown.max.retries defines how many times it retries this process if some partitions cannot be transferred (e.g., because no other ISR member is available). After exhausting retries, the broker proceeds with a hard shutdown. Option B confuses shutdown with restart recovery. Option C describes metadata propagation, not controlled shutdown. Option D incorrectly limits the number of partitions.",
+    "bonusFact": "Default is 3 retries with controlled.shutdown.retry.backoff.ms."
+  },
+  {
+    "id": "apache-kafka-adv-072",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the Outbox Pattern and how is it implemented with Kafka Connect?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Writing events to a database outbox table atomically with business data, then using a CDC connector to stream the outbox to Kafka topics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Buffering Kafka messages in an external queue before delivering them to consumers",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Storing rejected messages in a special outbox topic for manual review",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Writing messages to multiple Kafka topics simultaneously using the producer API",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Outbox Pattern solves the dual-write problem by writing business data and an event record to an outbox table within the same database transaction. A CDC (Change Data Capture) connector like Debezium then captures changes from the outbox table and publishes them to Kafka topics. This guarantees that events are published if and only if the business transaction commits. Option B describes a generic buffering pattern. Option C confuses outbox with dead letter queue. Option D does not solve the atomicity problem between database and Kafka.",
+    "bonusFact": "Debezium provides a built-in outbox event router SMT."
+  },
+  {
+    "id": "apache-kafka-adv-073",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What issue can occur with this Kafka Streams KTable-KTable foreign key join?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KTable<String, Order> orders = builder.table(\"orders\");\nKTable<String, Customer> customers = builder.table(\"customers\");\n\nKTable<String, EnrichedOrder> enriched = orders.join(\n    customers,\n    order -> order.getCustomerId(),\n    (order, customer) -> new EnrichedOrder(order, customer));"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Foreign key joins create internal repartition and subscription topics, adding significant processing overhead and increasing end-to-end latency",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Foreign key joins are not supported between two KTables",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The join will fail if orders and customers topics have different key types",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The foreign key extractor function is invoked on the broker side, requiring a custom plugin",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "KTable-KTable foreign key joins (KIP-213) are complex internally. They create internal subscription-response topics and repartition topics to resolve the foreign key relationship. Each update to either table triggers a multi-step process involving repartitioning, subscription matching, and response propagation. This adds latency and resource usage compared to primary-key joins. Option B is wrong because FK joins are supported since Kafka 2.4. Option C is actually expected since the FK type must match the other table's key. Option D is incorrect because all processing happens client-side in the Streams application.",
+    "bonusFact": "FK joins create 2 internal topics per join operation."
+  },
+  {
+    "id": "apache-kafka-adv-074",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's quotas.produced.throttle.time.ms metric and how should it be monitored?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It measures the average time producers are delayed due to quota throttling; a high value indicates the client is exceeding its bandwidth allocation",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It measures the time between a producer sending a message and the broker storing it",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It counts the total number of throttled requests per second",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It measures the CPU time spent processing produce requests on the broker",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The produce-throttle-time-avg metric reports the average time in milliseconds that the broker delays produce responses due to quota enforcement. A consistently high value indicates that the producer is regularly exceeding its configured bandwidth quota and is being actively throttled. This should trigger investigation into whether the quota needs to be increased or the producer's throughput reduced. Option B describes produce latency, a different metric. Option C describes a count, not a time. Option D describes CPU processing time, not quota delay.",
+    "bonusFact": "Alert when throttle time exceeds a few hundred milliseconds."
+  },
+  {
+    "id": "apache-kafka-adv-075",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the challenge of consumer offset management when migrating between Kafka clusters using MirrorMaker 2?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Offsets differ between source and target clusters; MM2's offset translation maps source offsets to equivalent target offsets for seamless consumer switchover",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Offsets are identical between clusters so no translation is needed",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Consumers must reset offsets to zero when switching to the target cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "MM2 does not replicate consumer offsets, only topic data",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When data is replicated between clusters, the offsets in the source and target topics are different because the target broker assigns new offsets during replication. MM2 maintains an offset translation table that maps source offsets to their equivalent target offsets. When consumers switch to the target cluster, they can use translated offsets to resume from approximately the same position. Option B is incorrect because offsets are always different. Option C would cause full reprocessing. Option D is wrong because MM2 explicitly supports offset synchronization via checkpoints.",
+    "bonusFact": "Use RemoteClusterUtils to translate offsets programmatically."
+  },
+  {
+    "id": "apache-kafka-adv-076",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the difference between a Kafka Streams sub-topology and a task, and how does parallelism work?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A sub-topology is a connected graph of processors; a task is an instance of a sub-topology assigned specific input partitions; parallelism equals max input partition count",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A sub-topology handles one topic; a task handles one partition; parallelism equals the number of stream threads",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Sub-topologies and tasks are the same concept with different names",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A sub-topology runs on one instance; a task runs across multiple instances",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka Streams breaks the topology into sub-topologies (connected groups of processors and state stores separated by repartition topics). Each sub-topology is instantiated as tasks, where each task processes data from specific input partitions. The maximum parallelism for a sub-topology equals the maximum number of input partitions across its source topics. Multiple tasks can run on the same or different stream threads and instances. Option B incorrectly ties sub-topologies to single topics. Option C ignores the distinction. Option D reverses the deployment model.",
+    "bonusFact": "Repartition topics create sub-topology boundaries."
+  },
+  {
+    "id": "apache-kafka-adv-077",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What optimization does this Kafka producer configuration enable?",
+    "codeSnippet": {
+      "language": "properties",
+      "code": "enable.idempotence=true\nmax.in.flight.requests.per.connection=5\nacks=all\nretries=2147483647\ndelivery.timeout.ms=120000"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Idempotent production with up to 5 in-flight requests, maintaining ordering guarantees through sequence numbers while maximizing throughput",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "This configuration is invalid because idempotence requires max.in.flight=1",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Enables exactly-once cross-topic transactional writes",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Configures the producer to never retry failed requests",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With idempotence enabled, the broker uses producer IDs and sequence numbers to detect and discard duplicates. This allows up to 5 in-flight requests while maintaining ordering guarantees, because the broker can detect out-of-order delivery and reorder if needed. Before idempotence, max.in.flight had to be set to 1 for strict ordering. The retries=MAX_INT with delivery.timeout.ms=120s ensures retries continue for up to 2 minutes. Option B is a common misconception; idempotent producers support up to 5 in-flight. Option C requires transactional.id for cross-topic EOS. Option D contradicts the high retry count.",
+    "bonusFact": "Idempotent producers guarantee per-partition ordering with 5 in-flight."
+  },
+  {
+    "id": "apache-kafka-adv-078",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's AlterPartitionReassignments API and when should it be used?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To move partition replicas between brokers for load balancing, decommissioning, or rack-awareness, with throttling support for minimal production impact",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To change the number of partitions in an existing topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To modify which consumers are assigned to which partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To change the replication factor of a topic by adding or removing replicas",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "AlterPartitionReassignments (KIP-455) allows administrators to move partition replicas to different brokers. This is essential for decommissioning brokers, rebalancing disk usage, or improving rack awareness. The operation supports throttling via leader.replication.throttled.rate to limit the bandwidth used during reassignment. Option B describes partition count changes. Option C describes consumer group assignment, a separate mechanism. Option D is partially correct but the API moves replicas between brokers; changing the replication factor requires first altering the reassignment to include the desired number of replicas.",
+    "bonusFact": "Use kafka-reassign-partitions.sh for command-line reassignment."
+  },
+  {
+    "id": "apache-kafka-adv-079",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the significance of the high watermark checkpoint file in Kafka broker recovery?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It persists the high watermark for each partition to disk periodically so that after a broker restart, consumers do not see uncommitted data",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It stores the last offset written to each partition for producer duplicate detection",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It records which consumer groups have active subscriptions to each partition",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It maintains a mapping between partition leaders and their follower replicas",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The replication-offset-checkpoint file on each broker periodically persists the high watermark for each partition. During broker recovery, this checkpoint is used to determine the safe offset up to which data is considered committed (replicated to all ISR members). Without this checkpoint, the broker would need to verify with other replicas, adding recovery time. Option B confuses the checkpoint with producer state. Option C describes consumer group metadata. Option D describes partition metadata, not the high watermark.",
+    "bonusFact": "The checkpoint file is written every replica.high.watermark.checkpoint.interval.ms."
+  },
+  {
+    "id": "apache-kafka-adv-080",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's observer nodes in KRaft mode?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Non-voting controller nodes that replicate the metadata log for read scaling but do not participate in quorum elections",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Monitoring agents that collect metrics from all brokers in the cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Dedicated nodes that only serve consumer read requests",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Nodes that observe network traffic for security auditing purposes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In KRaft mode, observer nodes replicate the metadata log from the active controller but do not vote in elections. They provide read scaling for metadata queries and serve as warm standby nodes that can be quickly promoted to voters if needed. Regular brokers also act as observers by default, receiving metadata updates from the controller. Option B describes monitoring infrastructure, not observers. Option C confuses metadata observers with data serving. Option D fabricates a security auditing role.",
+    "bonusFact": null
   }
 ]

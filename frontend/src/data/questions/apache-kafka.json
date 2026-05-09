@@ -7200,5 +7200,331 @@
     ],
     "explanation": "The sticky partitioner (KIP-480, default since Kafka 2.4) changes how null-key records are distributed. Instead of round-robin per record (which creates many small batches), it sticks to one partition until the current batch is full or linger.ms expires, then switches to another partition. This creates larger, more efficient batches. Option B describes keyed partitioning, which works the same regardless. Option C is a consumer-side concept unrelated to producers. Option D incorrectly describes permanent pinning; the partition changes with each batch.",
     "bonusFact": "Sticky partitioning can improve throughput by 50% or more."
+  },
+  {
+    "id": "apache-kafka-adv-021",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of log segment rolling on Kafka broker performance?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Rolling creates new segment files and index files, causing brief I/O spikes and potential fsync delays on the active segment",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Rolling has no performance impact because it is handled entirely in memory",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Rolling causes all consumers reading from the partition to temporarily disconnect",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Rolling triggers a full recompaction of all previous segments",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When a log segment reaches segment.bytes or segment.ms, Kafka rolls to a new active segment. This involves creating new .log, .index, and .timeindex files, potentially triggering fsync on the old segment, and updating the active segment reference. On heavily loaded brokers, many segments rolling simultaneously can cause I/O spikes. Option B is wrong because segment rolling involves disk I/O. Option C fabricates consumer disconnection. Option D incorrectly links rolling to compaction; they are independent processes.",
+    "bonusFact": "Stagger segment.ms across topics to avoid simultaneous rolls."
+  },
+  {
+    "id": "apache-kafka-adv-022",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka handle transaction timeout and what happens to pending transactions?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The transaction coordinator aborts transactions that exceed transaction.timeout.ms, writing abort markers to all involved partitions",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Pending transactions are automatically committed after the timeout expires",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The producer receives a warning but the transaction remains open indefinitely",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The broker deletes all records from the pending transaction immediately",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "If a transactional producer does not commit or abort a transaction within transaction.timeout.ms (default 60 seconds), the transaction coordinator proactively aborts the transaction. It writes abort markers to all partitions that were part of the transaction, and the producer's epoch is bumped, fencing the old producer. Option B is dangerously wrong since auto-committing an incomplete transaction could produce inconsistent data. Option C incorrectly suggests indefinite hanging. Option D is wrong because aborted records are not deleted; they are simply hidden from consumers with read_committed isolation.",
+    "bonusFact": "Max transaction.timeout.ms is bounded by the broker's setting."
+  },
+  {
+    "id": "apache-kafka-adv-023",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What concurrency issue exists in this Kafka producer usage?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "ExecutorService executor = Executors.newFixedThreadPool(10);\nKafkaProducer<String, String> producer = new KafkaProducer<>(props);\n\nfor (String message : messages) {\n  executor.submit(() -> {\n    producer.send(new ProducerRecord<>(\"topic\", message));\n  });\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "This is actually safe because KafkaProducer is thread-safe, but the executor should be shut down and producer.close() called to flush pending records",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "KafkaProducer is not thread-safe and concurrent sends will corrupt internal buffers",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Each thread needs its own KafkaProducer instance for correct behavior",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The producer will deadlock because multiple threads compete for the same partition lock",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "KafkaProducer is thread-safe by design and can be shared across multiple threads. The real issue in this code is resource cleanup: the executor should be properly shut down, and producer.close() must be called to flush any buffered records and release resources. Without close(), pending records may be lost. Option B is factually incorrect because KafkaProducer is explicitly documented as thread-safe. Option C is unnecessary and wasteful since a single producer can handle concurrent sends. Option D fabricates a deadlock scenario.",
+    "bonusFact": "Sharing one producer across threads is the recommended pattern."
+  },
+  {
+    "id": "apache-kafka-adv-024",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of the controller quorum voters configuration in KRaft mode?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It defines the set of nodes that participate in the Raft quorum for metadata consensus, determining the cluster's fault tolerance",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It lists the brokers that are allowed to serve as partition leaders",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It specifies which consumers can vote on consumer group rebalances",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It defines which clients are authorized to modify cluster configurations",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The controller.quorum.voters configuration (e.g., 1@host1:9093,2@host2:9093,3@host3:9093) specifies the nodes that form the KRaft controller quorum. These nodes participate in Raft leader election and metadata replication. With N voters, the cluster can tolerate (N-1)/2 failures. Option B confuses controller voters with partition leadership, which any broker can hold. Option C fabricates a consumer voting mechanism. Option D describes ACLs, not the quorum configuration.",
+    "bonusFact": "A 3-node quorum tolerates 1 failure; 5-node tolerates 2."
+  },
+  {
+    "id": "apache-kafka-adv-025",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of page cache eviction on Kafka broker performance?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "When active data exceeds page cache capacity, consumers fall behind into disk reads, causing a dramatic drop in throughput",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Page cache eviction has no impact because Kafka manages its own internal cache",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Kafka automatically compresses data when page cache is full to free memory",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Page cache eviction triggers broker shutdown to prevent data corruption",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka relies heavily on the OS page cache for high-performance reads. When consumers are reading recent data, it is served from page cache (memory speed). If the active dataset exceeds page cache capacity (due to too many topics, slow consumers, or insufficient RAM), data must be read from disk, dropping throughput by 10-100x. This cliff is a common production issue. Option B is wrong because Kafka deliberately delegates caching to the OS page cache. Option C fabricates a compression response. Option D is incorrect; eviction is normal OS behavior, not an error condition.",
+    "bonusFact": "Rule of thumb: allocate 60-70% of RAM for page cache."
+  },
+  {
+    "id": "apache-kafka-adv-026",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka handle consumer group state transitions during the rebalance protocol?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Groups transition through Empty -> PreparingRebalance -> CompletingRebalance -> Stable -> (back to PreparingRebalance on membership change)",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Groups only have two states: Active and Inactive",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Groups transition from Created -> Running -> Stopped and cannot return to Running",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "State transitions are managed by the consumers themselves, not the coordinator",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Consumer groups follow a specific state machine managed by the group coordinator. An empty group enters PreparingRebalance when the first consumer joins, then CompletingRebalance while the leader consumer calculates the assignment, then Stable once all consumers have received their assignments. Any membership change sends the group back to PreparingRebalance. Option B oversimplifies the state machine. Option C fabricates a linear lifecycle. Option D is wrong because the coordinator manages all state transitions.",
+    "bonusFact": "Dead is also a state, reached when the group is expired."
+  },
+  {
+    "id": "apache-kafka-adv-027",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What problem does this Kafka Streams custom timestamp extractor solve?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "public class EventTimeExtractor\n    implements TimestampExtractor {\n  @Override\n  public long extract(ConsumerRecord<Object, Object> record,\n      long partitionTime) {\n    JsonNode event = parse(record.value());\n    long eventTime = event.get(\"timestamp\").asLong();\n    return eventTime > 0 ? eventTime\n        : partitionTime;\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Extracts event time from the message payload instead of using Kafka's record timestamp, with fallback to partition time for invalid values",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Converts all timestamps to wall-clock time for consistent processing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Validates that all records have timestamps within an acceptable range",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Overwrites the Kafka record timestamp with the current system time",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This custom TimestampExtractor parses the message value as JSON and extracts a timestamp field to use as the event time for windowed operations and time-based processing in Kafka Streams. If the extracted timestamp is invalid (zero or negative), it falls back to the partition time (the highest timestamp seen so far on that partition). Option B is wrong because it preserves event time, not wall-clock time. Option C describes validation without extraction. Option D incorrectly describes using system time rather than event time.",
+    "bonusFact": "Custom extractors override the default FailOnInvalidTimestamp."
+  },
+  {
+    "id": "apache-kafka-adv-028",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the difference between Kafka's record batch v0, v1, and v2 formats?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "V2 (current) uses a more efficient variable-length encoding, supports headers, and stores timestamps as deltas to reduce batch size",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "V2 adds encryption support; V1 adds compression; V0 is uncompressed only",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The versions differ only in the maximum message size they support",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "V2 uses protobuf encoding; V1 uses Avro; V0 uses raw bytes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Record batch V2 (introduced in Kafka 0.11) uses variable-length encoding (varints), stores timestamps and offsets as deltas from the first record in the batch, and supports record headers. This is significantly more space-efficient than V0/V1 which used fixed-width fields. V2 also introduced producer IDs and sequence numbers for idempotency. Option B fabricates an encryption feature. Option C oversimplifies the differences. Option D incorrectly attributes specific serialization formats to batch versions.",
+    "bonusFact": "V2 can reduce message overhead by 30-50% over V0."
+  },
+  {
+    "id": "apache-kafka-adv-029",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the risk of setting a very high replication.factor (e.g., 5+) for Kafka topics?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Increased produce latency with acks=all, higher inter-broker network traffic, and more disk usage across the cluster",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Consumers will receive duplicate messages proportional to the replication factor",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The cluster requires more ZooKeeper nodes to track the additional replicas",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Topics with high replication cannot use log compaction",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A higher replication factor means every record must be copied to more brokers, increasing inter-broker network traffic and disk usage. With acks=all, the producer must wait for more replicas to acknowledge, increasing latency. Additionally, more replicas mean more follower fetch threads and memory usage on the leader. Option B is wrong because consumers read from one leader (or nearest replica), not multiple copies. Option C is incorrect, especially since KRaft has replaced ZooKeeper. Option D fabricates a compaction restriction.",
+    "bonusFact": "Replication factor 3 is the industry standard for production."
+  },
+  {
+    "id": "apache-kafka-adv-030",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's request purgatory?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A data structure that holds delayed requests (like produce with acks=all) until their conditions are met or they time out",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A dead letter queue for requests that failed authentication",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A buffer that reorders incoming requests by priority",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A mechanism to throttle clients that exceed their bandwidth quota",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The request purgatory is a broker-side data structure that holds requests that cannot be completed immediately. For example, a produce request with acks=all is placed in purgatory until all ISR members acknowledge, or a fetch request with fetch.min.bytes is held until enough data is available. Requests are completed when their conditions are satisfied or they expire. Option B confuses purgatory with authentication failure handling. Option C fabricates a priority reordering mechanism. Option D describes the quota manager, not purgatory.",
+    "bonusFact": "Kafka uses a hierarchical timing wheel for efficient expiration."
   }
 ]

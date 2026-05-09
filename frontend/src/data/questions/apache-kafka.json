@@ -9156,5 +9156,331 @@
     ],
     "explanation": "In KRaft mode, observer nodes replicate the metadata log from the active controller but do not vote in elections. They provide read scaling for metadata queries and serve as warm standby nodes that can be quickly promoted to voters if needed. Regular brokers also act as observers by default, receiving metadata updates from the controller. Option B describes monitoring infrastructure, not observers. Option C confuses metadata observers with data serving. Option D fabricates a security auditing role.",
     "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-081",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's kraft.metadata.log.max.record.bytes.between.snapshots configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Controls how much metadata log data accumulates before a new snapshot is taken, balancing snapshot frequency against log replay time on startup",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Limits the maximum size of a single metadata record in the KRaft log",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Sets the maximum size of the KRaft snapshot file",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Controls the interval between metadata propagation to broker nodes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This configuration controls how many bytes of metadata log records accumulate between snapshots. A lower value means more frequent snapshots (faster startup for new nodes, but more I/O overhead). A higher value means fewer snapshots (less I/O, but longer startup times since more log must be replayed). Finding the right balance depends on cluster change frequency. Option B confuses the between-snapshots threshold with individual record size. Option C describes snapshot file size, not the trigger threshold. Option D describes metadata propagation, a different mechanism.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-082",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the Saga Pattern and how does Kafka facilitate its implementation in microservices?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A sequence of local transactions coordinated through Kafka events, where each service publishes success/failure events and compensating actions undo partial failures",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A distributed two-phase commit across all microservices using Kafka's transaction API",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A pattern where Kafka stores the entire state of all microservices for recovery",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A retry mechanism that replays failed Kafka messages until all services acknowledge",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Saga Pattern uses Kafka as the event backbone for orchestrating distributed transactions across microservices. Each service performs its local transaction and publishes an event. If a step fails, compensating events are published to undo previous steps. Kafka's durability and ordering guarantees make it well-suited for this pattern. This differs from traditional 2PC because each step is an independent local transaction. Option B conflates sagas with 2PC. Option C fabricates a state storage role. Option D describes simple retries, not sagas.",
+    "bonusFact": "Choreography sagas use events; orchestration sagas use a coordinator."
+  },
+  {
+    "id": "apache-kafka-adv-083",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What is the purpose of this custom Kafka Streams state store implementation?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "public class TTLKeyValueStore<K, V>\n    implements KeyValueStore<K, V> {\n  private final KeyValueStore<K, V> inner;\n  private final long ttlMs;\n  \n  public V get(K key) {\n    V value = inner.get(key);\n    if (value != null && isExpired(key)) {\n      inner.delete(key);\n      return null;\n    }\n    return value;\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "A wrapper store that adds time-to-live (TTL) semantics, automatically evicting entries on read if they have expired",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A store that deduplicates records by deleting older values for the same key",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A cache layer that removes entries after a single read",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A store that validates data integrity and removes corrupted entries",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This implements the decorator pattern to wrap an existing KeyValueStore with TTL functionality. On each get() call, it checks if the entry has expired based on the configured ttlMs. If expired, it deletes the entry and returns null, effectively implementing lazy eviction. This is useful for state stores that need automatic cleanup of stale data. Option B describes deduplication, not TTL. Option C incorrectly describes single-read behavior; only expired entries are deleted. Option D fabricates data integrity validation.",
+    "bonusFact": "Kafka Streams does not natively support TTL on state stores."
+  },
+  {
+    "id": "apache-kafka-adv-084",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of the Kafka broker's unclean.leader.election.enable setting on the CAP theorem trade-off?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Enabling it favors availability over consistency (AP); disabling it favors consistency over availability (CP)",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It has no impact on the CAP trade-off because Kafka is always CP",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Enabling it makes Kafka fully CA (consistent and available)",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It only affects partition tolerance, not consistency or availability",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When unclean.leader.election.enable=true, Kafka allows an out-of-sync replica to become leader when no ISR member is available, prioritizing availability (the partition stays writable) over consistency (some committed records may be lost). When disabled, Kafka refuses to elect an unclean leader, making the partition unavailable until an ISR member recovers, prioritizing consistency. This is a classic AP vs CP trade-off. Option B ignores the configurable nature of this trade-off. Option C is impossible under the CAP theorem during a network partition. Option D misunderstands which CAP properties are affected.",
+    "bonusFact": "This is one of the few settings that directly maps to CAP."
+  },
+  {
+    "id": "apache-kafka-adv-085",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka handle message ordering guarantees across multiple partitions in a transactional producer?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Transactions guarantee atomicity (all or nothing) across partitions, but do not guarantee ordering between partitions; ordering is only guaranteed within each partition",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Transactional producers guarantee total ordering across all partitions in the transaction",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Records in a transaction are ordered by timestamp across all partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Kafka assigns a global sequence number to order records across partitions in a transaction",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka transactions provide atomicity: either all records in the transaction are visible to consumers (committed) or none are (aborted). However, there is no ordering guarantee between records written to different partitions in the same transaction. Each partition maintains its own independent offset sequence. Ordering is only guaranteed within a single partition. Option B overstates the ordering guarantee. Option C incorrectly suggests timestamp-based cross-partition ordering. Option D fabricates a global sequence number.",
+    "bonusFact": "Cross-partition ordering requires application-level sequencing."
+  },
+  {
+    "id": "apache-kafka-adv-086",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of the leader.replication.throttled.replicas topic-level configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Specifies which partition-replica pairs should have their replication traffic throttled during reassignment to limit impact on production traffic",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Lists the replicas that should be excluded from leader election",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Limits the total number of replicas that can be leaders simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Defines which replicas should receive priority for write requests",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "During partition reassignment, large amounts of data are replicated to new brokers, which can saturate the network and impact production traffic. leader.replication.throttled.replicas specifies which partition-replica pairs on the leader side should be throttled. Combined with follower.replication.throttled.replicas and leader.replication.throttled.rate, this allows controlled data movement during reassignment. Option B confuses throttling with election exclusion. Option C fabricates a concurrent leader limit. Option D mischaracterizes throttling as priority.",
+    "bonusFact": "kafka-reassign-partitions.sh can set throttles automatically."
+  },
+  {
+    "id": "apache-kafka-adv-087",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What is the purpose of this Kafka Streams named topology pattern?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "NamedTopologyBuilder tenantA =\n    streams.newNamedTopologyBuilder(\"tenant-A\");\ntenantA.stream(\"tenant-a-orders\")\n    .mapValues(v -> transform(v))\n    .to(\"tenant-a-output\");\n\nNamedTopologyBuilder tenantB =\n    streams.newNamedTopologyBuilder(\"tenant-B\");\ntenantB.stream(\"tenant-b-orders\")\n    .mapValues(v -> transform(v))\n    .to(\"tenant-b-output\");\n\nstreams.addNamedTopology(tenantA.build());\nstreams.addNamedTopology(tenantB.build());"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Multi-tenant stream processing where each tenant has an isolated topology that can be added or removed at runtime without affecting others",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Load balancing across two Kafka Streams instances",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Running two Kafka Streams applications within the same JVM for resource sharing",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Creating a failover topology that activates when the primary topology fails",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Named topologies (KIP-535) allow a single KafkaStreams instance to host multiple independent topologies. This is ideal for multi-tenant SaaS applications where each tenant's processing can be added, removed, or updated independently at runtime without restarting the application or affecting other tenants. Option B describes instance-level scaling, not named topologies. Option C is partially correct about sharing a JVM but misses the key benefit of runtime topology management. Option D fabricates a failover pattern.",
+    "bonusFact": "Named topologies support runtime add/remove without restart."
+  },
+  {
+    "id": "apache-kafka-adv-088",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of choosing LogAppendTime vs CreateTime as the message.timestamp.type for a Kafka topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "LogAppendTime uses the broker's clock (monotonic, uniform) but loses event time; CreateTime preserves producer event time but may have clock skew across producers",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "LogAppendTime is more accurate because producers always have synchronized clocks",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "CreateTime is only available when using the Kafka Streams API",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Both types produce identical timestamps in all scenarios",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "CreateTime uses the timestamp set by the producer (typically the event creation time), preserving event-time semantics for stream processing. However, unsynchronized producer clocks can lead to out-of-order timestamps. LogAppendTime uses the broker's clock when appending the record, providing monotonically increasing timestamps per partition but losing the original event time. The choice depends on whether event-time processing or broker-time ordering is more important. Option B incorrectly assumes producer clock synchronization. Option C is wrong because CreateTime works with all Kafka clients. Option D ignores the fundamental difference.",
+    "bonusFact": "LogAppendTime makes time-based retention more predictable."
+  },
+  {
+    "id": "apache-kafka-adv-089",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's consumer.group.max.size broker configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Limits the maximum number of consumers in a single consumer group to prevent excessive rebalancing and coordinator overhead",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Limits the total number of consumer groups that can exist in the cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Sets the maximum number of partitions a consumer group can subscribe to",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Limits how many messages a consumer group can consume per second",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "consumer.group.max.size limits the number of members in a single consumer group. Very large consumer groups can cause significant coordinator overhead due to the cost of rebalancing (especially with the eager protocol). Each rebalance requires communicating with all members, and with thousands of consumers, this can take minutes. This setting provides a safety guardrail. Option B confuses group size with group count. Option C describes subscription scope, not group size. Option D describes throughput quotas, not membership limits.",
+    "bonusFact": "Default is Integer.MAX_VALUE (effectively unlimited)."
+  },
+  {
+    "id": "apache-kafka-adv-090",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of KRaft's metadata log compaction and how does it differ from topic log compaction?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Metadata log uses snapshots to compact state, capturing full state at a point in time; topic compaction retains only the latest value per key in segments",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Both use identical compaction mechanisms but on different data",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "KRaft does not compact its metadata log; it grows indefinitely",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Metadata log compaction runs only during broker maintenance windows",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The KRaft metadata log uses a snapshot-based compaction strategy where a full snapshot of the current metadata state is periodically written. Log records before the snapshot offset can then be deleted since they are no longer needed for recovery. This differs from topic log compaction, which scans the log and retains only the latest value for each key. The approaches reflect different needs: metadata requires full state snapshots, while topics need per-key deduplication. Option B ignores the fundamental differences. Option C is wrong because snapshots prevent indefinite growth. Option D fabricates maintenance windows.",
+    "bonusFact": "Snapshots are triggered by metadata log size thresholds."
   }
 ]

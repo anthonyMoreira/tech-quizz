@@ -6874,5 +6874,331 @@
     ],
     "explanation": "The pre-vote mechanism (KIP-996) prevents disruptive leader elections caused by nodes that are partitioned from the cluster. Before initiating an actual election, a node sends pre-vote requests to check if other nodes would support its candidacy. If a node is partitioned and has a stale log, it will not get pre-votes and will not start a real election that would increment the epoch and disrupt the current leader. Option B mischaracterizes pre-vote as a prediction mechanism. Option C describes proactive failover, not pre-vote. Option D is entirely unrelated to leader elections.",
     "bonusFact": "Pre-vote is based on the Raft protocol's PreVote extension."
+  },
+  {
+    "id": "apache-kafka-adv-011",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka's log compaction handle records with the same key but different values in the dirty portion of the log?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The compactor scans the dirty segment, builds an offset map of latest offsets per key, then copies only the latest record for each key to the cleaned segment",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The compactor deletes all duplicates in real-time as they are written",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The compactor sorts records by key and removes duplicates alphabetically",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The compactor rewrites the entire partition from scratch on every compaction cycle",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The log cleaner thread reads the dirty (uncompacted) portion of the log and builds an in-memory offset map tracking the highest offset for each key. It then rewrites the dirty segments, keeping only the record with the highest offset for each key. The clean portion is not re-processed. Option B is wrong because compaction runs as a background process, not in real-time during writes. Option C fabricates alphabetical sorting. Option D is incorrect because only the dirty portion is rewritten, not the entire partition.",
+    "bonusFact": "The offset map size is controlled by log.cleaner.dedupe.buffer.size."
+  },
+  {
+    "id": "apache-kafka-adv-012",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the transaction coordinator in Kafka and how does it manage two-phase commits?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A broker component that writes transaction state to __transaction_state and uses two-phase commit: prepare (write markers) then commit (make visible)",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A separate cluster service that validates transaction consistency across multiple Kafka clusters",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A client-side library that ensures transactions are committed before the producer closes",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A ZooKeeper node that coordinates distributed transactions between brokers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The transaction coordinator runs on the broker that hosts the partition of __transaction_state for a given transactional.id. It manages the two-phase commit: first, it writes a prepare record to the transaction log and sends transaction markers to all partitions involved. Then, it writes a commit (or abort) record. Consumers with isolation.level=read_committed do not see records until the commit marker is written. Option B fabricates a separate service. Option C is wrong because coordination happens broker-side. Option D is incorrect because transactions do not rely on ZooKeeper.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-013",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What is the potential problem with this custom partitioner implementation?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "public class GeoPartitioner implements Partitioner {\n  public int partition(String topic, Object key,\n      byte[] keyBytes, Object value,\n      byte[] valueBytes, Cluster cluster) {\n    String region = extractRegion((String) key);\n    int numPartitions = cluster.partitionCountForTopic(topic);\n    return Math.abs(region.hashCode()) % numPartitions;\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "If regions are unevenly distributed, most data will concentrate in a few partitions causing hot spots",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The partitioner will throw a NullPointerException because Cluster is always null",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Math.abs can return a negative value for Integer.MIN_VALUE hashCode, causing an ArrayIndexOutOfBoundsException",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Custom partitioners are not supported in Kafka versions after 3.0",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This partitioner groups all records from the same geographic region into the same partition. If the data has a skewed distribution (e.g., 80% from one region), most data will land in one partition, creating a hot spot and limiting consumer parallelism. Option B is wrong because the Cluster object is always provided by the producer. Option C is technically a valid edge case for Math.abs(Integer.MIN_VALUE), but the primary design issue is data skew. Option D is factually incorrect; custom partitioners remain fully supported.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-014",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka Streams handle out-of-order data in windowed aggregations?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The grace period keeps windows open past their end time, allowing late records to update the aggregation before the window is closed and purged",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Kafka Streams automatically reorders all records by timestamp before processing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Out-of-order records are silently dropped because Kafka guarantees strict ordering",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Kafka Streams buffers all records until the window closes, then processes them in order",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka Streams uses a grace period to handle late-arriving data in windowed operations. Windows remain open for the duration of the grace period after their logical end time, allowing late records to be included in the aggregation. After the grace period, the window is closed and late records are dropped. Option B is incorrect because Kafka Streams processes records in offset order per partition, not by reordering globally. Option C is wrong because Kafka does not guarantee cross-partition ordering. Option D mischaracterizes the processing model; records are processed as they arrive, not buffered.",
+    "bonusFact": "Set grace period to Duration.ZERO for strict windowing."
+  },
+  {
+    "id": "apache-kafka-adv-015",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of using snappy vs zstd compression on Kafka producer and consumer performance?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Snappy has faster compression/decompression with lower ratios; zstd achieves higher compression ratios with more CPU usage but supports configurable levels",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Snappy is only supported for producers; zstd is only supported for consumers",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Both algorithms produce identical compression ratios but zstd uses less memory",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Snappy compresses at the message level; zstd compresses at the topic level",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Snappy is designed for speed, offering fast compression and decompression with moderate compression ratios. Zstd provides significantly better compression ratios (reducing network and storage costs) but at higher CPU cost. Zstd also supports configurable compression levels, allowing fine-tuning of the speed vs ratio tradeoff. Option B fabricates producer/consumer restrictions. Option C is factually wrong about identical ratios. Option D incorrectly describes the compression scope; both work at the batch level.",
+    "bonusFact": "Zstd typically achieves 20-30% better ratios than snappy."
+  },
+  {
+    "id": "apache-kafka-adv-016",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the difference between Kafka Streams' EXACTLY_ONCE and EXACTLY_ONCE_V2 processing guarantees?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "V2 uses a single producer per StreamThread (group-level fencing) instead of one per task, reducing transactional overhead significantly",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "V2 provides stronger guarantees by writing records to multiple partitions simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "V2 requires Kafka 2.x while V1 only works on Kafka 1.x",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "V2 uses client-side deduplication while V1 uses broker-side deduplication",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "EXACTLY_ONCE (v1) created one transactional producer per stream task, which scaled poorly with many tasks. EXACTLY_ONCE_V2 (KIP-447) uses a single producer per StreamThread and leverages group-level fencing based on the consumer's group.instance.id and generation, dramatically reducing the number of producers and transactional overhead. Option B mischaracterizes the improvement. Option C inverts version requirements; V2 requires Kafka 2.6+. Option D fabricates a client vs broker deduplication distinction.",
+    "bonusFact": "V2 requires Kafka broker version 2.6 or higher."
+  },
+  {
+    "id": "apache-kafka-adv-017",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What is the problem with this Kafka consumer error handling pattern?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "while (true) {\n  try {\n    ConsumerRecords<String, String> records =\n      consumer.poll(Duration.ofMillis(100));\n    for (ConsumerRecord<String, String> record : records) {\n      process(record);\n    }\n    consumer.commitSync();\n  } catch (Exception e) {\n    log.error(\"Processing failed\", e);\n    // continue processing next batch\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "If process() fails mid-batch, commitSync() is skipped but the consumer continues, causing records before the failure to be reprocessed on the next poll",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The poll timeout of 100ms is too short and will cause WakeupException",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "commitSync() should always be called inside the catch block",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The consumer will leak memory because records are not explicitly released",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "If process() throws an exception for any record in the batch, the catch block logs the error and continues to the next poll() call. However, commitSync() was never called for that batch, so the consumer's committed offset is still at the previous batch. On the next poll, all records from the failed batch (including those already successfully processed) will be fetched again, causing duplicate processing. Option B is wrong because 100ms is a valid poll timeout. Option C would skip failed records, potentially losing data. Option D is fabricated; Java's garbage collector handles record memory.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-018",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's follower fetching (KIP-392) and when should it be used?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Allows consumers to read from the closest replica instead of the leader, reducing cross-datacenter network traffic",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Allows follower replicas to serve write requests when the leader is busy",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Enables followers to replicate data from other followers instead of the leader",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Allows producers to write to follower replicas for lower latency",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "KIP-392 (follower fetching) enables consumers to fetch data from the nearest replica based on rack configuration, rather than always reading from the partition leader. This is particularly valuable in multi-datacenter or multi-availability-zone deployments where cross-zone network costs are significant. Option B is wrong because writes always go to the leader. Option C describes chained replication, which Kafka does not implement. Option D is also incorrect; producers must always write to the leader.",
+    "bonusFact": "Configure with client.rack on consumers and replica.selector.class."
+  },
+  {
+    "id": "apache-kafka-adv-019",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does the Kafka Streams DSL handle repartitioning and when is it triggered?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Operations that change the key (selectKey, map, flatMap) mark the stream for repartitioning, creating an internal topic to re-key data before downstream stateful operations",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Kafka Streams never repartitions data; all operations use the original partitioning",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Repartitioning happens automatically every time a record is processed",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Repartitioning only occurs when the application is restarted with a new state directory",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When operations like selectKey(), map(), or flatMap() change the record key, the downstream stateful operations (joins, aggregations, groupBy) need data partitioned by the new key. Kafka Streams marks the stream as requiring repartitioning and creates an internal repartition topic. Records are written to this topic using the new key, then read back with the correct partitioning. Option B is factually wrong. Option C exaggerates; repartitioning only happens when keys change before stateful operations. Option D confuses state directory with repartitioning.",
+    "bonusFact": "Repartition topics follow the pattern <app-id>-<op>-repartition."
+  },
+  {
+    "id": "apache-kafka-adv-020",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's sticky partitioner for producers introduced in KIP-480?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "For null-key records, it sends all records in a batch to the same partition before switching, improving batching efficiency",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It ensures records with the same key always go to the same partition across producer restarts",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It prevents partition reassignment during consumer group rebalances",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It pins each producer thread to a specific partition permanently",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The sticky partitioner (KIP-480, default since Kafka 2.4) changes how null-key records are distributed. Instead of round-robin per record (which creates many small batches), it sticks to one partition until the current batch is full or linger.ms expires, then switches to another partition. This creates larger, more efficient batches. Option B describes keyed partitioning, which works the same regardless. Option C is a consumer-side concept unrelated to producers. Option D incorrectly describes permanent pinning; the partition changes with each batch.",
+    "bonusFact": "Sticky partitioning can improve throughput by 50% or more."
   }
 ]

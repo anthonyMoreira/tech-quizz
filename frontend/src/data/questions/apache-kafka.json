@@ -2454,7 +2454,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control?",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2489,7 +2489,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 2)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2524,7 +2524,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 3)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2559,7 +2559,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 4)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2594,7 +2594,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 5)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2629,7 +2629,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 6)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2664,7 +2664,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 7)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2699,7 +2699,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 8)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2734,7 +2734,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 9)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2769,7 +2769,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 10)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2804,7 +2804,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 11)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2839,7 +2839,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 12)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2874,7 +2874,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 13)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2909,7 +2909,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 14)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2944,7 +2944,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 15)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -2979,7 +2979,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 16)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -3014,7 +3014,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 17)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -3049,7 +3049,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 18)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -3084,7 +3084,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 19)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -3119,7 +3119,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 20)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -3154,7 +3154,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 21)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -3189,7 +3189,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 22)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -3224,7 +3224,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 23)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -3259,7 +3259,7 @@
     "themeId": "apache-kafka",
     "difficulty": "beginner",
     "type": "code-snippet",
-    "prompt": "What does this configuration control in a Kafka consumer?",
+    "prompt": "What does this consumer polling configuration control? (variant 24)",
     "codeSnippet": {
       "language": "java",
       "code": "props.put(\"max.poll.records\", \"500\");"
@@ -3319,7 +3319,7 @@
       }
     ],
     "explanation": "With acks=all (or acks=-1), the leader waits for all in-sync replicas (ISR) to acknowledge before confirming the write. Option B describes acks=0 or acks=1 behavior. Option C is wrong because only ISR members must acknowledge, not all brokers. Option D is incorrect because the producer only sends to the leader; replication is handled by followers pulling from the leader.",
-    "bonusFact": "Using acks=all with min.insync.replicas=2 and a replication factor of 3 provides strong durability while tolerating one broker failure."
+    "bonusFact": "acks=all with min.insync.replicas=2 is the standard setup."
   },
   {
     "id": "apache-kafka-int-002",
@@ -3351,7 +3351,7 @@
       }
     ],
     "explanation": "The group coordinator is a broker responsible for managing consumer group membership and triggering partition reassignment (rebalance) when consumers join or leave. Option B is wrong because Kafka retains messages on disk regardless of consumption. Option C describes the partitioner in the producer. Option D is a broker-level storage concern unrelated to coordination.",
-    "bonusFact": "The coordinator for a consumer group is determined by hashing the group ID to an offset in the __consumer_offsets topic."
+    "bonusFact": "The coordinator is chosen by hashing group.id."
   },
   {
     "id": "apache-kafka-int-003",
@@ -3383,7 +3383,7 @@
       }
     ],
     "explanation": "Log compaction retains the last known value for each record key in a partition, removing older duplicates. This is different from compression (option B), which reduces message size. Option C is fabricated\u2014Kafka does not merge topics. Option D is also wrong; Kafka does not natively support reducing partition counts.",
-    "bonusFact": "Publishing a message with a null value (tombstone) for a key during log compaction signals that the key should eventually be deleted."
+    "bonusFact": "A null-value tombstone signals key deletion in compaction."
   },
   {
     "id": "apache-kafka-int-004",
@@ -3415,7 +3415,7 @@
       }
     ],
     "explanation": "The __consumer_offsets topic is an internal Kafka topic that stores the committed offsets for each consumer group, allowing consumers to resume from where they left off after a restart. Option B confuses this with a schema registry. Option C is incorrect\u2014Kafka does not duplicate messages into a backup topic. Option D describes broker configuration, which is managed by KRaft or ZooKeeper.",
-    "bonusFact": "By default, __consumer_offsets has 50 partitions, and the partition a consumer group maps to is determined by hash(group.id) % 50."
+    "bonusFact": "__consumer_offsets has 50 partitions by default."
   },
   {
     "id": "apache-kafka-int-005",
@@ -3447,7 +3447,7 @@
       }
     ],
     "explanation": "The delete policy removes entire log segments once they exceed retention.ms or retention.bytes. The compact policy keeps the latest record for each key, removing older duplicates. Option B reverses granularity\u2014delete works on segments, not individual records. Option C incorrectly scopes these policies. Option D is wrong because they are fundamentally different strategies.",
-    "bonusFact": "You can combine both policies by setting cleanup.policy=delete,compact, which applies compaction and then deletes old compacted segments based on retention settings."
+    "bonusFact": "Set cleanup.policy=delete,compact to combine both strategies."
   },
   {
     "id": "apache-kafka-int-006",
@@ -3482,7 +3482,7 @@
       }
     ],
     "explanation": "batch.size=65536 sets the maximum batch size to 64 KB, linger.ms=50 adds up to 50ms of delay to accumulate more records, and compression.type=lz4 compresses the entire batch. Option B is wrong because the batch may be sent before reaching 64 KB. Option C is incorrect because compression is applied per batch, not per message. Option D confuses bytes with message count.",
-    "bonusFact": "LZ4 is generally preferred for Kafka because it offers the best balance of compression ratio and CPU overhead compared to gzip, snappy, and zstd."
+    "bonusFact": "LZ4 offers the best compression-to-CPU ratio for Kafka."
   },
   {
     "id": "apache-kafka-int-007",
@@ -3514,7 +3514,7 @@
       }
     ],
     "explanation": "An ISR is a replica that is fully caught up with the leader within the time defined by replica.lag.time.max.ms. If a follower falls behind, it is removed from the ISR. Option B is too broad\u2014replicas are only in the ISR while actively synchronized. Option C is wrong because the leader is part of the ISR but the ISR includes followers too. Option D describes cross-datacenter replication, a different concept.",
-    "bonusFact": "The default replica.lag.time.max.ms is 30 seconds. If a follower hasn't fetched from the leader within this window, it is removed from the ISR."
+    "bonusFact": "Default replica.lag.time.max.ms is 30 seconds."
   },
   {
     "id": "apache-kafka-int-008",
@@ -3546,7 +3546,7 @@
       }
     ],
     "explanation": "max.poll.interval.ms defines how long a consumer can go between poll() calls before the coordinator considers it dead and triggers a rebalance. Option B describes fetch.max.wait.ms. Option C describes heartbeat.interval.ms. Option D describes max.poll.records, which limits the count of returned records.",
-    "bonusFact": "The default max.poll.interval.ms is 5 minutes (300000ms). For long-running record processing, increase this value or reduce max.poll.records."
+    "bonusFact": "Default max.poll.interval.ms is 5 minutes (300000ms)."
   },
   {
     "id": "apache-kafka-int-009",
@@ -3578,7 +3578,7 @@
       }
     ],
     "explanation": "The high watermark (HW) marks the offset up to which all ISR members have replicated. Consumers can only read up to the high watermark to ensure they see fully replicated data. Option B describes the log-end offset. Option C is wrong\u2014consumers commit offsets up to what they have consumed. Option D is unrelated to compaction.",
-    "bonusFact": "The gap between the high watermark and the log-end offset represents data that exists on the leader but has not yet been fully replicated to all ISR members."
+    "bonusFact": "The HW-to-LEO gap is unreplicated data on the leader."
   },
   {
     "id": "apache-kafka-int-010",
@@ -3613,7 +3613,7 @@
       }
     ],
     "explanation": "enable.auto.commit=false requires explicit commitSync()/commitAsync() calls. auto.offset.reset=earliest starts reading from the beginning when no committed offset exists. isolation.level=read_committed ensures only committed transactional records are visible. Option B contradicts two of the three settings. Option C is wrong because read_committed filters uncommitted records. Option D is fabricated.",
-    "bonusFact": "The read_committed isolation level also hides aborted transactional records, not just uncommitted ones, ensuring consumers only see successfully completed transactions."
+    "bonusFact": "read_committed also hides aborted transactional records."
   },
   {
     "id": "apache-kafka-int-011",
@@ -5998,7 +5998,7 @@
     "themeId": "apache-kafka",
     "difficulty": "intermediate",
     "type": "code-snippet",
-    "prompt": "What does this Kafka Streams code accomplish?",
+    "prompt": "What does this Kafka Streams topology produce?",
     "codeSnippet": {
       "language": "java",
       "code": "KStream<String, String> input = builder.stream(\"events\");\nKStream<String, String>[] branches = input.split()\n  .branch((k, v) -> v.contains(\"ERROR\"),\n    Branched.withConsumer(s -> s.to(\"errors\")))\n  .branch((k, v) -> v.contains(\"WARN\"),\n    Branched.withConsumer(s -> s.to(\"warnings\")))\n  .defaultBranch(\n    Branched.withConsumer(s -> s.to(\"info\")));"

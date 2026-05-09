@@ -3940,5 +3940,331 @@
     ],
     "explanation": "This command creates a topic named events with 12 partitions and a replication factor of 3. The retention is set to 604800000ms (7 days) with the delete cleanup policy, meaning old segments are deleted after 7 days. Option B misreads partitions as separate topics and miscalculates the retention. Option C would use the --alter flag, not --create. Option D swaps the partition and replica values.",
     "bonusFact": "604800000ms equals exactly 7 days, Kafka's default retention."
+  },
+  {
+    "id": "apache-kafka-int-021",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between Kafka's at-least-once and exactly-once delivery semantics?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "At-least-once may produce duplicates on retries; exactly-once uses transactions to prevent duplicates",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "At-least-once delivers messages faster; exactly-once delivers them more reliably",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "At-least-once requires more brokers; exactly-once works with a single broker",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "At-least-once is only for consumers; exactly-once is only for producers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "At-least-once delivery guarantees that every message is delivered but may result in duplicates if a producer retries after a transient failure. Exactly-once semantics (EOS) uses idempotent producers and transactions to ensure each message is written and consumed exactly once. Option B incorrectly frames the difference as a speed vs reliability trade-off. Option C fabricates a broker count requirement. Option D is wrong because both semantics apply to the full produce-consume pipeline.",
+    "bonusFact": "EOS was introduced in Kafka 0.11 via KIP-98."
+  },
+  {
+    "id": "apache-kafka-int-022",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the role of a Kafka partition leader?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It handles all read and write requests for that partition while followers replicate from it",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It distributes incoming messages evenly across all replicas",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It only handles write requests while followers serve all read requests",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It coordinates consumer group rebalances for the partition",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The partition leader handles all produce and consume requests for that partition. Follower replicas pull data from the leader to maintain copies. Option B is incorrect because the leader does not distribute messages to replicas; followers fetch from the leader. Option C is wrong because by default both reads and writes go through the leader (though KIP-392 introduced follower fetching for specific cases). Option D confuses the leader with the group coordinator.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-023",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka producer code do?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "Properties props = new Properties();\nprops.put(\"transactional.id\", \"order-processor\");\nKafkaProducer<String, String> producer =\n    new KafkaProducer<>(props);\nproducer.initTransactions();\nproducer.beginTransaction();\nproducer.send(new ProducerRecord<>(\"orders\", \"key1\", \"val1\"));\nproducer.send(new ProducerRecord<>(\"payments\", \"key1\", \"val2\"));\nproducer.commitTransaction();"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Sends records to two topics atomically within a single transaction",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Sends two records to the same topic in parallel",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Creates two new topics called orders and payments",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Sends records and rolls back if either send fails",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code initializes a transactional producer with a transactional.id, begins a transaction, sends records to two different topics (orders and payments), and commits the transaction atomically. Option B is wrong because the records go to different topics, not the same one. Option C is incorrect because ProducerRecord sends data to topics, it does not create them. Option D is misleading because a commit is called explicitly here; an abortTransaction() would be needed in a catch block for rollback.",
+    "bonusFact": "Transactional producers require a unique transactional.id."
+  },
+  {
+    "id": "apache-kafka-int-024",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the fetch.min.bytes consumer configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The minimum amount of data the broker should return for a fetch request, reducing small fetches",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The minimum message size a consumer will accept",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The minimum amount of data a consumer must process before committing offsets",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The minimum bytes reserved in consumer memory for buffering",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "fetch.min.bytes tells the broker to wait until it has at least this many bytes of data before responding to a fetch request, reducing the number of small fetches when data arrives slowly. Option B confuses fetch size with individual message size filtering, which is not what this setting does. Option C incorrectly ties this to offset commits. Option D fabricates a memory reservation concept that does not exist in this configuration.",
+    "bonusFact": "Default fetch.min.bytes is 1, meaning no waiting."
+  },
+  {
+    "id": "apache-kafka-int-025",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does Kafka's cooperative sticky partition assignor differ from the eager (range/round-robin) assignor?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Cooperative revokes only the partitions that need to move, while eager revokes all partitions before reassigning",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Cooperative assigns partitions alphabetically; eager assigns them by partition number",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Cooperative requires ZooKeeper; eager works with KRaft",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Cooperative is only available for Kafka Streams; eager is for regular consumers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The cooperative sticky assignor implements incremental rebalancing, where only the partitions that need to change ownership are revoked and reassigned. The eager protocol revokes all partition assignments from all consumers before redistributing them, causing a complete processing pause. Option B fabricates assignment ordering rules. Option C incorrectly ties assignors to cluster coordination mechanisms. Option D is wrong because cooperative assignors work with regular consumers too.",
+    "bonusFact": "CooperativeStickyAssignor was introduced in KIP-429."
+  },
+  {
+    "id": "apache-kafka-int-026",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka ACLs (Access Control Lists)?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To control which users or applications can perform specific operations on Kafka resources",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To define the order in which consumers read from partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To encrypt data at rest within Kafka log segments",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To limit the maximum message size per topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka ACLs provide authorization by defining which principals (users/applications) can perform which operations (read, write, create, delete, etc.) on which resources (topics, consumer groups, clusters). Option B confuses ACLs with consumer ordering, which is determined by offsets. Option C describes encryption at rest, a separate feature. Option D describes max.message.bytes, a topic-level configuration unrelated to access control.",
+    "bonusFact": "ACLs are managed with the kafka-acls.sh command-line tool."
+  },
+  {
+    "id": "apache-kafka-int-027",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is a Kafka log segment?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A file on disk that stores a sequential portion of a partition's records",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A logical grouping of topics within a Kafka cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A unit of consumer group membership tracking",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A network packet used for broker-to-broker communication",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Each Kafka partition is stored as a sequence of log segments on disk. A segment is a file containing a contiguous range of records, and Kafka creates a new segment when the current one reaches the configured segment.bytes size or segment.ms time limit. Option B fabricates a topic-grouping concept. Option C confuses storage with consumer group management. Option D describes network protocols, not storage structures.",
+    "bonusFact": "Default segment size is 1 GB (segment.bytes=1073741824)."
+  },
+  {
+    "id": "apache-kafka-int-028",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What is the effect of this Kafka consumer code?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "consumer.subscribe(List.of(\"events\"),\n  new ConsumerRebalanceListener() {\n    public void onPartitionsRevoked(\n        Collection<TopicPartition> parts) {\n      consumer.commitSync();\n    }\n    public void onPartitionsAssigned(\n        Collection<TopicPartition> parts) {\n      // no-op\n    }\n  });"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Commits offsets synchronously when partitions are revoked during a rebalance",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Automatically seeks to the beginning of newly assigned partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Prevents the consumer from joining any rebalance",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Pauses consumption on all partitions during rebalance",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code registers a ConsumerRebalanceListener that calls commitSync() in onPartitionsRevoked, ensuring that offsets are committed before partitions are given to another consumer during a rebalance. This prevents duplicate processing. Option B is wrong because onPartitionsAssigned is a no-op here. Option C is incorrect because the listener participates in the rebalance, it does not prevent it. Option D is misleading because pausing is not explicitly done here; the rebalance protocol itself handles suspension.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-029",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's Single Message Transform (SMT) in Kafka Connect?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To apply lightweight transformations to individual records as they flow through a connector",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To batch multiple messages into a single large record",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To convert Kafka topics from one serialization format to another",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To split a single message into multiple smaller records",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "SMTs are pluggable transformations applied per-record in Kafka Connect pipelines. Common transforms include renaming fields, masking values, inserting timestamps, and routing records to different topics. Option B describes batching, which is not what SMTs do. Option C describes converters (like JsonConverter or AvroConverter), not SMTs. Option D is partially wrong because while there is a Flatten SMT, the general purpose is transformation, not splitting.",
+    "bonusFact": "Built-in SMTs include InsertField, MaskField, and TimestampRouter."
+  },
+  {
+    "id": "apache-kafka-int-030",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between a Kafka source connector and a sink connector?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Source connectors ingest data from external systems into Kafka; sink connectors export data from Kafka to external systems",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Source connectors read from topics; sink connectors write to topics",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Source connectors run on brokers; sink connectors run on separate servers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Source connectors handle structured data; sink connectors handle unstructured data",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Source connectors pull data from external systems (databases, files, APIs) and publish it to Kafka topics. Sink connectors consume data from Kafka topics and push it to external systems (databases, search indexes, data warehouses). Option B reverses the relationship with Kafka. Option C is incorrect because both connector types run within Kafka Connect workers. Option D fabricates a structured vs unstructured distinction that does not exist.",
+    "bonusFact": "Popular source connectors include Debezium for CDC."
   }
 ]

@@ -5878,5 +5878,328 @@
     ],
     "explanation": "Kafka Streams requires that records be correctly partitioned by key before any stateful operation (groupByKey, join). When operations like map(), flatMap(), or selectKey() change the record key, Streams marks the stream as needing repartitioning and automatically inserts an internal repartition topic (named with an KSTREAM-REPARTITION suffix). Records are written to this topic and then re-consumed in the correct partition before the stateful step. Option B describes a user-managed scaling approach, not an internal Streams mechanism. Options C and D describe different scenarios entirely.",
     "bonusFact": "topology.optimization=ALL can merge redundant repartition topics, reducing the number of internal topics created."
+  },
+  {
+    "id": "apache-kafka-int-081",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What does the Kafka broker metric ActiveControllerCount indicate, and why is a value other than 1 problematic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It shows how many brokers think they are the active controller; only 1 is valid\u20140 means no controller elected, 2+ means a split-brain",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It counts how many controller election rounds have occurred since the last broker restart",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It measures the number of active client connections handled by the controller broker",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It counts the number of partitions currently undergoing leader election",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "ActiveControllerCount should be exactly 1 across the entire cluster. 0 means no controller has been elected\u2014often caused by a ZooKeeper/KRaft connectivity issue\u2014meaning no partition leadership changes or topic operations can proceed. 2+ indicates a split-brain condition where multiple brokers believe they are the active controller, which can cause conflicting metadata changes. Option B is wrong; it is not a historical counter. Option C is wrong; it is not about client connections. Option D describes UnderElectionCount, a different metric.",
+    "bonusFact": "Alert immediately if ActiveControllerCount != 1 on any broker\u2014it signals a serious cluster health issue."
+  },
+  {
+    "id": "apache-kafka-int-082",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's num.replica.fetchers broker configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Sets the number of threads each follower broker uses to fetch data from leader replicas in parallel",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Sets the number of consumer clients allowed to fetch from a single partition simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Sets the number of replica fetch requests a leader processes per second",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Controls how many partitions a follower can replicate concurrently before throttling",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "num.replica.fetchers (default 1) controls how many background I/O threads each broker uses to pull data from the leaders of partitions for which it is a follower. Increasing this value can improve replication throughput when a broker hosts many partitions or when replication lag is consistently high, at the cost of more network and CPU resources. Option B is wrong; consumer fetch concurrency is controlled by consumer group configuration. Option C is wrong; this is a follower-side configuration, not a leader-side one. Option D is wrong; there is no such throttle mechanism linked to this setting.",
+    "bonusFact": "Set num.replica.fetchers=4-8 on high-throughput clusters to prevent replication lag from growing."
+  },
+  {
+    "id": "apache-kafka-int-083",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What is a potential problem with this Kafka Streams application configuration?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "Properties props = new Properties();\nprops.put(StreamsConfig.APPLICATION_ID_CONFIG, \"my-app\");\nprops.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, \"broker:9092\");\nprops.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, \"16\");\nprops.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, \"exactly_once_v2\");\nKafkaStreams streams = new KafkaStreams(topology, props);"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "With exactly_once_v2, each thread creates its own transactional producer; 16 threads \u00d7 many instances may exhaust broker transaction coordinator capacity",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "NUM_STREAM_THREADS_CONFIG must equal the number of topic partitions to avoid idle threads",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "exactly_once_v2 is incompatible with multi-threaded Streams applications",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The APPLICATION_ID_CONFIG 'my-app' contains a hyphen, which is not allowed in Kafka Streams app IDs",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With exactly_once_v2, each Kafka Streams thread maintains its own transactional producer (unlike the original exactly_once which shared producers). With 16 threads per instance, and potentially many instances, the total number of open transactions can become large, stressing the broker's transaction coordinator and __transaction_state topic. A more modest thread count (matching or slightly below the number of source partitions) is recommended. Option B is wrong; having more threads than partitions just means some threads will be idle, not a configuration error. Option C is wrong; EOS V2 specifically supports multiple threads. Option D is wrong; hyphens are allowed in application IDs.",
+    "bonusFact": "Use 1-2 threads per application instance and scale horizontally with more instances instead."
+  },
+  {
+    "id": "apache-kafka-int-084",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What does the Kafka consumer configuration allow.auto.create.topics do when set to false?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Prevents the consumer's metadata request from triggering auto topic creation on the broker side",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Prevents the consumer from reading from topics that were not explicitly created by an admin",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Disables auto.offset.reset so the consumer throws an error if no offset is found",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Prevents the consumer from joining a consumer group that was auto-created",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When a consumer calls subscribe() or poll(), it sends metadata requests that can inadvertently trigger auto-topic creation on the broker if auto.create.topics.enable=true. Setting allow.auto.create.topics=false on the consumer prevents this, ensuring that metadata requests do not create topics as a side effect. This is useful in environments where topic creation is tightly controlled. Option B is wrong; this setting does not restrict which topics can be read. Option C is wrong; auto.offset.reset is a separate setting. Option D is wrong; consumer groups are not auto-created in the same sense\u2014membership is determined by group.id.",
+    "bonusFact": "Combine allow.auto.create.topics=false on consumers with auto.create.topics.enable=false on brokers for strict topic governance."
+  },
+  {
+    "id": "apache-kafka-int-085",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which Kafka Streams API method should you use to force emission of windowed aggregation results even when no new records arrive?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Punctuator scheduled via context.schedule() with a PunctuationType",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "KStream.flush() called periodically from the application thread",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "KTable.suppress() with an unbounded buffer to hold results until emitted",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "StreamsBuilder.addStateStore() with an expiry listener attached to the store",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A Punctuator is a callback scheduled via ProcessorContext.schedule() that fires at a configured interval, either based on stream time (STREAM_TIME) or wall-clock time (WALL_CLOCK_TIME). It is used to forward aggregation results, clean up state, or trigger periodic actions when record flow is sparse. Option B is wrong; KStream.flush() does not exist in the Kafka Streams DSL. Option C is wrong; KTable.suppress() holds results until a window closes before emitting the final result, but it does not trigger emission when no records arrive. Option D is wrong; state store expiry listeners serve a different purpose.",
+    "bonusFact": "WALL_CLOCK_TIME punctuation fires even when no records are being processed, unlike STREAM_TIME which advances only with record timestamps."
+  },
+  {
+    "id": "apache-kafka-int-086",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between at-least-once and at-most-once delivery semantics in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "At-least-once may process a record more than once (duplicates); at-most-once may skip records (data loss), but never duplicates",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "At-least-once commits offsets before processing; at-most-once commits after processing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "At-least-once is achievable only with transactional producers; at-most-once requires acks=0",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "At-most-once delivers each record to at most one consumer per group; at-least-once delivers to all consumers in the group",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "At-least-once delivery (the Kafka default when enable.auto.commit=true or with commitSync() after processing) ensures records are never lost but may be redelivered if a crash occurs between processing and committing offsets. At-most-once delivery commits offsets before processing; if a crash occurs after commit but before processing, the record is lost but never duplicated. Option B gets the commit ordering backwards. Option C is wrong; at-least-once does not require transactions. Option D confuses delivery semantics with consumer group fan-out.",
+    "bonusFact": "Exactly-once is the third semantic: achieved via idempotent producers + Kafka transactions, guaranteeing neither loss nor duplication."
+  },
+  {
+    "id": "apache-kafka-int-087",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When configuring Kafka Connect in distributed mode, what happens when a worker joins or leaves the Connect cluster?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A rebalance is triggered and connector tasks are redistributed among the available workers",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The new worker becomes the primary and takes over all connector tasks from the old workers",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Tasks continue running on the existing workers; the new worker only receives future connector deployments",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The cluster pauses all connectors until the joining worker has fully replicated all offset data",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka Connect distributed mode uses a Kafka consumer group internally (group.id=<cluster.name>) to coordinate workers. When a worker joins or leaves, the Connect consumer group rebalances, redistributing connector tasks across all available workers. This ensures fault tolerance\u2014if a worker dies, its tasks are reassigned within the session timeout. Option B is wrong; Connect has no single primary; it is distributed. Option C is wrong; tasks are redistributed on any membership change. Option D is wrong; Connect does not pause all connectors during join.",
+    "bonusFact": "Kafka Connect workers share state via the config, offset, and status internal topics, not via direct worker-to-worker communication."
+  },
+  {
+    "id": "apache-kafka-int-088",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the Kafka broker configuration log.dirs, and what happens if one of the listed directories fails?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "log.dirs specifies multiple data directories; if one fails, Kafka marks partitions on that directory as offline but continues serving others",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "log.dirs is a list of backup directories; Kafka writes to the primary directory and replicates to backup directories on the same broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "If one log directory fails, Kafka performs an emergency leader election for all affected partitions before shutting down",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "log.dirs must be a single directory; listing multiple directories causes a broker startup failure",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "log.dirs accepts a comma-separated list of directories for storing partition log data. Using multiple directories across different disks allows Kafka to spread I/O load. If a directory fails (e.g., disk error), Kafka isolates it: partitions stored in that directory are taken offline while partitions in healthy directories continue operating. This allows partial recovery instead of a full broker failure. Option B is wrong; there is no intra-broker replication; log.dirs is for performance, not redundancy. Option C is wrong; there is no emergency election triggered by a disk failure beyond normal ISR handling. Option D is wrong; multiple directories are explicitly supported.",
+    "bonusFact": "Use JBOD (Just a Bunch of Disks) with multiple log.dirs instead of RAID for higher disk throughput in Kafka."
+  },
+  {
+    "id": "apache-kafka-int-089",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does the Kafka consumer handle a WakeupException thrown from consumer.wakeup()?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It interrupts a blocking poll() call from another thread, allowing the consumer loop to shut down cleanly",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It causes the consumer to immediately commit all pending offsets and exit the group",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It triggers a consumer group rebalance and reassigns the consumer's partitions to other members",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It pauses all partitions assigned to the consumer until resume() is called",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "consumer.wakeup() is a thread-safe method that can be called from a shutdown hook or a different thread while the consumer is blocked in poll(). It causes poll() to throw a WakeupException on the consumer thread, which the main loop can catch to trigger a clean shutdown sequence (commit offsets, close the consumer). Option B is wrong; wakeup() does not automatically commit offsets\u2014that is the developer's responsibility in the shutdown handler. Option C is wrong; wakeup() does not trigger a rebalance. Option D is wrong; that is the behaviour of consumer.pause().",
+    "bonusFact": "Always call consumer.close() after catching WakeupException to release group membership immediately."
+  },
+  {
+    "id": "apache-kafka-int-090",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the Kafka Streams concept of 'co-partitioning', and why is it required for stream-stream joins?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Both input topics must have the same number of partitions and the same partitioning scheme so records with the same key land in the same task",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Both input topics must be stored on the same set of broker replicas to allow local joins",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Both streams must share the same consumer group ID so they are processed by the same Streams instance",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Both topics must use the same record schema and serialisation format for the join to work",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka Streams assigns tasks based on partition number, so a join between two streams is processed locally when the same task handles the same partition index of both topics. For this to work, records with the same key must be in the same partition on both topics\u2014requiring the same partition count and the same partitioner. If the topics are not co-partitioned, Kafka Streams throws a TopologyException at startup. Option B is wrong; replica placement is irrelevant to Streams task assignment. Option C is wrong; Streams manages its own consumer group per application. Option D is wrong; serialisation format is handled by the Serde configuration.",
+    "bonusFact": "Use a repartition topic (via through() or repartition()) to fix co-partitioning mismatches before a join."
   }
 ]

@@ -5555,5 +5555,328 @@
     ],
     "explanation": "enable.idempotence=true causes the broker to track a (producer ID, partition, sequence number) triple for each batch. If a retry delivers a batch the broker has already written, it detects the duplicate sequence number and discards the duplicate, providing exactly-once semantics within a single producer session for a single partition. It does not span multiple partitions or topics\u2014that requires Kafka transactions. Option B describes transactional semantics. Option C is wrong; idempotence is purely a producer-to-broker concern. Option D is wrong; it has nothing to do with replica count.",
     "bonusFact": "enable.idempotence was introduced in Kafka 0.11 and is the foundation of Kafka's exactly-once story."
+  },
+  {
+    "id": "apache-kafka-int-071",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What does the Kafka configuration inter.broker.protocol.version control, and when must it be updated?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Controls the protocol version used for inter-broker communication; must be updated after all brokers are on the new version to enable new features",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Controls the maximum Kafka version clients can use to connect to the broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Sets the version of the Kafka log format used when writing records to disk",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Controls the encryption protocol version used between brokers and ZooKeeper",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "inter.broker.protocol.version (IBP) defines the version of the protocol used for broker-to-broker communication (replication, metadata, etc.). During a rolling upgrade, all brokers are upgraded to the new binary first while keeping IBP at the old version. Once all brokers are running the new version, IBP is bumped to enable new inter-broker features. Option B describes the API version negotiation, which clients handle independently. Option C describes log.message.format.version (removed in Kafka 4.0). Option D is unrelated; ZooKeeper uses its own protocol.",
+    "bonusFact": "In Kafka 4.0, log.message.format.version was removed; record format V2 is the only supported format."
+  },
+  {
+    "id": "apache-kafka-int-072",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's record headers, and how do they differ from the record key and value?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Headers are key-value byte-array pairs attached to a record for metadata (e.g., tracing IDs); they do not affect partitioning or compaction",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Headers replace the record key for partitioning purposes when a custom header key is specified",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Headers are compressed separately from the record value to reduce overhead for frequently repeated metadata",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Headers are visible only to the broker and are stripped before delivery to consumers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Record headers (introduced in Kafka 0.11) are opaque byte-array key-value pairs attached alongside the record key and value. They are commonly used for cross-cutting concerns such as distributed tracing IDs, content-type hints, schema version, or event sourcing metadata. The broker does not interpret headers\u2014they are stored and forwarded transparently. Option B is wrong; headers do not influence partitioning. Option C is wrong; headers are part of the record batch and compressed along with other fields. Option D is wrong; headers are delivered to consumers unchanged.",
+    "bonusFact": "OpenTelemetry and Sleuth inject W3C trace context into Kafka record headers for distributed tracing."
+  },
+  {
+    "id": "apache-kafka-int-073",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When a consumer calls seekToBeginning(), what happens to the uncommitted offsets for that partition?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The consumer's fetch position is reset to offset 0 (or the earliest available); previously committed offsets in __consumer_offsets remain unchanged",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "All committed offsets in __consumer_offsets for that partition are deleted",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The consumer group is removed and must re-join before consuming again",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only the in-memory fetch position is reset; it automatically reverts after the next poll()",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "consumer.seekToBeginning(partitions) repositions the in-memory fetch offset to the earliest available offset for the specified partitions. This affects what the next poll() will return, but it does not modify the committed offsets stored in __consumer_offsets. If the consumer restarts without calling commitSync() after the seek, it will resume from the previously committed offset, not from the beginning. Option B is wrong; seek does not touch committed offsets. Option C is wrong; seek has no effect on group membership. Option D is wrong; the fetch position persists across poll() calls until explicitly changed or a rebalance occurs.",
+    "bonusFact": "Combine seek() with pause()/resume() to replay specific partitions while continuing to process others normally."
+  },
+  {
+    "id": "apache-kafka-int-074",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does Kafka ensure messages with the same key always go to the same partition when using the default partitioner?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It applies MurmurHash2 to the serialised key bytes and takes the result modulo the number of partitions",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It hashes the key using SHA-256 and assigns based on the first byte of the hash",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It sorts keys lexicographically and distributes them into equal-sized ranges across partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It uses a consistent hash ring so that adding partitions does not reassign existing keys",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The default Kafka partitioner uses MurmurHash2 (non-cryptographic) applied to the serialised key bytes, then takes the absolute value modulo the number of partitions. This produces a deterministic mapping from key to partition. If the number of partitions changes, keys may map to different partitions, breaking ordering guarantees for that key. Option B is wrong; SHA-256 is not used. Option C describes a range partitioner, not Kafka's default. Option D describes consistent hashing (used by systems like Cassandra) but not by Kafka's default partitioner.",
+    "bonusFact": "Adding partitions to a topic will change which partition a key hashes to for any new records."
+  },
+  {
+    "id": "apache-kafka-int-075",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's CreateTime vs. LogAppendTime record timestamp modes?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "CreateTime uses the producer-set timestamp; LogAppendTime overwrites it with the broker clock when the record is appended",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "CreateTime is set by the consumer at read time; LogAppendTime is set by the broker at write time",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Both modes use the broker clock; CreateTime is finer-grained (nanoseconds) and LogAppendTime uses milliseconds",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "CreateTime is used only for compacted topics; LogAppendTime is used only for retention-based topics",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "message.timestamp.type controls how record timestamps are assigned. CreateTime (the default) trusts the timestamp set by the producer client, which reflects when the event actually occurred. LogAppendTime ignores the producer timestamp and replaces it with the broker's local clock at ingestion. LogAppendTime is useful when producer clocks are unreliable but it loses the original event time. Options B, C, and D contain incorrect information about who sets the timestamp and how.",
+    "bonusFact": "Kafka Streams uses record timestamps for window operations, so LogAppendTime can shift window boundaries unexpectedly."
+  },
+  {
+    "id": "apache-kafka-int-076",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this producer code do, and what delivery guarantee does it provide?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "producer.initTransactions();\ntry {\n    producer.beginTransaction();\n    producer.send(new ProducerRecord<>(\"topic-a\", key, value1));\n    producer.send(new ProducerRecord<>(\"topic-b\", key, value2));\n    producer.commitTransaction();\n} catch (ProducerFencedException e) {\n    producer.close();\n} catch (KafkaException e) {\n    producer.abortTransaction();\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Atomically writes to both topic-a and topic-b; read_committed consumers see both or neither record",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Writes to topic-a and topic-b independently; if one fails the other is still committed",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Writes records idempotently to topic-a; topic-b is only written if topic-a succeeds",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Writes to both topics and auto-commits consumer offsets for all consumer groups reading them",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code uses Kafka's transactional API. initTransactions() registers the producer with the transaction coordinator. beginTransaction() starts an atomic unit. Both send() calls are batched under the same transaction ID. commitTransaction() atomically commits both writes\u2014consumers with isolation.level=read_committed will see both records together or neither if the transaction is aborted. abortTransaction() rolls back both sends. Option B describes non-transactional independent sends. Option C is wrong; both sends are under the same transaction. Option D is wrong; consumer offsets must be sent explicitly via sendOffsetsToTransaction().",
+    "bonusFact": "ProducerFencedException means another producer with the same transactional.id has taken ownership\u2014the old instance must close."
+  },
+  {
+    "id": "apache-kafka-int-077",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the impact of setting replication.factor=1 for a Kafka topic in a production cluster?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "There is no data redundancy; if the single broker hosting the partition fails, the partition is unavailable and data may be lost",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Records are replicated in memory only and not persisted to disk",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The topic can only be consumed by a single consumer at a time",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Producer acks=all is automatically downgraded to acks=1 when replication.factor=1",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With replication.factor=1, there is only one copy of each partition. If the broker hosting that partition goes down, the partition becomes offline and no reads or writes are possible until the broker recovers. Any data not yet flushed to disk may be lost permanently. Option B is wrong; replication factor controls the number of broker-level copies, not memory vs. disk. Option C is wrong; the number of consumers is unrelated to the replication factor. Option D is partially correct in effect (only one replica means acks=all \u2248 acks=1 in practice) but the setting is not automatically changed.",
+    "bonusFact": "Use replication.factor=1 only for development or for non-critical topics like application logs."
+  },
+  {
+    "id": "apache-kafka-int-078",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the role of the Kafka Schema Registry's subject in schema management?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A subject is a named scope for schema versions; by default, each Kafka topic has two subjects (key and value)",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A subject is a Kafka consumer group that subscribes to schema change events",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A subject is a mandatory prefix added to every schema field name to avoid naming conflicts",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A subject is an ACL that controls which producers can register new schemas",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In Confluent Schema Registry, a subject is a logical namespace under which schema versions are stored and compatibility rules are enforced. The default naming strategy creates two subjects per topic: {topic}-key and {topic}-value. Alternative strategies (RecordNameStrategy, TopicRecordNameStrategy) create subjects based on the schema's full name or a combination of topic and schema name. Option B is incorrect; subjects have nothing to do with consumer groups. Option C is wrong; subjects are not field prefixes. Option D is wrong; subjects are not ACL constructs.",
+    "bonusFact": "Each subject maintains its own compatibility setting, allowing mixed-mode schemas across different topics."
+  },
+  {
+    "id": "apache-kafka-int-079",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What happens when Kafka's log cleaner ratio (min.cleanable.dirty.ratio) threshold is NOT met for a compacted topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The log cleaner skips the segment until more dirty records accumulate, delaying compaction",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Compaction runs immediately and removes all records regardless of the dirty ratio",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The topic automatically switches to delete retention policy until the ratio is exceeded",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The broker rejects new produce requests until compaction completes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "min.cleanable.dirty.ratio (default 0.5) defines the minimum fraction of the log that must be 'dirty' (records written after the last compaction point) before the log cleaner will compact a segment. If the dirty ratio is below the threshold, the cleaner skips the topic to avoid repeatedly compacting a nearly-clean log, which would waste I/O. Option B is wrong; compaction is a background process with a cost/benefit gate. Option C is wrong; topics never automatically change cleanup policy. Option D is wrong; produce requests are never blocked by the log cleaner.",
+    "bonusFact": "Lower min.cleanable.dirty.ratio increases compaction frequency but also increases I/O overhead."
+  },
+  {
+    "id": "apache-kafka-int-080",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "In the context of Kafka Streams, what is a repartition topic and when is one automatically created?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "An internal topic created by Kafka Streams to re-key records before a key-based aggregation or join when the upstream key has changed",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A user-created topic with increased partition count used to scale out stream processing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A topic created when the source topic has fewer partitions than the target output topic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A topic created automatically by MirrorMaker 2 when replicating between clusters with different partition counts",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka Streams requires that records be correctly partitioned by key before any stateful operation (groupByKey, join). When operations like map(), flatMap(), or selectKey() change the record key, Streams marks the stream as needing repartitioning and automatically inserts an internal repartition topic (named with an KSTREAM-REPARTITION suffix). Records are written to this topic and then re-consumed in the correct partition before the stateful step. Option B describes a user-managed scaling approach, not an internal Streams mechanism. Options C and D describe different scenarios entirely.",
+    "bonusFact": "topology.optimization=ALL can merge redundant repartition topics, reducing the number of internal topics created."
   }
 ]

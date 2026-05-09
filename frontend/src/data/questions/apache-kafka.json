@@ -4906,5 +4906,328 @@
     ],
     "explanation": "When you call producer.send(record, callback), the callback is invoked on the producer's I/O thread once the broker responds (success or error), so it does not block the application thread. Calling Future.get() blocks the calling thread until the acknowledgment arrives, effectively making the send synchronous. Option B is wrong; callbacks are invoked after broker acknowledgment, not before sending. Option C is wrong; they have fundamentally different threading models. Option D is wrong; Future.get() throws ExecutionException on failure, wrapping the underlying Kafka exception.",
     "bonusFact": "Avoid performing heavy work inside a callback as it runs on the producer I/O thread and can delay other sends."
+  },
+  {
+    "id": "apache-kafka-int-051",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's segment.ms configuration on a topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Forces the active log segment to be rolled after the specified time, even if it has not reached segment.bytes",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Sets the maximum time records can remain in a segment before being deleted by retention",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Controls how often the log cleaner checks for compactable segments",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Sets the interval at which segment indices are flushed to disk",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "segment.ms (default 7 days) triggers a log segment roll even if segment.bytes has not been reached. This ensures that time-based retention (retention.ms) can delete segments in a timely manner; without it, a low-traffic topic might keep a single large segment open for a long time, preventing retention from taking effect. Option B confuses segment rolling with record deletion. Option C describes log.cleaner.backoff.ms. Option D is wrong; index flushing is controlled by log.flush.interval.ms and related settings.",
+    "bonusFact": "Setting segment.ms lower than retention.ms ensures retention can delete at least one full rolled segment."
+  },
+  {
+    "id": "apache-kafka-int-052",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When should you use a KStream-KTable join instead of a KStream-KStream join in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "When one stream represents the latest state per key (e.g., user profile) and the other is an event stream that should be enriched with it",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "When both streams produce records at the same rate and you need to correlate them by time",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "When you need to join records from two topics with a time window, retaining all matches",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "When you want to join records only if they share the same partition number",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A KStream-KTable join enriches each incoming event record with the current value in the KTable for the matching key. This pattern is ideal when one dataset is a slowly changing reference (user profile, product catalog) and the other is a high-throughput event stream. KStream-KStream joins are used when both datasets are event streams and you want to find correlated events within a time window. Option B describes a KStream-KStream scenario. Option C also describes a KStream-KStream windowed join. Option D is a fabricated concept; Kafka Streams joins are key-based, not partition-number-based.",
+    "bonusFact": "KStream-KTable joins are non-windowed and always use the latest KTable value at the time of the stream record."
+  },
+  {
+    "id": "apache-kafka-int-053",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the broker configuration that limits the rate at which a single client can produce data, and at what granularity?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "quota.producer.default limits produce throughput in bytes/second per (user, clientId) pair",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "max.message.bytes limits the size of each individual message a producer can send",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "producer.rate.limit.ms sets the minimum time between produce requests for each producer",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "fetch.max.bytes limits how many bytes a producer can buffer before sending",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka broker quotas allow operators to cap the produce/consume throughput per (user, clientId) pair using quota.producer.default (broker-wide default) or dynamic per-entity quotas set via AdminClient or kafka-configs.sh. When the quota is exceeded the broker throttles the connection by delaying responses. Option B describes max.message.bytes, which limits individual message size, not aggregate throughput. Option C is a fabricated setting. Option D confuses fetch.max.bytes (a consumer setting) with producer buffering.",
+    "bonusFact": "Dynamic quotas set via AdminClient override quota.producer.default without requiring a broker restart."
+  },
+  {
+    "id": "apache-kafka-int-054",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the function of the Kafka Streams Interactive Queries feature?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It allows external applications to query the local state stores of a running Streams instance via a user-defined RPC layer",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It provides a SQL interface to Kafka Streams topologies similar to ksqlDB",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It enables Kafka Streams to push query results to an external database in real time",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It allows two Kafka Streams applications to share state stores across JVM boundaries automatically",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Interactive Queries expose a read-only view of a Kafka Streams application's local state stores. The Streams runtime provides metadata about which instance owns which partition's state (via KafkaStreams.queryMetadataForKey()), so a caller can route requests to the correct host. Developers must implement the actual RPC transport (e.g., REST or gRPC). Option B describes ksqlDB, which is a separate product. Option C describes Kafka Connect sink connectors. Option D is wrong; each instance only holds the state for its assigned partitions and does not automatically share across JVMs.",
+    "bonusFact": "Interactive Queries are read-only; state stores can only be written to by the Streams processing topology."
+  },
+  {
+    "id": "apache-kafka-int-055",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What is the correct way to perform a manual per-partition offset commit after processing?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();\nfor (ConsumerRecord<String, String> record : records) {\n    process(record);\n    offsets.put(\n        new TopicPartition(record.topic(), record.partition()),\n        new OffsetAndMetadata(record.offset() + 1)\n    );\n}\nconsumer.commitSync(offsets);"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "This correctly commits the next offset to be read (record.offset() + 1) for each partition",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "This is incorrect because commitSync() should be called inside the for loop, not after it",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "This is incorrect because record.offset() should be committed, not record.offset() + 1",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "This commits offsets but ignores records where processing threw an exception, risking message loss",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka stores the offset of the next record to be fetched, so committing record.offset() + 1 is correct\u2014it marks the current record as processed and tells Kafka to start from the next one on restart. The offsets map accumulates the latest offset per partition, and a single commitSync(offsets) at the end of the batch is efficient. Option B is wrong; committing inside the loop is valid but less efficient. Option C is wrong; committing record.offset() would cause the same record to be reprocessed. Option D is wrong; if process() throws, the offsets map should not be updated and the commit should not be called\u2014this code does not handle that case, but option D misidentifies the issue.",
+    "bonusFact": "Using OffsetAndMetadata(offset, metadata) allows attaching a custom string (e.g., a timestamp) alongside the offset."
+  },
+  {
+    "id": "apache-kafka-int-056",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "How does Kafka's log.flush.interval.messages configuration affect durability and performance?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Higher values improve throughput by reducing disk fsync frequency but increase potential data loss on crash",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Higher values reduce consumer lag by flushing more records per cycle",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Lower values reduce producer latency by triggering broker acknowledgments sooner",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It controls how many records fit in a single log segment file before a new one is created",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "log.flush.interval.messages determines how many messages are written to the OS page cache before an explicit fsync() is called. A higher value allows more writes to be batched before the expensive fsync, improving throughput. However, if the broker crashes before fsync, messages in the page cache that haven't been flushed to disk could be lost. Kafka's preferred durability strategy is replication (acks=all + ISR), not frequent fsyncs. Option B is wrong; log flush has no direct effect on consumer lag. Option C is wrong; acknowledgment timing depends on acks, not log flush. Option D describes segment.bytes.",
+    "bonusFact": "Kafka developers recommend relying on replication over frequent fsyncs for durability, keeping log.flush.interval.messages high."
+  },
+  {
+    "id": "apache-kafka-int-057",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What happens when you decrease the number of partitions in a Kafka topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Kafka does not support decreasing the partition count; you must delete and recreate the topic",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The records from removed partitions are automatically redistributed to remaining partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The partition count is decreased and the records in removed partitions are deleted immediately",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The partition count is decreased but the records in removed partitions are retained in an archive partition",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka only allows increasing the number of partitions, never decreasing. Reducing partitions would require merging existing partitions, which would break key-based ordering guarantees and is not implemented. To effectively reduce partitions, you must delete the topic and recreate it with fewer partitions, accepting data loss or migrating records manually. Options B, C, and D all describe hypothetical behaviours that Kafka does not implement.",
+    "bonusFact": "Increasing partitions changes key-to-partition mapping for new records, potentially breaking key-ordering for existing consumers."
+  },
+  {
+    "id": "apache-kafka-int-058",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the Kafka broker configuration offsets.topic.replication.factor?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Sets the replication factor for the __consumer_offsets internal topic, affecting fault tolerance of committed offsets",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Sets the default replication factor for all user-created topics",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Limits the maximum replication factor that any topic can use",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Sets the replication factor for the __transaction_state internal topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "offsets.topic.replication.factor controls the replication factor of the __consumer_offsets topic, which is created automatically when the first consumer group is formed. Setting it to at least 3 in production ensures that committed offsets survive the loss of up to two brokers. Option B describes default.replication.factor. Option C is a fabricated setting. Option D is wrong; __transaction_state replication is controlled by transaction.state.log.replication.factor.",
+    "bonusFact": "In single-broker dev environments, set offsets.topic.replication.factor=1 to prevent the cluster from waiting for unavailable replicas."
+  },
+  {
+    "id": "apache-kafka-int-059",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What does the Kafka Streams processing.guarantee=exactly_once_v2 configuration enable?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Each record is processed exactly once end-to-end using transactions, with each thread using its own transactional producer",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Records are deduplicated using a server-side bloom filter to avoid duplicate processing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Consumers commit offsets before processing so that records are never re-read on restart",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The processing guarantee is enforced by the schema registry, rejecting duplicate schemas",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "exactly_once_v2 (EOS V2) uses Kafka's transactional producer API so that consuming, processing, and producing output is atomic. Each Streams thread maintains its own transactional producer, and offsets are committed atomically with output records in the same transaction. If the application crashes mid-transaction, the transaction is aborted and the input is re-read from the last committed offset. Option B is fabricated; Kafka has no built-in bloom filter. Option C describes at-most-once semantics (pre-read commit), not exactly-once. Option D is wrong; the Schema Registry is not involved in processing guarantees.",
+    "bonusFact": "exactly_once_v2 requires Kafka brokers 2.5+ and has lower overhead than the original exactly_once setting."
+  },
+  {
+    "id": "apache-kafka-int-060",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which Kafka metric indicates that a broker is no longer able to keep up with incoming produce requests?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "RequestHandlerAvgIdlePercent dropping close to 0%",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "BytesInPerSec increasing steadily over time",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "LeaderCount increasing on one broker",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "NetworkProcessorAvgIdlePercent remaining above 80%",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "RequestHandlerAvgIdlePercent measures how much time the broker's request handler thread pool is idle. When it drops toward 0%, the broker is CPU-saturated and cannot process incoming requests fast enough, leading to request queuing and increased latency. BytesInPerSec (option B) growing is normal for a healthy cluster; it doesn't indicate overload by itself. LeaderCount increasing (option C) indicates partition leadership imbalance but not necessarily overload. A high NetworkProcessorAvgIdlePercent (option D) actually means the network threads are idle, which is a good sign.",
+    "bonusFact": "Alert when RequestHandlerAvgIdlePercent falls below 20% to catch broker saturation early."
   }
 ]

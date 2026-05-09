@@ -6527,5 +6527,325 @@
     ],
     "explanation": "group.id uniquely identifies a consumer group. All consumers sharing the same group.id form a single group\u2014Kafka delivers each record to exactly one consumer within the group by assigning partitions exclusively. If two unrelated applications accidentally share a group.id, they will compete for partition assignments, each receiving only a subset of records, which typically causes data processing errors for both. Option B is wrong; group.id is functional, not cosmetic. Option C describes fan-out, which requires different group IDs. Option D is wrong; Kafka has no such rejection mechanism based on group.id uniqueness.",
     "bonusFact": "Use different group.id values for independent consumers that each need a full copy of the data."
+  },
+  {
+    "id": "apache-kafka-adv-001",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "In KRaft mode, how does a controller node determine whether it is the active controller and prevent a stale leader from accepting writes?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The Raft leader election assigns an epoch; any controller with a lower epoch is fenced and must step down before sending any metadata writes",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The controller with the lowest broker ID is always designated as active; others check via a ZooKeeper ephemeral node",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Controllers broadcast heartbeats to all brokers; the first to receive a quorum of responses becomes active",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The active controller is determined by a lease stored in __cluster_metadata with a TTL refreshed by a background thread",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "KRaft uses the Raft consensus protocol. The leader election process produces a leader epoch (term). All metadata writes include the current epoch; any follower or stale leader that receives a message with a higher epoch immediately steps down. This monotonically increasing epoch is the fence that prevents two nodes from simultaneously acting as the active controller. Option B is wrong; KRaft does not use ZooKeeper or a lowest-ID heuristic. Option C describes a heartbeat-based approach closer to ZAB (ZooKeeper), not Raft. Option D partially resembles a lease-based approach but the TTL/lease model is not how KRaft works\u2014leadership is maintained through Raft heartbeats and term numbers.",
+    "bonusFact": "KRaft's controller failover is typically measured in seconds rather than the 30-60 seconds seen with ZooKeeper-based election."
+  },
+  {
+    "id": "apache-kafka-adv-002",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the role of the __cluster_metadata topic in KRaft, and how is it different from ZooKeeper's metadata store?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "__cluster_metadata is a Raft log stored on controller nodes; brokers replicate it locally, making metadata reads fully local without ZooKeeper RPCs",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "__cluster_metadata mirrors all user topic data for disaster recovery purposes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "__cluster_metadata is an internal topic consumed by brokers to sync consumer offsets across clusters",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "__cluster_metadata stores broker JMX metrics and is read by monitoring systems",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In KRaft, __cluster_metadata is the Raft log itself\u2014all cluster state (topic configs, partition assignments, ISR lists, broker registrations) is stored as records in this log. Brokers subscribe to the log and maintain a local metadata cache, so they can serve most metadata requests without contacting a controller. In ZooKeeper mode, metadata was stored in ZooKeeper's znodes; brokers had to make RPC calls to ZooKeeper or the controller for fresh metadata. This local replication dramatically reduces controller load and improves metadata propagation speed. Options B, C, and D are incorrect descriptions of the topic's purpose.",
+    "bonusFact": "The __cluster_metadata log is snapshotted periodically to avoid replaying the full history on broker startup."
+  },
+  {
+    "id": "apache-kafka-adv-003",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the producer epoch fencing mechanism in Kafka's exactly-once semantics, and what class of bugs does it prevent?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "When a new producer instance initialises with an existing transactional.id, the broker increments the epoch, invalidating the old producer; this prevents zombie producers from appending stale data after a failover",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The broker tracks the epoch to decide which partition a transactional producer should write to, ensuring even distribution",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The epoch is used as an encryption key for transactional records, preventing unauthorised consumers from reading in-flight transactions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The epoch is a version counter for the transaction log schema and increments on each Kafka broker upgrade",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In distributed systems, a process may appear dead (e.g., long GC pause) while a replacement takes over. Without fencing, the 'zombie' could resume and write duplicate or conflicting records. Kafka's producer epoch is a monotonically increasing integer tied to a transactional.id. When a new producer calls initTransactions(), the broker bumps the epoch. Any subsequent request from an old producer with a stale (lower) epoch is rejected with a ProducerFencedException, preventing zombie writes. This is the core of Kafka's zombie fencing mechanism. Options B, C, and D are fabricated explanations.",
+    "bonusFact": "Since Kafka 2.5, epoch fencing also works within a session via the 'PID epoch' even without transactional.id."
+  },
+  {
+    "id": "apache-kafka-adv-004",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does the Kafka log segment sparse index work, and what trade-off does it make compared to a dense index?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The sparse index stores one entry per index.interval.bytes of log data; lookups require scanning from the nearest indexed entry, trading larger scans for a smaller index file size",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The sparse index stores every offset with a pointer to its position, enabling O(1) lookup but consuming more memory",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The sparse index partitions the log file into fixed-size blocks and indexes only the first offset in each block, using bloom filters for fast offset existence checks",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The sparse index stores only the offsets of records with null keys, optimising compacted topic lookups",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka's .index file (offset index) maps offsets to byte positions in the .log file. It is sparse: an entry is created every index.interval.bytes (default 4096) bytes written to the log segment. To find a record, Kafka binary-searches the index to find the nearest indexed offset, then does a linear scan from that position in the .log file. This keeps the index file small and memory-mappable while accepting a small linear scan overhead. A dense index would map every offset but would be prohibitively large for high-throughput topics. Options B, C, and D describe mechanisms Kafka does not use.",
+    "bonusFact": "Kafka also maintains a separate .timeindex file for time-based lookup, with the same sparse design."
+  },
+  {
+    "id": "apache-kafka-adv-005",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the two-phase commit protocol used internally by Kafka transactions, and what are the two phases?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Phase 1: write records to partitions with a marker that they belong to an ongoing transaction. Phase 2: write a transaction marker (COMMIT or ABORT) to each partition involved, making the records visible or invisible to read_committed consumers",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Phase 1: the transaction coordinator locks all involved partitions. Phase 2: records are written atomically across all partitions simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Phase 1: the producer writes to a staging topic. Phase 2: a transaction broker copies records from the staging topic to the target topics",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Phase 1: all in-sync replicas vote to accept or reject the transaction. Phase 2: the leader applies the majority decision",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka's transaction protocol is an adaptation of 2PC. In the first phase, the producer appends records tagged with its transactional producer ID and epoch\u2014these records are stored but hidden from read_committed consumers (they are visible only to read_uncommitted). The transaction coordinator also logs the set of partitions involved. In the second phase, upon commitTransaction(), the coordinator writes COMMIT markers to each involved partition; upon abort, ABORT markers are written. Read_committed consumers only expose records for which a COMMIT marker has been received. Option B is wrong; no locking occurs. Options C and D are fabricated.",
+    "bonusFact": "The transaction coordinator is itself fault-tolerant: it replicates its log via __transaction_state (50 partitions by default)."
+  },
+  {
+    "id": "apache-kafka-adv-006",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "In Kafka Streams, what is the difference between STREAM_TIME and WALL_CLOCK_TIME punctuation, and when should each be used?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "STREAM_TIME advances with record timestamps and fires punctuations only when records arrive; WALL_CLOCK_TIME fires based on the system clock regardless of record flow",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "STREAM_TIME uses the broker's append timestamp; WALL_CLOCK_TIME uses the producer's creation timestamp",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "STREAM_TIME is used for session windows; WALL_CLOCK_TIME is used for tumbling windows",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Both are identical in behaviour; the distinction only affects how the punctuation is logged for debugging",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "STREAM_TIME punctuation fires when the stream time (derived from record timestamps) advances past the next scheduled interval. If no records arrive, stream time does not advance, so punctuations are not triggered\u2014this makes it unreliable for periodic side effects in sparse streams. WALL_CLOCK_TIME uses the actual system clock, so it fires even when no records are being processed, making it suitable for sending periodic heartbeats, evicting stale state, or emitting results on a real-time schedule. Option B confuses punctuation types with timestamp modes. Option C is wrong; window types are unrelated to punctuation type. Option D is wrong; they have fundamentally different triggering semantics.",
+    "bonusFact": "WALL_CLOCK_TIME punctuations can fire on any Streams thread, while STREAM_TIME fires only when records are processed."
+  },
+  {
+    "id": "apache-kafka-adv-007",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the significance of the 'dirty' ratio in Kafka log compaction, and how does the log cleaner select segments to compact?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The dirty ratio is the fraction of the log written after the last compaction; the cleaner selects the partition with the highest dirty ratio above min.cleanable.dirty.ratio to maximise per-compaction benefit",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The dirty ratio measures the fraction of records with null keys; compaction removes them first to reclaim space",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The dirty ratio is the replication lag expressed as a fraction of total log size; compaction is paused when it exceeds 50%",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The dirty ratio tracks how many records have been delivered to consumers; compaction removes only consumed records",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The dirty portion of a log is the data written since the last compaction checkpoint offset. The cleaner calculates a cost/benefit score for each eligible partition: the dirty ratio (dirty bytes / total log size) must exceed min.cleanable.dirty.ratio (default 0.5) for the partition to be eligible. Among eligible partitions, the cleaner picks the one that will yield the most space savings per byte of I/O, maximising efficiency. Option B is wrong; null-key records are not preferentially selected. Option C invents a replication-lag metric that does not exist. Option D is wrong; consumer delivery status is irrelevant to compaction.",
+    "bonusFact": "The log cleaner runs as a background pool of threads controlled by log.cleaner.threads (default 1)."
+  },
+  {
+    "id": "apache-kafka-adv-008",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka's zero-copy data transfer (sendfile) work, and which code path in Kafka benefits most from it?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "sendfile() transfers data from a file descriptor directly to a socket without copying through user-space; the consumer fetch path benefits because log segment data is sent to consumers without deserialisation",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "sendfile() compresses data in-kernel before transmission, eliminating the need for application-level compression",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "sendfile() is used by Kafka producers to send large batches by bypassing the Kafka network layer entirely",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "sendfile() copies records directly from one broker's disk to another, bypassing the network for intra-cluster replication",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The Linux sendfile() system call (or its equivalent on other OSes) transfers data between file descriptors entirely in kernel space: from the page cache to the network socket buffer without copying to user space. Kafka's broker uses this for the consumer fetch path\u2014when serving a fetch request, it maps the byte range of a log segment and transfers it to the network socket directly. Since Kafka records are not interpreted or transformed during fetch, the entire path can bypass user space, yielding very high throughput. Option B is wrong; compression happens at the producer/consumer, not in sendfile(). Option C is wrong; producers write to the broker, not read via sendfile(). Option D is wrong; inter-broker replication uses the follower fetch path.",
+    "bonusFact": "Zero-copy is only possible because Kafka does not modify records in transit\u2014they are immutable once written."
+  },
+  {
+    "id": "apache-kafka-adv-009",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is KIP-848 (the new consumer group protocol) and how does it differ from the classic JoinGroup/SyncGroup protocol?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "KIP-848 moves partition assignment to the broker (group coordinator); clients send heartbeats and receive incremental assignment updates without a stop-the-world rebalance",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "KIP-848 replaces heartbeats with a push-based notification from the broker when partitions become available",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "KIP-848 allows multiple consumer groups to share partitions simultaneously, reducing per-group overhead",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "KIP-848 introduces a new wire protocol that is incompatible with existing Kafka clients, requiring a client upgrade",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The classic JoinGroup/SyncGroup protocol is client-side: all consumers join the group, one is elected leader, it computes the assignment, syncs it back, and all members restart consuming\u2014a stop-the-world rebalance. KIP-848 (targeted for Kafka 4.0) moves assignment logic to the broker's group coordinator. Consumers send periodic HeartbeatRequests; the coordinator responds with incremental assignment changes (add/remove partitions) without requiring all members to pause. This eliminates the stop-the-world pause and enables much faster, incremental rebalancing. Option B inverts the direction of heartbeat communication. Option C describes Share Groups (KIP-932), not KIP-848. Option D is wrong; KIP-848 is designed for backward compatibility.",
+    "bonusFact": "KIP-848 is sometimes called the 'next-generation consumer rebalance protocol' and is the foundation of Share Groups."
+  },
+  {
+    "id": "apache-kafka-adv-010",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "In Kafka Streams, what is the purpose of a standby replica task, and how does it reduce recovery time?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A standby task keeps a warm copy of a state store by replaying the changelog topic on a different Streams instance, so it can take over quickly after a failure without a full restore",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A standby task is an idle consumer thread that takes over processing when the primary thread is paused by GC",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A standby task replicates the state store to an external database for disaster recovery",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A standby task monitors the changelog topic for corruption and triggers a compaction if anomalies are detected",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka Streams supports standby replicas configured via num.standby.replicas. A standby task runs on a different Streams instance and continuously replays the same changelog topic as the active task, keeping its state store nearly up to date. If the active task's instance fails and a rebalance reassigns the partition to the instance holding the standby, it resumes from a much more recent checkpoint than a cold restore would require\u2014sometimes just seconds of catch-up instead of replaying the entire changelog. Option B is wrong; standby tasks are about state store replication, not thread management. Option C is wrong; state is stored locally in RocksDB, not in an external database. Option D is wrong; standbys do not perform compaction or corruption detection.",
+    "bonusFact": "Setting num.standby.replicas=1 doubles the state store storage but can reduce failover time from minutes to seconds."
   }
 ]

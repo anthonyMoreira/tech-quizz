@@ -8504,5 +8504,331 @@
     ],
     "explanation": "Running Kafka in containers introduces several challenges: container memory limits may restrict the OS page cache that Kafka relies on heavily, JVM ergonomics may not correctly detect available resources behind cgroup limits, and network overlay performance may add latency. Persistent volume selection is critical since Kafka requires high I/O throughput. Proper resource requests/limits, local persistent volumes, and JVM flags like -XX:+UseContainerSupport are essential. Option B overstates container benefits. Option C is wrong since Kafka runs well in containers with proper configuration. Option D fabricates auto-optimization.",
     "bonusFact": "Use local persistent volumes for best Kafka I/O performance."
+  },
+  {
+    "id": "apache-kafka-adv-061",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's Controller Quorum snapshot mechanism in KRaft?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Periodically captures the full metadata state so new controllers can bootstrap from a snapshot instead of replaying the entire metadata log",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Takes snapshots of topic data for backup and disaster recovery purposes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Creates checkpoints of consumer group offsets for faster recovery",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Captures the state of all running Kafka Connect tasks for failover",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In KRaft mode, the metadata log grows as cluster changes accumulate. The snapshot mechanism periodically captures the complete metadata state at a specific offset, allowing new controller voters or observers to bootstrap from the snapshot rather than replaying the entire metadata log from the beginning. This dramatically reduces startup time for new nodes. Option B confuses metadata snapshots with data backups. Option C describes consumer offset checkpointing, a different mechanism. Option D fabricates a Connect task snapshot.",
+    "bonusFact": "Snapshots are stored as compact binary files alongside the log."
+  },
+  {
+    "id": "apache-kafka-adv-062",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's IncrementalAlterConfigs API and how does it differ from the legacy AlterConfigs?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "IncrementalAlterConfigs modifies only specified properties while preserving others; legacy AlterConfigs replaces the entire configuration",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "IncrementalAlterConfigs is faster because it skips validation; legacy AlterConfigs validates all properties",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "IncrementalAlterConfigs works with KRaft; legacy AlterConfigs only works with ZooKeeper",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "IncrementalAlterConfigs supports batch changes across topics; legacy AlterConfigs only modifies one topic at a time",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The legacy AlterConfigs API replaces the entire dynamic configuration for a resource, meaning any properties not included in the request are reset to defaults. IncrementalAlterConfigs (KIP-339) supports SET, DELETE, and APPEND operations on individual properties, allowing safe incremental changes without accidentally removing other configurations. Option B fabricates a validation difference. Option C is wrong because both APIs work with KRaft. Option D incorrectly describes batch capabilities.",
+    "bonusFact": "Legacy AlterConfigs was deprecated in favor of Incremental."
+  },
+  {
+    "id": "apache-kafka-adv-063",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What is the concurrency issue with this Kafka Streams interactive query?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "ReadOnlyKeyValueStore<String, Long> store =\n  streams.store(\n    StoreQueryParameters.fromNameAndType(\n      \"counts\", QueryableStoreTypes.keyValueStore()));\n\n@GetMapping(\"/count/{key}\")\npublic Long getCount(@PathVariable String key) {\n  return store.get(key);\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "The store reference is captured once at startup but becomes invalid after a rebalance when tasks migrate; it should be re-obtained on each request",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "ReadOnlyKeyValueStore is not thread-safe and will corrupt data under concurrent HTTP requests",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Interactive queries require a special license and are not part of open-source Kafka Streams",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The store.get() call will block the HTTP thread until the next poll() returns",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The store reference obtained from streams.store() is valid only while the current task assignment holds. When a rebalance occurs and the task hosting that state store migrates to another instance, the cached store reference becomes stale and will throw InvalidStateStoreException. The store should be re-obtained on each request or the exception should be handled with retry logic. Option B is wrong because the store is thread-safe for reads. Option C is factually incorrect. Option D mischaracterizes the blocking behavior.",
+    "bonusFact": "Catch InvalidStateStoreException to handle rebalances gracefully."
+  },
+  {
+    "id": "apache-kafka-adv-064",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the difference between Kafka's static and dynamic broker configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Static configs are set in server.properties and require a restart; dynamic configs are set via AdminClient and take effect immediately",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Static configs apply to the broker; dynamic configs apply to topics",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Static configs are read-only; dynamic configs can only be set at cluster creation",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Both types require a rolling restart to take effect",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Static broker configurations are set in server.properties and read at broker startup; changes require a restart. Dynamic configurations can be modified at runtime via the AdminClient API or kafka-configs.sh and take effect immediately or after a short delay, without requiring a restart. Dynamic configs are stored in the metadata log (KRaft) or ZooKeeper. Option B is partially wrong because dynamic configs can apply to brokers, topics, and other entities. Option C contradicts how dynamic configs work. Option D is incorrect because dynamic configs specifically avoid restarts.",
+    "bonusFact": "Dynamic configs override static configs for the same property."
+  },
+  {
+    "id": "apache-kafka-adv-065",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of using a compacted topic as a Kafka Streams changelog and what constraints apply?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Changelog topics must be compacted to support state store restoration, but compaction lag must not delete records before restoration completes",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Changelog topics should use the delete cleanup policy for better performance",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Compacted changelog topics cannot store null values",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Changelog topics are automatically managed by Kafka Streams and should never be compacted",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka Streams creates internal changelog topics with compact cleanup policy so that state stores can be fully restored by replaying the compacted log. However, aggressive compaction (with very low min.compaction.lag.ms) could remove records before a slow instance completes restoration, causing an incomplete state store. The compaction lag must be large enough to allow full restoration. Option B is wrong because delete policy would remove data needed for restoration. Option C is incorrect because null values (tombstones) are used to delete keys from state stores. Option D is partially wrong; changelog topics are auto-managed and are compacted by design.",
+    "bonusFact": "Kafka Streams auto-configures changelog topic settings."
+  },
+  {
+    "id": "apache-kafka-adv-066",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's metadata propagation delay and how does it affect client behavior?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "After metadata changes, brokers propagate updates asynchronously; clients may temporarily use stale metadata, causing NOT_LEADER_OR_FOLLOWER errors until refreshed",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Metadata propagation is instantaneous across all brokers and clients",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Metadata is only updated when clients explicitly request a refresh",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Metadata changes are queued and applied during maintenance windows",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When metadata changes (leader elections, topic creation), the controller propagates updates to all brokers, but this is not instantaneous. During the propagation window, clients may send requests to the old leader and receive NOT_LEADER_OR_FOLLOWER errors. Clients handle this by refreshing their metadata cache (metadata.max.age.ms controls the refresh interval) and retrying. Option B ignores propagation delay. Option C is wrong because brokers push metadata updates to each other. Option D fabricates maintenance windows.",
+    "bonusFact": "Reduce metadata.max.age.ms for faster client adaptation."
+  },
+  {
+    "id": "apache-kafka-adv-067",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What problem does this Kafka Connect dead letter queue configuration solve?",
+    "codeSnippet": {
+      "language": "properties",
+      "code": "errors.tolerance=all\nerrors.deadletterqueue.topic.name=dlq-orders\nerrors.deadletterqueue.topic.replication.factor=3\nerrors.deadletterqueue.context.headers.enable=true\nerrors.log.enable=true\nerrors.log.include.messages=true"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Failed records are sent to a DLQ topic with error context in headers, while the connector continues processing; errors are also logged with message content",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "All records are duplicated to the DLQ topic for backup purposes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The connector retries failed records 3 times before moving them to the DLQ",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only deserialization errors are captured; processing errors still cause the connector to fail",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "errors.tolerance=all tells the connector to continue processing when records fail. Failed records are sent to the dlq-orders topic with a replication factor of 3. Context headers (exception class, stack trace, original topic/partition/offset) are attached to each DLQ record. Errors are also logged with the full message content for debugging. Option B is wrong because only failed records go to the DLQ. Option C fabricates a retry count (replication.factor is for the DLQ topic, not retry count). Option D understates coverage; this handles all types of errors.",
+    "bonusFact": "DLQ context headers include __connect.errors.exception.class."
+  },
+  {
+    "id": "apache-kafka-adv-068",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's delayed operation mechanism and the timing wheel?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The timing wheel efficiently manages delayed operations like produce requests with acks=all and fetch requests with fetch.min.bytes using O(1) insertion and expiration",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The timing wheel schedules periodic log segment rotation at fixed intervals",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The timing wheel manages consumer heartbeat timeouts",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The timing wheel is used to schedule KRaft Raft elections at precise intervals",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka uses a hierarchical timing wheel data structure to manage delayed operations efficiently. When a produce request with acks=all arrives, it cannot complete until ISR members replicate the data. The request is placed in the timing wheel with an expiration time. The timing wheel supports O(1) insertion and O(1) expiration check per tick, making it highly efficient for managing thousands of concurrent delayed operations. Option B oversimplifies to one use case. Option C is handled by the session timeout mechanism. Option D incorrectly ties the timing wheel to Raft elections.",
+    "bonusFact": "Kafka's timing wheel is based on the Hashed Timing Wheel paper."
+  },
+  {
+    "id": "apache-kafka-adv-069",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What are the implications of choosing between event sourcing with Kafka versus using Kafka as a simple message queue?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Event sourcing stores the full history as immutable events with compacted topics for snapshots, requiring careful schema evolution; simple queuing uses delete retention and loses history",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Kafka cannot be used for event sourcing because it does not guarantee message ordering",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Event sourcing requires a separate database; Kafka only handles message transport",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Simple queuing provides exactly-once semantics; event sourcing only supports at-most-once",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Event sourcing with Kafka stores every state change as an immutable event in a topic. Compacted topics can provide current state snapshots while the full history remains in append-only topics. This requires careful schema evolution (using a schema registry) since events are long-lived. Simple message queuing uses delete retention and treats messages as transient, losing them after the retention period. Option B is wrong because Kafka guarantees per-partition ordering. Option C is incorrect because Kafka's compacted topics can serve as the event store. Option D incorrectly ties delivery semantics to the usage pattern.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-070",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka's broker handle disk failure when using JBOD (Just a Bunch of Disks) configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Since KIP-112, the broker can continue operating with remaining healthy disks, taking failed-disk partitions offline rather than shutting down entirely",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The broker immediately shuts down when any configured disk fails",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Data from the failed disk is automatically migrated to healthy disks on the same broker",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "JBOD configuration automatically mirrors data across all configured disks",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "KIP-112 introduced JBOD disk failure handling where a broker with multiple log directories (log.dirs) can survive individual disk failures. Partitions on the failed disk go offline and are reassigned to other brokers, while partitions on healthy disks continue serving requests. Before KIP-112, any disk failure would bring down the entire broker. Option B describes the pre-KIP-112 behavior. Option C is wrong because data is not automatically migrated within the same broker. Option D confuses JBOD with RAID-1 mirroring; JBOD stores each partition on a single disk.",
+    "bonusFact": "JBOD reduces the blast radius of disk failures."
   }
 ]

@@ -4266,5 +4266,331 @@
     ],
     "explanation": "Source connectors pull data from external systems (databases, files, APIs) and publish it to Kafka topics. Sink connectors consume data from Kafka topics and push it to external systems (databases, search indexes, data warehouses). Option B reverses the relationship with Kafka. Option C is incorrect because both connector types run within Kafka Connect workers. Option D fabricates a structured vs unstructured distinction that does not exist.",
     "bonusFact": "Popular source connectors include Debezium for CDC."
+  },
+  {
+    "id": "apache-kafka-int-031",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's message timestamp?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It records when the message was created or appended, used for time-based retention and windowed operations",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It indicates the order in which consumers should process messages",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It specifies when the message should expire and be automatically deleted",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It identifies which broker originally received the message",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Each Kafka record has a timestamp that can be either CreateTime (set by the producer) or LogAppendTime (set by the broker). This timestamp is used for time-based retention, Kafka Streams windowed operations, and temporal queries. Option B is wrong because message ordering is determined by offsets, not timestamps. Option C confuses timestamps with TTL, which Kafka does not support per-message. Option D fabricates a broker identification function.",
+    "bonusFact": "message.timestamp.type controls CreateTime vs LogAppendTime."
+  },
+  {
+    "id": "apache-kafka-int-032",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What happens if a Kafka consumer reads from a partition that has no committed offset?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The behavior is controlled by auto.offset.reset, which defaults to latest",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The consumer always starts from the beginning of the partition",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The consumer throws an exception and stops",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The consumer waits indefinitely until an offset is manually committed",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When no committed offset exists for a consumer group on a partition, the auto.offset.reset configuration determines where to start reading. The default value is 'latest', meaning only new messages are consumed. Other options are 'earliest' (start from the beginning) and 'none' (throw an exception). Option B assumes 'earliest' behavior, which is not the default. Option C only happens with auto.offset.reset=none. Option D is fabricated.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-033",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the Kafka AdminClient API?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To programmatically manage topics, configurations, ACLs, and other cluster resources",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To produce and consume messages with administrative privileges",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To monitor broker health and consumer lag in real-time",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To schedule automated backups of Kafka topics",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The AdminClient API allows programmatic management of Kafka resources including creating/deleting topics, altering configurations, managing ACLs, and describing consumer groups. Option B confuses admin operations with produce/consume operations, which use separate producer and consumer APIs. Option C describes monitoring tools like JMX metrics exporters, not the AdminClient. Option D is fabricated because Kafka does not have a built-in backup scheduling mechanism.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-034",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What partition strategy does this producer configuration use?",
+    "codeSnippet": {
+      "language": "properties",
+      "code": "key.serializer=org.apache.kafka.common.serialization.StringSerializer\nvalue.serializer=org.apache.kafka.common.serialization.StringSerializer\npartitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Distributes records across partitions in a round-robin fashion regardless of key",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Hashes the record key to determine the target partition",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Always sends records to partition 0",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Randomly selects a partition for each record",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The RoundRobinPartitioner distributes records across all available partitions in a cyclic order, regardless of the message key. This maximizes parallelism but breaks key-based ordering guarantees. Option B describes the default partitioner behavior when a key is present (murmur2 hash). Option C describes a custom partitioner that always returns 0. Option D describes random partitioning, which is different from the deterministic round-robin approach.",
+    "bonusFact": "The default partitioner uses murmur2 hash when a key is set."
+  },
+  {
+    "id": "apache-kafka-int-035",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is a Kafka consumer lag?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The difference between the latest produced offset and the consumer's committed offset for a partition",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The time it takes for a consumer to process a single message",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The delay between a producer sending a message and the broker acknowledging it",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The number of consumers in a group that are not actively processing",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Consumer lag measures how far behind a consumer group is from the latest data in a partition. It is calculated as the difference between the log-end offset (latest produced) and the consumer's last committed offset. Option B describes processing latency, a different metric. Option C describes produce latency, not consumer lag. Option D fabricates a consumer activity count metric.",
+    "bonusFact": "Monitor lag with kafka-consumer-groups.sh --describe."
+  },
+  {
+    "id": "apache-kafka-int-036",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka headers?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To attach key-value metadata to records without modifying the message body",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To define the serialization format of the message key and value",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To specify which partition the message should be routed to",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To set the compression algorithm for individual messages",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka headers allow producers to attach arbitrary key-value metadata (such as tracing IDs, source identifiers, or content types) to records without altering the message payload. Option B confuses headers with serializer configurations. Option C is wrong because partitioning is determined by the key and partitioner, not headers. Option D is incorrect because compression is configured at the producer level and applied per batch, not per message via headers.",
+    "bonusFact": "Headers were introduced in Kafka 0.11 via KIP-82."
+  },
+  {
+    "id": "apache-kafka-int-037",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the effect of setting max.in.flight.requests.per.connection=1 on a Kafka producer?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Ensures strict ordering by allowing only one unacknowledged request per broker connection at a time",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Limits the producer to sending one message per second",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Forces the producer to use only one network connection to the entire cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Restricts the producer to writing to only one partition",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Setting max.in.flight.requests.per.connection=1 ensures that only one batch of messages is in-flight per broker connection at any time. This guarantees strict message ordering even during retries, since a retry cannot overtake a subsequent request. Option B confuses this with a rate limit. Option C misinterprets the setting as limiting total connections rather than in-flight requests per connection. Option D confuses connection management with partition assignment.",
+    "bonusFact": "With idempotence enabled, up to 5 in-flight requests are safe."
+  },
+  {
+    "id": "apache-kafka-int-038",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's group.instance.id consumer configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To enable static group membership, preventing unnecessary rebalances when a consumer restarts",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To assign a unique name to each consumer group",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To limit the number of consumer instances in a group",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To specify which broker should coordinate the consumer group",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Setting group.instance.id makes a consumer a static member of the group. When a static member restarts within session.timeout.ms, it reclaims its previous partition assignment without triggering a rebalance. Option B confuses group.instance.id with group.id. Option C fabricates a group size limit, which does not exist. Option D is wrong because the coordinator broker is determined by hashing the group.id, not configured manually.",
+    "bonusFact": "Static membership avoids stop-the-world rebalances."
+  },
+  {
+    "id": "apache-kafka-int-039",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this kafka-consumer-groups.sh command output?",
+    "codeSnippet": {
+      "language": "shell",
+      "code": "kafka-consumer-groups.sh \\\n  --bootstrap-server localhost:9092 \\\n  --group order-service \\\n  --describe"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Shows partition assignments, current offsets, log-end offsets, and lag for the order-service group",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Deletes the order-service consumer group and all its committed offsets",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Creates a new consumer group called order-service",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Lists all topics that the order-service group has ever consumed from",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The --describe flag shows detailed information about a consumer group, including which consumers are assigned to which partitions, their current offsets, the log-end offsets, and the resulting consumer lag. Option B would require the --delete flag. Option C is wrong because consumer groups are created implicitly when consumers join, not by command-line tools. Option D overstates the output, which shows current assignments, not historical consumption.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-040",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's interceptor mechanism?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To hook into the producer/consumer pipeline for cross-cutting concerns like monitoring and tracing",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To block certain messages from being produced or consumed",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To intercept and modify broker replication traffic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To prevent unauthorized clients from connecting to the cluster",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka interceptors are pluggable components that execute before and after producing or consuming records. They are commonly used for monitoring, tracing, auditing, and adding metadata without modifying application logic. Option B overstates their function; interceptors can observe but are not designed to block messages. Option C is wrong because interceptors operate on the client side, not on broker replication traffic. Option D describes authentication/authorization mechanisms like SASL and ACLs.",
+    "bonusFact": "Interceptors implement ProducerInterceptor or ConsumerInterceptor."
   }
 ]

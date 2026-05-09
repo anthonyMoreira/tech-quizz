@@ -5244,5 +5244,331 @@
     ],
     "explanation": "Kafka's metric.reporters configuration allows pluggable metric reporter implementations that export metrics from clients and brokers to external monitoring systems like Prometheus, Datadog, or Graphite. Option B fabricates a weekly reporting feature that does not exist. Option C describes auto-tuning, which Kafka does not perform. Option D describes alerting, which is handled by external monitoring tools, not Kafka's metric reporters directly.",
     "bonusFact": "JMX is the default metric reporting mechanism in Kafka."
+  },
+  {
+    "id": "apache-kafka-int-061",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's request.timeout.ms producer configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum time the producer waits for a response from the broker before considering the request failed",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum time the producer waits before sending the first message",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The interval between consecutive produce requests",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The time the broker holds a request in its queue before processing",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "request.timeout.ms defines how long the producer waits for a response from the broker after sending a request. If the broker does not respond within this time, the request is considered failed and may be retried. Option B fabricates an initial send delay. Option C confuses timeout with a send interval. Option D describes broker-side queue behavior, which is controlled by different settings.",
+    "bonusFact": "Default request.timeout.ms is 30000 (30 seconds)."
+  },
+  {
+    "id": "apache-kafka-int-062",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the Kafka Streams GlobalKTable?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A fully replicated table where every stream task has a complete copy of all partition data",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A table that is shared across all Kafka clusters globally",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A table that stores data in a global external database",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A KTable with no partitioning applied to its source topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A GlobalKTable is a special type of table in Kafka Streams where each application instance receives all partitions of the source topic, providing a complete copy of the data for non-key-based joins. A regular KTable only receives the partitions assigned to that instance. Option B fabricates cross-cluster sharing. Option C incorrectly involves external databases. Option D is wrong because the source topic still has partitions; the difference is that all partitions are consumed by every instance.",
+    "bonusFact": "GlobalKTables are ideal for small lookup/reference data."
+  },
+  {
+    "id": "apache-kafka-int-063",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the effect of setting auto.create.topics.enable=true on a Kafka broker?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Topics are automatically created when a producer sends to or a consumer reads from a non-existent topic",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "New partitions are automatically added to existing topics when load increases",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Topics are automatically replicated to a disaster recovery cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Topic configurations are automatically optimized based on usage patterns",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When auto.create.topics.enable=true (the default), Kafka automatically creates a topic with default settings when a producer sends to or a consumer tries to read from a topic that does not exist. While convenient for development, this is often disabled in production to prevent accidental topic creation from typos. Option B describes a scaling feature that Kafka does not provide automatically. Option C describes replication across clusters, a different feature. Option D fabricates auto-tuning.",
+    "bonusFact": "Disable in production to prevent accidental topic creation."
+  },
+  {
+    "id": "apache-kafka-int-064",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka Streams windowed aggregation do?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "stream\n  .groupByKey()\n  .windowedBy(TimeWindows.ofSizeWithNoGrace(\n      Duration.ofMinutes(5)))\n  .count()\n  .toStream()\n  .to(\"windowed-counts\");"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Counts records per key in tumbling 5-minute windows with no grace period",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Counts records per key in sliding 5-minute windows",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Counts all records across all keys every 5 minutes",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Delays record processing by 5 minutes before counting",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code groups records by key, creates tumbling (non-overlapping) 5-minute time windows with no late arrival grace period, counts records per key per window, and writes results to the windowed-counts topic. Option B is wrong because TimeWindows creates tumbling windows, not sliding windows (which would use SlidingWindows). Option C ignores the groupByKey, which partitions counts by key. Option D misinterprets windowing as a delay mechanism.",
+    "bonusFact": "Use SlidingWindows for overlapping window computations."
+  },
+  {
+    "id": "apache-kafka-int-065",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the Kafka Streams punctuator?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To schedule periodic actions based on stream time or wall-clock time within a processor",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To add punctuation marks to string values in stream records",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To mark the end of a stream processing session",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To split stream records into smaller chunks at specified intervals",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A punctuator in the Kafka Streams Processor API allows developers to schedule periodic callbacks that execute based on either stream time (advancing with record timestamps) or wall-clock time. This is useful for time-based flushing, aggregation emission, or timeout detection. Option B is an amusing but incorrect literal interpretation. Option C fabricates a session termination concept. Option D confuses punctuation with record splitting.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-066",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the buffer.memory producer configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The total bytes of memory available to the producer for buffering unsent records",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The amount of memory reserved for deserializing incoming consumer records",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The maximum size of a single message before compression",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The buffer size for reading data from disk on the broker",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "buffer.memory controls the total amount of memory the producer can use to buffer records waiting to be sent to the broker. If this buffer is full, the producer's send() call will block for up to max.block.ms before throwing an exception. Option B describes a consumer-side operation. Option C confuses buffer memory with message size limits. Option D describes broker-side disk I/O buffering, not producer memory.",
+    "bonusFact": "Default buffer.memory is 32 MB (33554432 bytes)."
+  },
+  {
+    "id": "apache-kafka-int-067",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between Kafka's PLAINTEXT and SSL security protocols?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "PLAINTEXT sends data unencrypted; SSL encrypts all data in transit between clients and brokers",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "PLAINTEXT uses plain text serialization; SSL uses binary serialization",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "PLAINTEXT is for internal broker communication; SSL is for external client connections",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "PLAINTEXT supports authentication; SSL does not",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The PLAINTEXT security protocol transmits data without any encryption, suitable only for trusted networks. The SSL protocol encrypts all communication between clients and brokers using TLS, providing confidentiality and optionally mutual authentication via client certificates. Option B confuses security protocols with serialization formats. Option C is wrong because either protocol can be used for both internal and external communication. Option D reverses reality since SSL can provide certificate-based authentication while PLAINTEXT provides none.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-068",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the role of the Kafka Streams topology optimizer?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To merge redundant internal topics and repartition steps to reduce processing overhead",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To automatically scale the number of stream threads based on load",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To optimize the JVM garbage collection for Kafka Streams applications",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To compress state store data for faster disk I/O",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The topology optimizer (enabled via topology.optimization=all) analyzes the Kafka Streams topology and merges redundant repartition topics and unnecessary internal topics, reducing the number of sub-topologies and improving performance. Option B describes auto-scaling, which Kafka Streams does not provide natively. Option C is about JVM tuning, unrelated to the topology optimizer. Option D describes RocksDB compression, a separate concern.",
+    "bonusFact": "Enable with topology.optimization=all in StreamsConfig."
+  },
+  {
+    "id": "apache-kafka-int-069",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka ACL command grant?",
+    "codeSnippet": {
+      "language": "shell",
+      "code": "kafka-acls.sh --bootstrap-server localhost:9092 \\\n  --add \\\n  --allow-principal User:app-service \\\n  --operation Read \\\n  --operation Describe \\\n  --topic orders \\\n  --group order-consumers"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Grants app-service read and describe access on the orders topic and the order-consumers group",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Creates a new topic called orders and a consumer group called order-consumers",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Revokes all permissions from app-service on the orders topic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Grants app-service full admin access to the entire Kafka cluster",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This command adds ACL entries that allow the principal User:app-service to perform Read and Describe operations on the orders topic and the order-consumers consumer group. This is the minimum permission set needed for a consumer to read from a topic. Option B is wrong because ACL commands manage permissions, not resources. Option C would require the --remove flag. Option D overstates the permissions; only Read and Describe on specific resources are granted.",
+    "bonusFact": "Consumers need Read on both the topic and consumer group."
+  },
+  {
+    "id": "apache-kafka-int-070",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the num.standby.replicas configuration in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To maintain backup copies of state stores on other instances for faster failover",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To set the number of Kafka broker replicas for internal topics",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To configure how many consumer instances remain idle as hot spares",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To define the replication factor for the application's output topics",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "num.standby.replicas configures how many standby copies of each state store are maintained on other Kafka Streams instances. During a failover, a standby replica can quickly take over without needing to fully rebuild the state store from the changelog topic. Option B confuses this with Kafka broker replication settings. Option C fabricates an idle consumer concept. Option D describes output topic configuration, which uses a different setting.",
+    "bonusFact": "Standby replicas reduce failover time from minutes to seconds."
   }
 ]

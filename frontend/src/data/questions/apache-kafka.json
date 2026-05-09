@@ -7852,5 +7852,331 @@
     ],
     "explanation": "When a Kafka Streams task migrates to a new instance, the state store is rebuilt by replaying records from the internal changelog topic. A checkpoint file tracks the last restored offset, so restoration resumes from that point rather than from the beginning. Standby replicas (if configured) can reduce restoration time by maintaining an up-to-date copy. Option B is wrong because state is restored from the changelog topic, not copied between instances. Option C fabricates an RPC mechanism. Option D ignores the changelog-based restoration mechanism.",
     "bonusFact": "Standby replicas reduce state restoration time significantly."
+  },
+  {
+    "id": "apache-kafka-adv-041",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's record accumulator and how does it affect producer throughput?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It buffers records per partition into batches in memory, allowing the sender thread to transmit larger payloads and reduce network overhead",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It accumulates records from multiple producers into a single stream for the broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It counts the total number of records sent and provides metrics to the application",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It ensures records are written to disk on the producer side before being sent to the broker",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The RecordAccumulator is the producer's internal buffer that groups records destined for the same partition into batches (controlled by batch.size and linger.ms). The Sender thread then transmits complete batches to the appropriate broker, reducing the number of network requests. This batching is crucial for throughput. Option B is wrong because the accumulator works within a single producer instance. Option C describes metrics, not the accumulator's function. Option D fabricates a write-ahead log on the producer side.",
+    "bonusFact": "Each partition has its own deque of batches in the accumulator."
+  },
+  {
+    "id": "apache-kafka-adv-042",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka's exactly-once semantics interact with external systems in a consume-transform-produce pattern?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "EOS only guarantees exactly-once within Kafka; writes to external systems require additional idempotency or two-phase commit patterns",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "EOS automatically extends exactly-once guarantees to all external systems through distributed transactions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "EOS cannot be used with any external systems and is limited to Kafka-to-Kafka pipelines",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "EOS uses XA transactions to coordinate with external databases automatically",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka's EOS guarantees that records are processed exactly once within the Kafka ecosystem (read from input topic, process, write to output topic, commit offsets atomically). However, side effects on external systems (database writes, API calls, file writes) are outside Kafka's transactional boundary. For end-to-end exactly-once, the external system must support idempotent operations or participate in a two-phase commit. Option B overstates EOS capabilities. Option C is too restrictive; EOS can be used with external systems, just without automatic guarantees. Option D fabricates XA integration.",
+    "bonusFact": "Use unique keys or deduplication for external system writes."
+  },
+  {
+    "id": "apache-kafka-adv-043",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What subtle issue exists in this Kafka Streams topology with multiple input topics?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KStream<String, String> topic1 = builder.stream(\"topic-1\");\nKStream<String, String> topic2 = builder.stream(\"topic-2\");\n\nKStream<String, String> merged = topic1.merge(topic2);\nmerged\n  .groupByKey()\n  .count(Materialized.as(\"merged-counts\"))\n  .toStream()\n  .to(\"output\");"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "If topic-1 and topic-2 have different partition counts, the merge will cause incorrect counts because co-partitioning is not guaranteed",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Merging two streams is not supported in Kafka Streams",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The count() operation will double-count records from the merged stream",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The materialized store name conflicts with internal topic naming",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When two streams are merged and then grouped by key for aggregation, Kafka Streams assumes co-partitioning: the same key must be in the same partition number across both topics. If topic-1 has 6 partitions and topic-2 has 12, the same key may map to different partitions, causing records for the same key to be processed by different stream tasks, producing incorrect counts. Option B is wrong because merge is supported. Option C misunderstands counting mechanics. Option D is unlikely with a user-defined store name.",
+    "bonusFact": "Co-partitioning requires same partition count and partitioner."
+  },
+  {
+    "id": "apache-kafka-adv-044",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's metadata quorum in KRaft mode and how does it differ from a data quorum?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The metadata quorum uses Raft consensus among controller nodes for cluster metadata, while data quorum uses ISR replication among broker nodes for partition data",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Both quorums use the same Raft protocol but on different network ports",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The metadata quorum handles reads while the data quorum handles writes",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "There is only one quorum in KRaft mode that handles both metadata and data",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In KRaft mode, the metadata quorum consists of controller nodes running the Raft consensus protocol for cluster metadata (topic configurations, partition assignments, ACLs). Partition data replication continues to use the ISR-based pull model where followers fetch from leaders. These are fundamentally different protocols with different fault tolerance characteristics. Option B is wrong because the protocols differ, not just ports. Option C mischaracterizes the responsibilities. Option D ignores the dual-quorum architecture.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-045",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of GC pauses on Kafka broker performance and how can they be mitigated?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Long GC pauses can cause followers to fall out of the ISR and trigger unnecessary rebalances; mitigation includes using G1/ZGC, minimizing heap usage, and relying on page cache",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "GC pauses have no impact because Kafka runs entirely in native code outside the JVM",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "GC pauses only affect consumers, not brokers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Kafka automatically pauses replication during GC to prevent data corruption",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Long JVM garbage collection pauses on a broker can prevent followers from fetching data (causing ISR shrinkage), delay heartbeats to the controller (causing the broker to appear dead), and stall client requests. Mitigation strategies include using low-latency GC algorithms (G1 or ZGC), keeping the JVM heap small (Kafka stores data in the OS page cache, not on-heap), and tuning GC parameters. Option B is incorrect because Kafka is a JVM-based application. Option C is wrong because brokers are the primary concern. Option D fabricates an automatic pause mechanism.",
+    "bonusFact": "Keep broker heap at 4-8 GB; let the OS page cache do the work."
+  },
+  {
+    "id": "apache-kafka-adv-046",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of share group acknowledgment in Kafka 4.0's share groups (KIP-932)?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Individual records can be acknowledged, released, or rejected, enabling per-message delivery tracking unlike traditional consumer groups",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Consumers acknowledge partitions they want to read from, similar to subscribe()",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The group coordinator acknowledges that consumers are alive via heartbeats",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Producers acknowledge that messages were received by the share group",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Share groups introduce per-record acknowledgment where consumers can acknowledge successful processing of individual records, release records back for redelivery to another consumer, or reject records to send them to a dead letter queue. This is fundamentally different from traditional consumer groups where progress is tracked by a single offset per partition. Option B confuses record acknowledgment with partition subscription. Option C describes heartbeats, not share group acknowledgment. Option D incorrectly involves producers.",
+    "bonusFact": "Share groups enable traditional queue semantics in Kafka."
+  },
+  {
+    "id": "apache-kafka-adv-047",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What correctness issue does this Kafka consumer have when handling partition revocation?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "consumer.subscribe(List.of(\"orders\"),\n  new ConsumerRebalanceListener() {\n    public void onPartitionsRevoked(\n        Collection<TopicPartition> revoked) {\n      consumer.commitAsync();\n    }\n    public void onPartitionsAssigned(\n        Collection<TopicPartition> assigned) {\n      for (TopicPartition tp : assigned) {\n        consumer.seek(tp, getCheckpoint(tp));\n      }\n    }\n  });"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Using commitAsync in onPartitionsRevoked may not complete before partitions are reassigned, causing duplicate processing",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The seek in onPartitionsAssigned will throw an exception because partitions are not yet ready",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Consumer subscribe does not accept a rebalance listener",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The consumer will deadlock because both callbacks try to access the consumer",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Using commitAsync() in onPartitionsRevoked is risky because the asynchronous commit may not complete before the partitions are reassigned to another consumer. If the commit fails or arrives late, the new consumer will start from the last committed offset and reprocess some records. Using commitSync() in onPartitionsRevoked ensures the commit completes before revocation proceeds. Option B is incorrect because seek works correctly in onPartitionsAssigned. Option C is wrong; subscribe accepts a ConsumerRebalanceListener. Option D is false; the consumer is accessible in both callbacks.",
+    "bonusFact": "Always use commitSync() in onPartitionsRevoked."
+  },
+  {
+    "id": "apache-kafka-adv-048",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's inter-broker protocol version and how does it affect rolling upgrades?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It controls the protocol version used for inter-broker communication, allowing mixed-version clusters during rolling upgrades by keeping the protocol at the older version",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It determines which client versions can connect to the cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It specifies the minimum Kafka version required to start a broker",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It controls the serialization format used for messages stored on disk",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "During a rolling upgrade, inter.broker.protocol.version is set to the older version so that upgraded and non-upgraded brokers can communicate using the same protocol. After all brokers are upgraded, this setting is bumped to the new version in a second rolling restart to enable new features. Option B describes client compatibility, managed by api.version settings. Option C fabricates a minimum version requirement. Option D confuses the inter-broker protocol with on-disk storage format (controlled by log.message.format.version).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-049",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of network partitions on a Kafka cluster with KRaft and how does the pre-vote mechanism help?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A partitioned node may repeatedly trigger elections, disrupting the cluster; pre-vote prevents this by requiring majority support before starting an election",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Network partitions have no impact because KRaft automatically routes around failures",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Network partitions cause all brokers to shut down until connectivity is restored",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The partitioned node automatically becomes a read-only observer",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Without pre-vote, a controller node isolated by a network partition would see its election timer expire, increment the epoch, and start an election. When connectivity resumes, its higher epoch could disrupt the current leader. With pre-vote (KIP-996), the isolated node first asks other nodes if they would vote for it. Since the isolated node cannot reach a majority, it never starts the actual election, preserving cluster stability. Option B ignores the disruption potential. Option C exaggerates the impact. Option D fabricates an observer mode.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-050",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's OffsetForLeaderEpoch request during follower log reconciliation?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A follower asks the leader for the end offset of a given leader epoch to determine the correct truncation point after a leader change",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A follower requests the leader to send all records from a specific epoch",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A consumer asks the broker for the offset corresponding to a specific timestamp",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The controller asks all replicas to report their current leader epoch",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "After a leader change, a follower needs to determine if it has any divergent records (records from a previous leader that were not replicated). It sends an OffsetForLeaderEpoch request to the new leader with its current leader epoch. The new leader responds with the end offset for that epoch. If the follower's log extends past this offset, it truncates back to align with the new leader. Option B describes a fetch request, not epoch lookup. Option C describes the ListOffsets request. Option D fabricates a controller-initiated process.",
+    "bonusFact": "This replaced the high-watermark-based truncation approach."
   }
 ]

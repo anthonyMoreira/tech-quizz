@@ -4918,5 +4918,331 @@
     ],
     "explanation": "This configures a JDBC source connector that reads from the customers and products tables in a PostgreSQL database. It uses incrementing mode on the id column to detect new rows, and publishes them to Kafka topics prefixed with db- (e.g., db-customers, db-products). Option B is wrong because this is a source connector, not a sink. Option C overstates the scope; it captures row data, not schema definitions. Option D is fabricated; source connectors read data, they do not delete from the source.",
     "bonusFact": "Incrementing mode only detects inserts, not updates."
+  },
+  {
+    "id": "apache-kafka-int-051",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's replica.fetch.max.bytes configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum amount of data a follower replica fetches from the leader in a single request",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum size of a single message that can be stored in a replica",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The maximum total disk space a replica can use",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The maximum number of replicas that can fetch from the leader simultaneously",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "replica.fetch.max.bytes controls the maximum number of bytes a follower replica will request from the leader in a single fetch request. This affects replication throughput and memory usage on the leader. Option B confuses this with max.message.bytes, which limits individual message size. Option C fabricates a disk space limit per replica. Option D misinterprets the configuration as a concurrent fetch count.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-052",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's num.io.threads and num.network.threads configurations?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "num.network.threads handle incoming requests; num.io.threads process disk I/O operations on the broker",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Both control the number of threads used for consumer group coordination",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "num.io.threads controls replication; num.network.threads controls client connections",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "They set the maximum number of concurrent producers and consumers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "num.network.threads specifies the number of threads handling network requests (receiving and sending data), while num.io.threads specifies the number of threads performing disk I/O operations (reading and writing log segments). Tuning these affects broker throughput. Option B incorrectly ties both to consumer coordination. Option C partially correct on network threads but wrong on io threads, which handle all disk I/O, not just replication. Option D fabricates a client count limit.",
+    "bonusFact": "Default: 3 network threads and 8 I/O threads."
+  },
+  {
+    "id": "apache-kafka-int-053",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the Kafka Streams state store?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To persist local state for stateful operations like aggregations, joins, and windowed computations",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To store the Kafka Streams application's configuration settings",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To cache messages before they are written to output topics",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To maintain a backup of the Kafka cluster metadata",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "State stores in Kafka Streams are local embedded databases (typically RocksDB) that store intermediate state required by stateful operations such as counts, aggregations, joins, and windowed computations. They are backed by internal changelog topics for fault tolerance. Option B confuses state stores with application configuration. Option C describes a buffer, not a state store. Option D fabricates a metadata backup function.",
+    "bonusFact": "State stores use RocksDB by default for persistent storage."
+  },
+  {
+    "id": "apache-kafka-int-054",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this producer callback handle?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "producer.send(\n  new ProducerRecord<>(\"events\", key, value),\n  (metadata, exception) -> {\n    if (exception != null) {\n      log.error(\"Send failed\", exception);\n    } else {\n      log.info(\"Sent to {}:{} offset {}\",\n        metadata.topic(),\n        metadata.partition(),\n        metadata.offset());\n    }\n  });"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Logs the partition and offset on success, or the error on failure, after the send completes asynchronously",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Retries the send operation automatically if it fails",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Blocks until the broker acknowledges the message",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Commits the consumer offset after the message is sent",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The callback lambda is invoked asynchronously when the broker responds. It checks if an exception occurred; if so, it logs the error. Otherwise, it logs the topic, partition, and offset where the record was written. Option B is wrong because the callback only handles the result, it does not trigger retries (retries are configured separately). Option C describes producer.send().get(), which is the synchronous approach. Option D confuses producer callbacks with consumer offset commits.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-055",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of log.retention.bytes in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum total size of log segments retained per partition before old segments are deleted",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum size of a single log segment file",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The total disk space available for the entire Kafka cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The maximum size of a single message before it is rejected",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "log.retention.bytes sets the maximum size of log data retained per partition. When a partition's log exceeds this size, the oldest segments are eligible for deletion. This works alongside log.retention.ms (time-based retention). Option B describes log.segment.bytes, which controls individual segment file size. Option C fabricates a cluster-wide disk limit. Option D describes max.message.bytes.",
+    "bonusFact": "Default is -1 (unlimited), relying on time-based retention."
+  },
+  {
+    "id": "apache-kafka-int-056",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's delegation tokens?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To allow lightweight authentication without distributing Kerberos credentials or SCRAM secrets to every client",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To delegate partition leadership from one broker to another",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To grant temporary write access to read-only consumer groups",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To distribute encryption keys between brokers for TLS communication",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Delegation tokens provide a lightweight authentication mechanism that allows clients to authenticate without needing direct access to the primary credentials (like Kerberos keytabs). A privileged client creates a token, which can then be shared with other clients. Option B confuses tokens with leader election. Option C fabricates a consumer group access feature. Option D describes TLS key distribution, which is a separate mechanism.",
+    "bonusFact": "Delegation tokens have a configurable expiry time."
+  },
+  {
+    "id": "apache-kafka-int-057",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the impact of increasing the number of partitions for a Kafka topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Increases parallelism for consumers but also increases broker resource usage and may break key-based ordering",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Reduces the replication factor and decreases fault tolerance",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Automatically increases the number of consumer group members",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Improves message compression ratio across the topic",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "More partitions allow more consumers to read in parallel, improving throughput. However, more partitions also mean more open file handles, more memory for replication, and potentially longer leader election times. Adding partitions changes the key-to-partition mapping, which can break ordering guarantees for existing keys. Option B is wrong because replication factor is independent of partition count. Option C is incorrect because consumers must be added manually. Option D fabricates a compression benefit.",
+    "bonusFact": "Kafka does not support reducing partition count."
+  },
+  {
+    "id": "apache-kafka-int-058",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's log.cleanup.policy=compact,delete setting?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Applies both compaction and time/size-based deletion, keeping the latest value per key while also enforcing retention limits",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "First compacts all data, then deletes the entire topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Compacts only the active segment while deleting inactive segments",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Alternates between compact and delete policies on each log segment",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When both policies are configured, Kafka applies log compaction to retain the latest value for each key and also deletes compacted segments that exceed the configured retention time or size. This is useful for topics that need both changelog semantics and a retention limit. Option B incorrectly suggests topic deletion. Option C mischaracterizes how the policies interact with segments. Option D fabricates an alternating policy approach.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-059",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What security configuration does this Kafka client use?",
+    "codeSnippet": {
+      "language": "properties",
+      "code": "security.protocol=SASL_SSL\nsasl.mechanism=SCRAM-SHA-256\nssl.truststore.location=/etc/kafka/truststore.jks\nssl.truststore.password=changeit\nsasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \\\n  username=\"app-user\" \\\n  password=\"secret\";"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "SCRAM-SHA-256 authentication over TLS-encrypted connections",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Kerberos authentication without encryption",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "TLS client certificate authentication only",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Plain text authentication over an unencrypted connection",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This configuration uses SASL_SSL as the security protocol, which combines SASL authentication with SSL/TLS encryption. The SASL mechanism is SCRAM-SHA-256, which provides password-based authentication with salted challenge-response. A truststore is configured for TLS certificate verification. Option B is wrong because GSSAPI (Kerberos) is not configured, and SASL_SSL includes encryption. Option C would use SSL protocol with keystore, not SASL. Option D would use SASL_PLAINTEXT, not SASL_SSL.",
+    "bonusFact": "SCRAM stores salted passwords, unlike PLAIN mechanism."
+  },
+  {
+    "id": "apache-kafka-int-060",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's metric reporters?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To export Kafka client and broker metrics to external monitoring systems via pluggable reporters",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To generate weekly reports on topic usage and consumer performance",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To automatically adjust broker configurations based on observed metrics",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To send alerts directly to administrators when thresholds are exceeded",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka's metric.reporters configuration allows pluggable metric reporter implementations that export metrics from clients and brokers to external monitoring systems like Prometheus, Datadog, or Graphite. Option B fabricates a weekly reporting feature that does not exist. Option C describes auto-tuning, which Kafka does not perform. Option D describes alerting, which is handled by external monitoring tools, not Kafka's metric reporters directly.",
+    "bonusFact": "JMX is the default metric reporting mechanism in Kafka."
   }
 ]

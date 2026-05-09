@@ -5896,5 +5896,331 @@
     ],
     "explanation": "inter.broker.listener.name specifies which of the broker's configured listeners should be used for inter-broker communication such as replication and metadata exchange. This is important in multi-listener setups where internal and external traffic use different networks. Option B is unrelated to listener configuration. Option C partially overlaps but the setting covers all inter-broker traffic, not just group coordination. Option D describes advertised.listeners, a different setting.",
     "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-081",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's log.dirs configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To specify one or more directories where Kafka stores partition log data on disk",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To configure the directory where Kafka broker logs (application logs) are written",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To set the path for storing consumer offset data on the client side",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To define the directory for temporary files during message compression",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "log.dirs specifies one or more filesystem directories where Kafka stores partition data (message log segments, indexes, and related files). Multiple directories can be specified for spreading I/O across disks. Option B confuses Kafka data logs with application logging (configured via log4j). Option C is wrong because consumer offsets are stored in the __consumer_offsets topic, not client-side files. Option D fabricates a compression temp directory.",
+    "bonusFact": "Spread across multiple disks for better I/O throughput."
+  },
+  {
+    "id": "apache-kafka-int-082",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's preferred replica election?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To rebalance partition leadership back to the first replica in the replica list for even load distribution",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To elect the replica with the most data as the new leader",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To select which replica should be decommissioned first",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To vote on which broker should become the cluster controller",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Over time, leader elections after broker failures can cause uneven leader distribution. Preferred replica election triggers leader transfer back to the preferred replica (the first in the replica list), restoring balanced load. Option B is wrong because leader election is based on ISR membership and preferred replica ordering, not data size. Option C fabricates a decommissioning mechanism. Option D confuses partition leadership with controller election.",
+    "bonusFact": "auto.leader.rebalance.enable triggers this automatically."
+  },
+  {
+    "id": "apache-kafka-int-083",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the max.block.ms producer configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum time send() and partitionsFor() will block when the buffer is full or metadata is unavailable",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum time between consecutive producer send calls",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The maximum time the broker holds a produce request in its queue",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The maximum size of a batch before it is sent",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "max.block.ms controls how long the producer's send() method will block when the internal buffer is full or when requesting topic metadata. After this timeout, a TimeoutException is thrown. Option B is incorrect because there is no minimum frequency requirement between sends. Option C describes broker-side queuing, not producer blocking. Option D confuses time with size; batch.size controls batch sizing.",
+    "bonusFact": "Default max.block.ms is 60000 (60 seconds)."
+  },
+  {
+    "id": "apache-kafka-int-084",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka Streams code accomplish?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KStream<String, String> input = builder.stream(\"events\");\nKStream<String, String>[] branches = input.split()\n  .branch((k, v) -> v.contains(\"ERROR\"),\n    Branched.withConsumer(s -> s.to(\"errors\")))\n  .branch((k, v) -> v.contains(\"WARN\"),\n    Branched.withConsumer(s -> s.to(\"warnings\")))\n  .defaultBranch(\n    Branched.withConsumer(s -> s.to(\"info\")));"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Routes events to different topics based on whether they contain ERROR, WARN, or neither",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Merges the errors, warnings, and info topics into a single events topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Counts the number of ERROR, WARN, and INFO events per key",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Filters out ERROR and WARN events, keeping only INFO events",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code uses the split/branch API to route records from the events topic to different output topics based on content: records containing ERROR go to the errors topic, records containing WARN go to the warnings topic, and all others go to the info topic via the default branch. Option B reverses the data flow direction. Option C would require grouping and counting operations. Option D is wrong because all records are routed, not filtered out.",
+    "bonusFact": "split().branch() replaced the deprecated KStream.branch() method."
+  },
+  {
+    "id": "apache-kafka-int-085",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's message.max.bytes broker configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum size of a single message batch that the broker will accept from a producer",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum total size of all messages stored in a topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The maximum size of a consumer fetch response",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The maximum number of bytes a message key can have",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "message.max.bytes sets the maximum record batch size that the broker will accept. If a producer attempts to send a batch larger than this, the broker rejects it. This must be coordinated with the producer's max.request.size and the consumer's max.partition.fetch.bytes. Option B fabricates a total topic size limit. Option C describes fetch.max.bytes or max.partition.fetch.bytes. Option D incorrectly limits key size specifically; the setting applies to the entire record batch.",
+    "bonusFact": "Default message.max.bytes is 1048588 (~1 MB)."
+  },
+  {
+    "id": "apache-kafka-int-086",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between Kafka's consumer subscribe() and assign() methods?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "subscribe() uses group management with automatic rebalancing; assign() manually sets specific partitions without group coordination",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "subscribe() reads from one topic; assign() reads from multiple topics simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "subscribe() is synchronous; assign() is asynchronous",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "subscribe() reads from the beginning; assign() reads from the latest offset",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "subscribe() registers the consumer in a consumer group and relies on the group coordinator for partition assignment and rebalancing. assign() manually assigns specific topic partitions to the consumer, bypassing group management entirely. Option B is incorrect because both methods can handle multiple topics. Option C fabricates a sync/async distinction. Option D is wrong because the starting offset depends on auto.offset.reset, not the subscription method.",
+    "bonusFact": "You cannot use subscribe() and assign() on the same consumer."
+  },
+  {
+    "id": "apache-kafka-int-087",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the min.compaction.lag.ms topic configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The minimum time a record must exist before it becomes eligible for compaction",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The minimum delay between two consecutive compaction runs",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The minimum time a consumer must wait before reading compacted records",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The minimum lag a consumer must have before compaction is triggered",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "min.compaction.lag.ms ensures that records are not compacted until they have been in the log for at least the specified time. This gives consumers time to read all versions of a key before older values are removed by compaction. Option B describes the frequency of compaction runs, which is controlled by different settings. Option C fabricates a consumer read delay. Option D incorrectly ties compaction to consumer lag.",
+    "bonusFact": "Default is 0, meaning records are immediately eligible."
+  },
+  {
+    "id": "apache-kafka-int-088",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's consumer pause() and resume() methods?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To temporarily stop and restart fetching data from specific partitions without leaving the consumer group",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To pause and resume the entire consumer group's processing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To pause message production to specific partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To temporarily stop offset commits for specific partitions",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "pause() stops a consumer from fetching new records from specified partitions during subsequent poll() calls, while resume() re-enables fetching. The consumer remains in the group and continues sending heartbeats. This is useful for back-pressure scenarios. Option B is wrong because these methods affect individual consumers, not the entire group. Option C confuses consumer operations with producer operations. Option D incorrectly ties these to offset commits.",
+    "bonusFact": "Paused partitions still participate in rebalances."
+  },
+  {
+    "id": "apache-kafka-int-089",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's tiered storage feature?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To offload older log segments to cheaper remote storage while keeping recent data on local disks",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To replicate data across different storage tiers within the same broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To compress data at different levels depending on its age",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To automatically move hot topics to SSDs and cold topics to HDDs",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Tiered storage (KIP-405) allows Kafka to separate data into local storage (for recent, frequently accessed data) and remote storage (such as S3 or HDFS for older data). This dramatically reduces local disk requirements and costs for long-retention topics. Option B is wrong because tiered storage involves remote storage, not just local tiers. Option C describes adaptive compression, which is not what this feature does. Option D is a simplified view; tiered storage is about local vs remote, not SSD vs HDD.",
+    "bonusFact": "Tiered storage was introduced as early access in Kafka 3.6."
+  },
+  {
+    "id": "apache-kafka-int-090",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka configuration enable for a Connect worker?",
+    "codeSnippet": {
+      "language": "properties",
+      "code": "group.id=connect-cluster\nconfig.storage.topic=connect-configs\noffset.storage.topic=connect-offsets\nstatus.storage.topic=connect-status\nkey.converter=org.apache.kafka.connect.json.JsonConverter\nvalue.converter=org.apache.kafka.connect.json.JsonConverter"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "A distributed Kafka Connect worker using JSON converters with internal topics for config, offsets, and status",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A standalone Kafka Connect worker with file-based storage",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A Kafka Streams application with three input topics",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A consumer group with three dedicated consumer instances",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This configures a distributed Kafka Connect worker. The group.id identifies the Connect cluster, and the three internal topics store connector configurations, source connector offsets, and connector status respectively. The JSON converters define how message keys and values are serialized. Option B is wrong because standalone mode uses file-based offset storage, not Kafka topics. Option C is a different framework entirely. Option D misinterprets the Connect worker configuration as a consumer group setup.",
+    "bonusFact": "Distributed Connect workers share tasks for fault tolerance."
   }
 ]

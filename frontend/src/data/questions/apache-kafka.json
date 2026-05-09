@@ -5570,5 +5570,331 @@
     ],
     "explanation": "num.standby.replicas configures how many standby copies of each state store are maintained on other Kafka Streams instances. During a failover, a standby replica can quickly take over without needing to fully rebuild the state store from the changelog topic. Option B confuses this with Kafka broker replication settings. Option C fabricates an idle consumer concept. Option D describes output topic configuration, which uses a different setting.",
     "bonusFact": "Standby replicas reduce failover time from minutes to seconds."
+  },
+  {
+    "id": "apache-kafka-int-071",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's delivery.timeout.ms producer configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The upper bound on the total time from send() to receiving an acknowledgment, including retries",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum time a message can remain in a topic before being consumed",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The timeout for establishing a network connection to the broker",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The time a consumer waits for a message to be delivered by the broker",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "delivery.timeout.ms sets the total time limit for a produce request to complete, encompassing the time spent waiting in the buffer, the actual send, and any retries. If the message is not acknowledged within this time, the producer reports failure. Option B confuses this with retention, which is a broker-side concept. Option C describes connection timeout settings. Option D describes consumer-side behavior, not producer delivery.",
+    "bonusFact": "delivery.timeout.ms must be >= linger.ms + request.timeout.ms."
+  },
+  {
+    "id": "apache-kafka-int-072",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's connect.offset.storage.topic configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To store the source connector's position tracking offsets in a dedicated Kafka topic",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To configure the topic where consumer group offsets are stored",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To specify the topic where failed Connect task records are sent",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To store the Kafka Connect worker's configuration",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In distributed Kafka Connect, the offset storage topic stores the position offsets for source connectors so they can track which data has already been read from the external system. This is separate from consumer group offsets. Option B describes the __consumer_offsets topic, which is different. Option C describes a dead letter queue, not offset storage. Option D confuses offset storage with config storage, which uses a separate topic (config.storage.topic).",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-073",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of setting unclean.leader.election.enable=false?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To prevent data loss by only allowing ISR members to become partition leaders",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To disable all leader elections in the cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To require manual approval before any leader election occurs",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To ensure leaders are always elected from the largest replica",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With unclean.leader.election.enable=false, Kafka will not elect an out-of-sync replica as leader, even if it means the partition becomes temporarily unavailable. This prevents data loss since out-of-sync replicas may not have the latest committed records. Option B is wrong because normal ISR-based leader elections still occur. Option C fabricates a manual approval process. Option D misunderstands the concept; leader election is based on ISR membership, not replica size.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-074",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What consumer behavior does this configuration produce?",
+    "codeSnippet": {
+      "language": "properties",
+      "code": "max.poll.records=100\nmax.poll.interval.ms=600000\nfetch.max.bytes=52428800\nmax.partition.fetch.bytes=1048576"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Fetches up to 100 records per poll with a 10-minute processing window, limiting fetch to 50 MB total and 1 MB per partition",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Processes exactly 100 records every 10 minutes in strict batches",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Limits the consumer to reading from only 100 partitions with 1 MB messages",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Configures the consumer to fetch 50 MB of data from each partition every poll",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "max.poll.records=100 limits each poll() call to return at most 100 records. max.poll.interval.ms=600000 gives the consumer 10 minutes to process records before being considered failed. fetch.max.bytes=52428800 limits the total fetch response to 50 MB. max.partition.fetch.bytes=1048576 limits each partition's contribution to 1 MB per fetch. Option B incorrectly suggests fixed-interval processing. Option C confuses records with partitions. Option D misapplies the total fetch limit as a per-partition limit.",
+    "bonusFact": "Increase max.poll.interval.ms for slow record processing."
+  },
+  {
+    "id": "apache-kafka-int-075",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's log.index.interval.bytes configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Controls how frequently an index entry is added to the offset index, affecting lookup granularity",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Sets the maximum size of the index file before a new segment is created",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Defines the interval between consumer offset commits",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Controls how often the broker flushes the log to disk",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "log.index.interval.bytes determines how many bytes of log data are written between entries in the offset index file. A smaller value creates more index entries, allowing faster offset lookups at the cost of a larger index file. Option B confuses index interval with index file size limits. Option C incorrectly relates this to consumer offset commits. Option D describes log.flush.interval.messages or log.flush.interval.ms, different settings.",
+    "bonusFact": "Default is 4096 bytes (4 KB) between index entries."
+  },
+  {
+    "id": "apache-kafka-int-076",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's assignor strategy configuration for consumers?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To determine how partitions are distributed among consumers within a consumer group",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To decide which broker should store each partition's data",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To configure how producers select which partition to write to",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To set the order in which topics are processed during a quiz",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The partition.assignment.strategy consumer configuration determines the algorithm used to assign partitions to consumers during a rebalance. Built-in strategies include RangeAssignor, RoundRobinAssignor, StickyAssignor, and CooperativeStickyAssignor. Option B describes broker-level partition placement, not consumer assignment. Option C describes the producer partitioner, a different mechanism. Option D is completely unrelated to Kafka.",
+    "bonusFact": "RangeAssignor is the default partition assignment strategy."
+  },
+  {
+    "id": "apache-kafka-int-077",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's transaction.state.log.replication.factor?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Sets the replication factor for the internal __transaction_state topic that tracks transaction metadata",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Defines how many times each transactional message is duplicated across partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Controls the number of transaction coordinators in the cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Sets the maximum number of concurrent transactions per producer",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The __transaction_state topic stores metadata about active and completed transactions. transaction.state.log.replication.factor configures how many replicas this internal topic has, affecting the durability of transaction state. Option B confuses replication with message duplication. Option C is wrong because the number of coordinators depends on the topic's partition count. Option D describes max.open.transactions or similar concepts, not replication.",
+    "bonusFact": "Default replication factor for __transaction_state is 3."
+  },
+  {
+    "id": "apache-kafka-int-078",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's controlled shutdown?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To gracefully transfer partition leadership to other brokers before shutting down, minimizing unavailability",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To prevent any broker from shutting down without administrator approval",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To automatically delete all data on the broker before shutdown",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To pause all consumer groups before stopping the broker",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Controlled shutdown allows a Kafka broker to gracefully hand off partition leadership to in-sync replicas on other brokers before stopping. This ensures minimal disruption to producers and consumers. Option B fabricates an approval mechanism. Option C is destructive and incorrect since controlled shutdown preserves data. Option D is wrong because consumer groups are not paused; they are affected only if their assigned partitions need to be reassigned.",
+    "bonusFact": "Enable with controlled.shutdown.enable=true (default)."
+  },
+  {
+    "id": "apache-kafka-int-079",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka Streams join operation produce?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KStream<String, String> orders =\n    builder.stream(\"orders\");\nKTable<String, String> customers =\n    builder.table(\"customers\");\norders.join(customers,\n    (order, customer) -> order + \" | \" + customer)\n  .to(\"enriched-orders\");"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Enriches each order record with the latest matching customer record by key",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Merges the orders and customers topics into a single topic without transformation",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Creates a new customers table from order data",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Filters orders that do not have a matching customer record",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code performs a KStream-KTable join: for each record in the orders stream, it looks up the matching key in the customers KTable and combines the two values with a pipe separator. The result is written to the enriched-orders topic. Option B is wrong because a join applies a transformation (the value joiner). Option C mischaracterizes the operation entirely. Option D describes a filter, not a join; with an inner join, non-matching orders are indeed dropped, but the purpose is enrichment, not filtering.",
+    "bonusFact": "KStream-KTable joins are non-windowed and use the latest table value."
+  },
+  {
+    "id": "apache-kafka-int-080",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's inter.broker.listener.name configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To specify which listener brokers use for internal communication with each other",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To set the name displayed in broker log messages",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To configure the listener used for consumer group coordination",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To define the hostname other brokers use to discover this broker",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "inter.broker.listener.name specifies which of the broker's configured listeners should be used for inter-broker communication such as replication and metadata exchange. This is important in multi-listener setups where internal and external traffic use different networks. Option B is unrelated to listener configuration. Option C partially overlaps but the setting covers all inter-broker traffic, not just group coordination. Option D describes advertised.listeners, a different setting.",
+    "bonusFact": null
   }
 ]

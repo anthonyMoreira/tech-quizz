@@ -6222,5 +6222,331 @@
     ],
     "explanation": "This configures a distributed Kafka Connect worker. The group.id identifies the Connect cluster, and the three internal topics store connector configurations, source connector offsets, and connector status respectively. The JSON converters define how message keys and values are serialized. Option B is wrong because standalone mode uses file-based offset storage, not Kafka topics. Option C is a different framework entirely. Option D misinterprets the Connect worker configuration as a consumer group setup.",
     "bonusFact": "Distributed Connect workers share tasks for fault tolerance."
+  },
+  {
+    "id": "apache-kafka-int-091",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's replica.lag.time.max.ms configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum time a follower can go without fetching from the leader before being removed from the ISR",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum replication delay before a broker is shut down",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The maximum time a producer waits for all replicas to acknowledge",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The maximum lag in bytes before a replica is considered out of sync",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "replica.lag.time.max.ms determines how long a follower can go without successfully fetching from the leader before the leader removes it from the ISR. The default is 30 seconds. Option B fabricates a broker shutdown mechanism. Option C confuses this with request.timeout.ms or acks configuration. Option D describes a byte-based lag metric; this setting is time-based, not size-based.",
+    "bonusFact": "Default replica.lag.time.max.ms is 30000 (30 seconds)."
+  },
+  {
+    "id": "apache-kafka-int-092",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between a Kafka converter and a serializer?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Serializers are used by producers/consumers to encode messages; converters are used by Kafka Connect to transform between Connect data and byte arrays",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Converters handle encryption; serializers handle compression",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Serializers work with Avro only; converters work with any format",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "They are the same thing with different names in different versions of Kafka",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Serializers (Serializer/Deserializer) are used by the Kafka producer and consumer clients to convert objects to and from byte arrays. Converters are specific to Kafka Connect and handle the transformation between Connect's internal data representation (Struct, Schema) and the byte format stored in Kafka. Option B mischaracterizes both. Option C is wrong because serializers support many formats (String, JSON, Avro, Protobuf). Option D is incorrect; they are distinct concepts in different parts of the Kafka ecosystem.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-093",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's offset.retention.minutes broker configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "How long committed consumer offsets are retained after a consumer group becomes empty",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "How long messages are retained in the __consumer_offsets topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "How often the broker compacts the offset storage topic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The maximum time between offset commits for a consumer",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "offsets.retention.minutes defines how long the broker retains committed offsets for a consumer group after the group has no active members. After this period, the offsets are deleted and the group is considered new if it reconnects. Option B is partially correct but misses the key point about group emptiness. Option C confuses retention with compaction frequency. Option D describes max.poll.interval.ms or commit frequency, different concepts.",
+    "bonusFact": "Default is 10080 minutes (7 days)."
+  },
+  {
+    "id": "apache-kafka-int-094",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka consumer seek operation do?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "TopicPartition tp = new TopicPartition(\"events\", 0);\nconsumer.assign(List.of(tp));\nconsumer.seek(tp, 500);\nwhile (true) {\n  ConsumerRecords<String, String> records =\n    consumer.poll(Duration.ofMillis(100));\n  // process records\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Manually assigns partition 0 of events topic and starts reading from offset 500",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Subscribes to the events topic and skips the first 500 messages",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Reads exactly 500 records from partition 0 and stops",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Commits offset 500 for partition 0 without reading any data",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code manually assigns partition 0 of the events topic using assign(), then uses seek() to position the consumer at offset 500. Subsequent poll() calls will start reading from offset 500 onwards. Option B is wrong because assign() is used (not subscribe()), and seek sets a specific offset, not a count to skip. Option C is incorrect because the loop runs indefinitely, not for 500 records. Option D confuses seek with commit; seek only changes the read position.",
+    "bonusFact": "seekToBeginning() and seekToEnd() are also available."
+  },
+  {
+    "id": "apache-kafka-int-095",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's client.dns.lookup configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To control how the client resolves bootstrap server hostnames, supporting multi-IP DNS entries",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To configure the DNS server used by the Kafka broker",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To enable DNS-based service discovery for consumer groups",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To cache DNS lookups for faster broker connections",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "client.dns.lookup controls how the Kafka client resolves hostnames from the bootstrap server list. With the 'resolve_canonical_bootstrap_servers_only' setting, all DNS addresses are resolved and used, which helps with multi-IP round-robin DNS and load balancers. Option B describes broker-side DNS, not client configuration. Option C fabricates a service discovery mechanism. Option D mischaracterizes the setting as a caching mechanism.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-096",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's min.insync.replicas configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The minimum number of replicas that must acknowledge a write when acks=all for the write to succeed",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The minimum number of replicas needed to elect a partition leader",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The minimum number of replicas before a topic can be consumed",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The minimum number of brokers that must be online in the cluster",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "min.insync.replicas specifies the minimum number of replicas that must be in the ISR and acknowledge a write when the producer uses acks=all. If fewer replicas are in sync, the broker rejects the write with a NotEnoughReplicasException. Option B is wrong because leader election requires any one ISR member, not a minimum count. Option C confuses write availability with read availability. Option D conflates replica count with broker count.",
+    "bonusFact": "Common setup: replication.factor=3, min.insync.replicas=2."
+  },
+  {
+    "id": "apache-kafka-int-097",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's dead letter queue pattern?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To route records that fail processing to a separate topic for later analysis instead of blocking the pipeline",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To store messages that have expired past their retention period",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To hold messages while a consumer group is being rebalanced",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To queue messages for brokers that are temporarily offline",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A dead letter queue (DLQ) is a pattern where records that cannot be processed (due to deserialization errors, processing exceptions, etc.) are sent to a dedicated error topic rather than blocking the consumer pipeline. This is supported natively in Kafka Connect via errors.tolerance and errors.deadletterqueue.topic.name. Option B confuses DLQs with retention expiry. Option C describes rebalance behavior, not error handling. Option D describes replication, not DLQs.",
+    "bonusFact": "Kafka Connect supports DLQ natively with errors.tolerance=all."
+  },
+  {
+    "id": "apache-kafka-int-098",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's group.initial.rebalance.delay.ms configuration?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To delay the first rebalance after a group coordinator starts, allowing more consumers to join before rebalancing",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To set the delay between a consumer joining and starting to process messages",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To configure the timeout before a consumer is removed from the group",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To delay initial offset commits when a new consumer group is created",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "group.initial.rebalance.delay.ms introduces a delay when a consumer group first forms (or when the coordinator restarts), giving more consumers time to join before the first rebalance is triggered. This reduces the number of unnecessary rebalances during application startup. Option B confuses this with processing delay. Option C describes session.timeout.ms. Option D fabricates a commit delay concept.",
+    "bonusFact": "Default is 3000ms (3 seconds)."
+  },
+  {
+    "id": "apache-kafka-int-099",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka topic alteration command do?",
+    "codeSnippet": {
+      "language": "shell",
+      "code": "kafka-configs.sh --bootstrap-server localhost:9092 \\\n  --entity-type topics \\\n  --entity-name orders \\\n  --alter \\\n  --add-config retention.ms=259200000,\\\nmax.message.bytes=5242880"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Changes the orders topic retention to 3 days and maximum message size to 5 MB",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Creates a new topic called orders with 3-day retention",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Deletes messages older than 3 days from the orders topic immediately",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Sets the replication factor of the orders topic to 3",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This command uses kafka-configs.sh with --alter to modify the runtime configuration of the existing orders topic. It sets retention.ms to 259200000 (3 days) and max.message.bytes to 5242880 (5 MB). Option B is wrong because --alter modifies existing entities, not creates them. Option C is incorrect because changing retention does not immediately delete old data; it affects future cleanup. Option D misinterprets the configuration values as replication factor.",
+    "bonusFact": "259200000ms = 3 days (3 x 24 x 60 x 60 x 1000)."
+  },
+  {
+    "id": "apache-kafka-int-100",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What are share groups in Kafka 4.0?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A new consumer model where multiple consumers cooperatively process records from the same partitions with individual acknowledgment",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Consumer groups that share committed offsets across multiple Kafka clusters",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A mechanism for sharing topics between different consumer groups",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A feature that allows consumers to share network connections to brokers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Share groups (KIP-932, introduced in Kafka 4.0) add queue-like semantics to Kafka. Unlike traditional consumer groups where each partition is assigned to exactly one consumer, share groups allow multiple consumers to process records from the same partitions with per-record acknowledgment and delivery tracking. Option B fabricates cross-cluster offset sharing. Option C describes a scenario that already works with regular consumer groups. Option D invents a connection-sharing feature.",
+    "bonusFact": "Share groups enable traditional queue patterns in Kafka."
   }
 ]

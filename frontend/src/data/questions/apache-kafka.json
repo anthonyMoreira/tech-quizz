@@ -4592,5 +4592,331 @@
     ],
     "explanation": "Kafka interceptors are pluggable components that execute before and after producing or consuming records. They are commonly used for monitoring, tracing, auditing, and adding metadata without modifying application logic. Option B overstates their function; interceptors can observe but are not designed to block messages. Option C is wrong because interceptors operate on the client side, not on broker replication traffic. Option D describes authentication/authorization mechanisms like SASL and ACLs.",
     "bonusFact": "Interceptors implement ProducerInterceptor or ConsumerInterceptor."
+  },
+  {
+    "id": "apache-kafka-int-041",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of KRaft mode in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To manage cluster metadata using an internal Raft-based consensus protocol, eliminating the need for ZooKeeper",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To improve message compression ratios using a new algorithm",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To enable Kafka Streams applications to run without a Kafka cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To provide a REST API for managing Kafka configurations",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "KRaft (Kafka Raft) mode replaces ZooKeeper for cluster metadata management by using an internal Raft-based consensus protocol. This simplifies Kafka's architecture by removing the external ZooKeeper dependency. Option B fabricates a compression feature. Option C is incorrect because Kafka Streams still requires a running Kafka cluster. Option D describes Confluent REST Proxy or similar tools, not KRaft.",
+    "bonusFact": "Kafka 4.0 removed ZooKeeper support entirely."
+  },
+  {
+    "id": "apache-kafka-int-042",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the role of the controller broker in a Kafka cluster?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Managing partition leader elections and distributing metadata updates to other brokers",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Handling all produce and consume requests for the cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Storing all messages for topics that have no assigned leader",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Balancing network traffic evenly across all brokers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The controller broker is responsible for electing partition leaders when brokers join or leave the cluster and propagating metadata changes to all brokers. Only one broker acts as the active controller at a time. Option B is wrong because produce and consume requests are handled by the partition leaders on various brokers, not centrally by the controller. Option C fabricates a message storage role. Option D describes a load balancer function, not the controller.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-043",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between synchronous and asynchronous offset commits in Kafka consumers?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Synchronous blocks until the broker confirms; asynchronous returns immediately and handles results via callback",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Synchronous commits after every message; asynchronous commits in batches",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Synchronous commits to disk; asynchronous commits to memory",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Synchronous is used for exactly-once; asynchronous is used for at-least-once only",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "commitSync() blocks the calling thread until the broker confirms the offset commit, providing stronger guarantees at the cost of latency. commitAsync() returns immediately and optionally invokes a callback when the commit completes or fails. Option B incorrectly ties sync/async to batching behavior. Option C fabricates a disk vs memory distinction. Option D is wrong because both commit methods can be used with either delivery semantic.",
+    "bonusFact": "A common pattern: use commitAsync() in the loop, commitSync() in finally."
+  },
+  {
+    "id": "apache-kafka-int-044",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka Streams code accomplish?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KStream<String, String> stream = builder.stream(\"clicks\");\nKTable<String, Long> counts = stream\n  .groupByKey()\n  .count(Materialized.as(\"click-counts\"));\ncounts.toStream().to(\"click-analytics\");"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Counts the number of records per key from the clicks topic and writes results to click-analytics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Filters click events and removes duplicates before writing to click-analytics",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Joins clicks with a table of analytics data",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Sorts click events by timestamp and writes them in order to click-analytics",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code reads from the clicks topic, groups records by key, counts occurrences per key using a materialized state store named click-counts, and writes the running count for each key to the click-analytics topic. Option B is wrong because there is no filter or deduplication operation. Option C is incorrect because no join is performed. Option D fabricates a sorting operation, which Kafka Streams does not perform in this manner.",
+    "bonusFact": "Materialized state stores enable interactive queries."
+  },
+  {
+    "id": "apache-kafka-int-045",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is a Kafka consumer's poll loop and why is it important?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A continuous loop calling poll() to fetch records, send heartbeats, and trigger rebalances",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A background thread that automatically processes messages without user code",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A mechanism that polls the schema registry for schema updates",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A retry loop that re-sends failed consumer offset commits",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The poll loop is the core of a Kafka consumer application. Each call to poll() fetches new records, sends heartbeats to the group coordinator (keeping the consumer alive in the group), and handles partition assignments during rebalances. Option B is incorrect because the poll loop requires explicit user code, it is not automatic. Option C confuses the consumer poll with schema registry communication. Option D fabricates a commit retry mechanism.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-046",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is rack awareness in Kafka and why is it useful?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Distributing replicas across different racks or availability zones to survive rack-level failures",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Monitoring the physical temperature of server racks hosting Kafka brokers",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Automatically scaling the number of brokers based on rack capacity",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Routing consumer requests to the nearest broker for lower latency",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Rack awareness ensures that partition replicas are distributed across different failure domains (racks, availability zones, or data centers) so that a single rack failure does not cause data loss. This is configured using broker.rack on each broker. Option B fabricates a temperature monitoring feature. Option C describes auto-scaling, which Kafka does not provide natively. Option D partially describes follower fetching (KIP-392) but is not what rack awareness means.",
+    "bonusFact": "Configure rack awareness with the broker.rack property."
+  },
+  {
+    "id": "apache-kafka-int-047",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's quota mechanism?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To throttle produce and consume bandwidth per client or user to prevent resource starvation",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To limit the number of topics that can be created in a cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To set the maximum number of partitions per broker",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To restrict the size of individual messages",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka quotas allow administrators to limit the produce and consume throughput (bytes/second) and request rate for specific clients or users, preventing any single client from monopolizing cluster resources. Option B is incorrect because topic creation limits are a separate administrative concern. Option C confuses quotas with partition count limits. Option D describes max.message.bytes, a configuration parameter unrelated to the quota mechanism.",
+    "bonusFact": "Quotas can be set per client-id, user, or both."
+  },
+  {
+    "id": "apache-kafka-int-048",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between KStream and KTable in Kafka Streams?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "KStream is an unbounded record stream; KTable is a changelog where each key holds only the latest value",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "KStream processes data in real time; KTable processes data in batch mode",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "KStream reads from topics; KTable reads from databases",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "KStream supports joins; KTable does not support any join operations",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A KStream represents an unbounded, append-only sequence of records where each record is an independent event. A KTable represents a changelog stream where the latest value for each key is retained, providing a materialized table view. Option B is wrong because both KStream and KTable process data in real time. Option C is incorrect because KTable also reads from Kafka topics, not databases. Option D is wrong because KTable supports several join operations including table-table joins.",
+    "bonusFact": "KTable is backed by a compacted changelog topic."
+  },
+  {
+    "id": "apache-kafka-int-049",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of SASL authentication in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To verify the identity of clients and brokers using mechanisms like SCRAM, GSSAPI, or OAUTHBEARER",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To encrypt message payloads stored in Kafka log segments",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To compress data during broker-to-broker replication",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To manage consumer group partition assignments",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "SASL (Simple Authentication and Security Layer) provides a framework for authenticating clients and brokers in Kafka. Supported mechanisms include SCRAM-SHA-256/512, GSSAPI (Kerberos), PLAIN, and OAUTHBEARER. Option B confuses authentication with encryption at rest. Option C describes compression, which is unrelated to authentication. Option D describes the group coordinator's function, not an authentication mechanism.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-050",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka Connect configuration define?",
+    "codeSnippet": {
+      "language": "json",
+      "code": "{\n  \"name\": \"jdbc-source\",\n  \"config\": {\n    \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n    \"connection.url\": \"jdbc:postgresql://db:5432/orders\",\n    \"table.whitelist\": \"customers,products\",\n    \"mode\": \"incrementing\",\n    \"incrementing.column.name\": \"id\",\n    \"topic.prefix\": \"db-\"\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "A JDBC source connector that streams new rows from customers and products tables to Kafka topics",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "A JDBC sink connector that writes Kafka data into a PostgreSQL database",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "A connector that replicates the entire database schema to a Kafka topic",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A connector that deletes processed rows from the database tables",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This configures a JDBC source connector that reads from the customers and products tables in a PostgreSQL database. It uses incrementing mode on the id column to detect new rows, and publishes them to Kafka topics prefixed with db- (e.g., db-customers, db-products). Option B is wrong because this is a source connector, not a sink. Option C overstates the scope; it captures row data, not schema definitions. Option D is fabricated; source connectors read data, they do not delete from the source.",
+    "bonusFact": "Incrementing mode only detects inserts, not updates."
   }
 ]

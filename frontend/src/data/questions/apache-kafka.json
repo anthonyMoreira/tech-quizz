@@ -3934,5 +3934,331 @@
     ],
     "explanation": "Kafka transactions allow a producer with a transactional.id to group writes across multiple partitions and topics into an atomic unit. Consumers configured with isolation.level=read_committed will only see records from committed transactions, effectively providing all-or-nothing visibility. Idempotence (option B) prevents duplicate records for a single producer session but does not span multiple partitions atomically. acks=all (option C) controls durability, not atomicity across topics. Option D is incorrect because using a single partition does not provide cross-topic atomicity.",
     "bonusFact": "Kafka's exactly-once read-process-write pattern (EOS) in Streams uses transactions internally."
+  },
+  {
+    "id": "apache-kafka-int-021",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What happens to consumer group offsets stored in __consumer_offsets when the offsets.retention.minutes period expires?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The offsets are deleted and the group will reset to auto.offset.reset policy on next startup",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The offsets are archived to a secondary topic for long-term storage",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The consumer group is forcibly rebalanced and offsets are reset to the latest available",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Kafka pauses message consumption until the group acknowledges the expiry",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "offsets.retention.minutes (default 7 days) controls how long Kafka retains committed offsets for a consumer group after the group becomes inactive (no active members). Once expired, the offset record is removed from __consumer_offsets via compaction tombstones, and the next time the group starts it behaves as a new group, applying auto.offset.reset. Option B is fabricated; Kafka has no archival mechanism for offsets. Option C is wrong; Kafka does not trigger a rebalance due to offset expiry. Option D is incorrect; Kafka does not pause consumption for this reason.",
+    "bonusFact": "Increase offsets.retention.minutes for consumer groups that run infrequently, such as daily batch jobs."
+  },
+  {
+    "id": "apache-kafka-int-022",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which isolation.level setting must a consumer use to avoid reading records from aborted Kafka transactions?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "read_committed",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "read_uncommitted",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "serializable",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "repeatable_read",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "isolation.level=read_committed tells the consumer to withhold records that belong to open or aborted transactions and only deliver records from committed transactions (plus non-transactional records). isolation.level=read_uncommitted (the default) delivers all records regardless of transaction state, including those from aborted transactions. Options C and D ('serializable' and 'repeatable_read') are SQL isolation levels and are not valid Kafka consumer settings.",
+    "bonusFact": "read_committed adds a small read latency because the consumer must wait for the transaction marker before releasing records."
+  },
+  {
+    "id": "apache-kafka-int-023",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What is wrong with this idempotent producer configuration?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "Properties props = new Properties();\nprops.put(\"bootstrap.servers\", \"broker:9092\");\nprops.put(\"enable.idempotence\", \"true\");\nprops.put(\"acks\", \"1\");\nprops.put(\"retries\", \"3\");\nKafkaProducer<String, String> producer = new KafkaProducer<>(props);"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "acks=1 conflicts with enable.idempotence=true, which requires acks=all",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "retries=3 is too low and should be Integer.MAX_VALUE for idempotence to work",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Idempotent producers cannot be used with string key/value types",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "bootstrap.servers must list all brokers for idempotence to function correctly",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Enabling idempotence (enable.idempotence=true) requires acks=all because the broker must confirm that all in-sync replicas have written the record before the sequence number is advanced. Setting acks=1 while enabling idempotence will cause a ConfigException at producer startup in Kafka 3.0+. Option B is incorrect; retries does not need to be Integer.MAX_VALUE for idempotence to work, though a higher value is recommended. Option C is wrong; key/value serializer types are unrelated to idempotence. Option D is incorrect; a single bootstrap server is sufficient for the producer to discover the cluster.",
+    "bonusFact": "In Kafka 3.0+, enable.idempotence=true is the default when acks=all is also the default."
+  },
+  {
+    "id": "apache-kafka-int-024",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "In Kafka Connect, what is the purpose of a Single Message Transform (SMT)?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To apply lightweight, stateless transformations to individual records as they pass through the connector",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To perform stateful aggregations across multiple records before writing to the target",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To convert binary record formats (e.g., Avro) to JSON for downstream consumers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To route records to different topics based on a complex multi-step filtering pipeline",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "SMTs are simple, stateless record-by-record transformations applied in the connector pipeline. Examples include ReplaceField (add/remove/rename fields), InsertField (add a static value or timestamp), MaskField (mask sensitive values), and ExtractField (flatten nested structures). Option B is wrong because SMTs are stateless\u2014complex stateful aggregations require Kafka Streams or ksqlDB. Option C describes converters (e.g., AvroConverter), which are a separate mechanism. Option D is partially possible via ValueToKey or conditional routing SMTs, but the description implies a Kafka Streams-level pipeline, not a single SMT.",
+    "bonusFact": "SMTs can be chained in sequence using the transforms configuration key in connector properties."
+  },
+  {
+    "id": "apache-kafka-int-025",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What does the fetch.min.bytes consumer configuration control, and what is the trade-off?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The minimum data the broker must return per fetch request; higher values reduce requests but increase latency",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum size of a single fetched record; higher values allow larger messages",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The minimum number of partitions the consumer must poll in each request",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The minimum offset gap between two consecutive fetch requests",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "fetch.min.bytes tells the broker to wait until at least that many bytes are available before responding to a fetch request. Increasing it means fewer but larger fetches, improving throughput at the cost of added latency because the broker may hold the response until the threshold is met (up to fetch.max.wait.ms). Option B describes max.message.bytes or max.partition.fetch.bytes. Option C is fabricated; there is no per-partition minimum count setting. Option D is also fabricated.",
+    "bonusFact": "fetch.max.wait.ms (default 500 ms) caps how long the broker waits even if fetch.min.bytes is not reached."
+  },
+  {
+    "id": "apache-kafka-int-026",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "A Kafka topic has cleanup.policy=compact,delete. What does this combined policy do?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Old segments are deleted based on retention.ms/bytes, and the active segment is compacted to keep only the latest value per key",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Records are compacted first, then immediately deleted after each compaction run",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The topic alternates between delete and compact policies on each log cleaner cycle",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "All records are deleted after retention.ms, making compaction redundant and ignored",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When both policies are combined, Kafka applies time/size-based deletion to closed (inactive) log segments that are older than retention.ms or retention.bytes, while simultaneously running the log cleaner to compact the remaining segments so only the latest value per key is kept. This is useful for topics that need bounded storage but also require a full-state snapshot of current keys. Option B is wrong; deletion and compaction are independent processes that run concurrently, not sequentially. Option C is incorrect; both policies are active simultaneously. Option D is wrong; compaction still operates on segments within the retention window.",
+    "bonusFact": "cleanup.policy=compact,delete is the recommended policy for Kafka Streams changelog topics."
+  },
+  {
+    "id": "apache-kafka-int-027",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the effect of setting auto.offset.reset=earliest on a consumer that is joining an existing consumer group for the first time?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The consumer reads from the earliest available offset in each assigned partition",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The consumer reads from the offset committed by the last consumer in the same group",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The consumer reads only records produced after it joined the group",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The consumer reads from offset 0, even if earlier records have been deleted by retention",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "auto.offset.reset applies only when no committed offset exists for the consumer group on a partition. With earliest, the consumer starts reading from the beginning of the partition (the oldest available message). Option B is wrong; if the group has no committed offset, there is no 'last committed offset' to resume from. Option C describes the behaviour of auto.offset.reset=latest. Option D is subtly wrong: earliest starts at the earliest available offset, which may be greater than 0 if earlier records have been deleted by retention or compaction.",
+    "bonusFact": "auto.offset.reset=none throws a NoOffsetForPartitionException if no committed offset is found, useful for strict pipelines."
+  },
+  {
+    "id": "apache-kafka-int-028",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the __transaction_state internal Kafka topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It stores the state of ongoing and completed producer transactions managed by the transaction coordinator",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It stores committed consumer group offsets for transactional consumers",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It stores the metadata of compacted topics to accelerate state recovery",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It stores Kafka Streams changelog entries for transactional state stores",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "__transaction_state is a compacted internal topic (50 partitions by default) that the transaction coordinator uses to durably persist the state of each transactional producer: whether a transaction is ongoing, prepared, committed, or aborted. This ensures transaction state survives coordinator failover. Option B is wrong; consumer group offsets are stored in __consumer_offsets. Option C is fabricated. Option D is wrong; Kafka Streams changelog topics are user-created topics separate from __transaction_state.",
+    "bonusFact": "The transaction coordinator for a transactional.id is determined by hashing the ID to a __transaction_state partition."
+  },
+  {
+    "id": "apache-kafka-int-029",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What will this Kafka Streams code output when it receives the record ('user-1', '5') followed by ('user-1', '3')?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KTable<String, Long> counts = builder\n    .stream(\"events\", Consumed.with(Serdes.String(), Serdes.String()))\n    .groupByKey()\n    .count();"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "First emits ('user-1', 1L) then updates to ('user-1', 2L) in the output KTable",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Emits ('user-1', 5) and ('user-1', 3) unchanged as a KStream",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Sums the values: emits ('user-1', 8L)",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Emits only the latest record: ('user-1', 3)",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "groupByKey().count() counts the number of records (not their values) per key. After the first record arrives, the count for 'user-1' becomes 1. After the second, it becomes 2. These counts are materialised as a KTable, so downstream consumers see the updated count as ('user-1', 2L) eventually. Option B is wrong because this is an aggregation, not a passthrough stream. Option C is wrong because count() counts records, not sums values\u2014that would require reduce() or aggregate(). Option D is wrong because KTable semantics emit updates, not just the final state.",
+    "bonusFact": "count() internally uses a persistent RocksDB state store to maintain per-key counts across restarts."
+  },
+  {
+    "id": "apache-kafka-int-030",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is rack awareness in Kafka replication and why is it important?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It spreads partition replicas across different failure zones so that a single rack failure does not cause data loss",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It ensures that the producer always writes to the broker in the same rack to minimise network latency",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It limits consumer fetch requests to brokers in the same rack to reduce cross-rack bandwidth costs",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It configures the Kafka controller to use only brokers in a designated primary rack",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Rack awareness (broker.rack configuration) instructs Kafka to place partition replicas on brokers in different racks or availability zones. This ensures that even if an entire rack loses power or network connectivity, at least one replica in each ISR remains available in another rack, preventing data loss or unavailability. Option B describes a producer optimisation but is the opposite concern\u2014rack awareness is about replica placement, not write path. Option C describes a valid related feature (follower fetching), but that is a separate optimisation. Option D is incorrect; the controller placement is unrelated to rack awareness.",
+    "bonusFact": "In cloud deployments, each availability zone is typically mapped to a separate rack value."
   }
 ]

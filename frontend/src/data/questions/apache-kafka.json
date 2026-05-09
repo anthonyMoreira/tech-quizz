@@ -3611,5 +3611,328 @@
     ],
     "explanation": "linger.ms sets the maximum time the producer waits to fill a batch before sending, even if batch.size has not been reached. Setting it to a small positive value (e.g., 5\u201320 ms) trades slightly higher latency for better throughput by sending fuller batches. batch.size caps the maximum byte size of a batch but does not add any delay\u2014the batch is sent as soon as it is full. buffer.memory limits the total memory allocated for all producer record buffers. request.timeout.ms is the time the producer waits for a broker acknowledgment after sending.",
     "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-int-011",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of static group membership (group.instance.id) in Kafka consumers?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Prevents unnecessary rebalances when a consumer restarts within session.timeout.ms",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Pins a consumer to a specific set of partitions that never change",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Allows multiple consumer groups to share the same partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Disables the heartbeat mechanism to reduce broker load",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "When group.instance.id is set, the broker treats the consumer as a static member. If it disconnects and reconnects within the session timeout, its previous partition assignment is restored without triggering a rebalance. This is particularly useful for stateful consumers (e.g., Kafka Streams) that need to avoid costly state store rebuilds on restart. Option B is wrong because static membership does not lock assignments forever\u2014it only preserves them during the session window. Option C is incorrect; partition sharing across groups is not possible. Option D is wrong; heartbeats still operate normally.",
+    "bonusFact": "Static membership is especially valuable when deploying containerised consumers with frequent rolling restarts."
+  },
+  {
+    "id": "apache-kafka-int-012",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When a Kafka producer has exhausted its buffer.memory and block.on.buffer.full is no longer available, what happens by default?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The send() call blocks until buffer space becomes available or max.block.ms is exceeded, then throws a TimeoutException",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The record is silently dropped to prevent the producer from stalling",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The producer immediately throws an OutOfMemoryError and terminates",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The producer automatically increases buffer.memory to accommodate new records",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Since Kafka 0.10, when the producer's RecordAccumulator is full, send() blocks for up to max.block.ms (default 60 s). If space does not free up within that window, a TimeoutException is thrown. This design allows transient backpressure without data loss. Option B is wrong because records are not silently dropped; the caller is notified via an exception. Option C is wrong; a regular TimeoutException is thrown, not an OutOfMemoryError. Option D is incorrect; the producer never auto-expands buffer.memory at runtime.",
+    "bonusFact": "max.block.ms also governs how long the producer will wait for metadata on topic creation."
+  },
+  {
+    "id": "apache-kafka-int-013",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which Kafka compression type offers the best compression ratio for text-heavy messages at the cost of higher CPU usage?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "zstd",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "snappy",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "lz4",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "gzip",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "zstd (Zstandard), added in Kafka 2.1, consistently delivers the best compression ratios among Kafka's supported codecs while remaining competitive in speed at higher compression levels. snappy and lz4 prioritise speed over ratio and are better choices when CPU is the bottleneck. gzip provides good compression but is slower than zstd and lz4. For throughput-sensitive workloads with text or JSON payloads, zstd is typically the best trade-off. Option D (gzip) also provides a good ratio but zstd outperforms it in both ratio and decompression speed.",
+    "bonusFact": "zstd decompression is significantly faster than gzip, making it advantageous for consumer-heavy workloads."
+  },
+  {
+    "id": "apache-kafka-int-014",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "In Kafka Streams, what is the difference between a tumbling window and a hopping window?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Tumbling windows do not overlap; hopping windows overlap when the advance interval is shorter than the window size",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Tumbling windows overlap; hopping windows never overlap",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Hopping windows are session-based; tumbling windows are time-based",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Both window types are identical; the distinction is only in the DSL API naming",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A tumbling window has a fixed size and advances by exactly its own size, so consecutive windows never overlap. A hopping window also has a fixed size but advances by a smaller hop interval, causing windows to overlap and each record to potentially belong to multiple windows. Session windows are a third distinct type based on activity gaps, not fixed time. Option B inverts the definitions. Option C confuses hopping with session windows. Option D is wrong; they have fundamentally different behaviours and result in different record-to-window assignments.",
+    "bonusFact": "A hopping window with hop equal to its size is equivalent to a tumbling window."
+  },
+  {
+    "id": "apache-kafka-int-015",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What does a GlobalKTable provide that a regular KTable does not in a Kafka Streams application?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It is populated with the full data from all partitions on every Streams instance, enabling joins without repartitioning",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It stores data only for partitions assigned to the local Streams task, reducing memory usage",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It supports time-windowed aggregations, unlike a regular KTable",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It is persisted to an external database instead of a local state store",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "A GlobalKTable reads all partitions of its source topic into every Streams instance, regardless of task assignment. This means any stream record can be joined with any entry in the GlobalKTable without requiring a repartition step, which is impossible with a regular KTable that only holds the data for locally assigned partitions. The trade-off is higher memory usage per instance. Option B describes the behaviour of a regular KTable. Option C is wrong; time-windowed aggregations use windowed KTables, not GlobalKTable. Option D is incorrect; GlobalKTable uses the same local RocksDB state store as a KTable.",
+    "bonusFact": "GlobalKTable is ideal for slowly changing reference data like user profiles or product catalogs."
+  },
+  {
+    "id": "apache-kafka-int-016",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What does this Kafka Streams topology do when a record arrives on the input topic?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "StreamsBuilder builder = new StreamsBuilder();\nKStream<String, String> stream = builder.stream(\"orders\");\nstream\n    .filter((key, value) -> value != null && value.contains(\"PAID\"))\n    .mapValues(value -> value.toUpperCase())\n    .to(\"paid-orders\");"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Filters records whose value contains 'PAID', uppercases the value, then writes to paid-orders",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Filters records whose value contains 'PAID' and writes the original value (unchanged) to paid-orders",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Compacts the orders topic into paid-orders by keeping only the latest value per key",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Aggregates all PAID records by key and emits totals to paid-orders",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The topology applies two stateless operations: filter() drops any record whose value is null or does not contain the string 'PAID', and mapValues() transforms the remaining values to uppercase. The transformed records are then written to the paid-orders topic via to(). Option B is wrong because mapValues() does transform the value. Option C describes log compaction, not a Streams topology. Option D is wrong because there is no groupBy() or aggregate() operation in the topology.",
+    "bonusFact": "mapValues() is preferred over map() when only the value changes because it avoids an unnecessary repartition."
+  },
+  {
+    "id": "apache-kafka-int-017",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the role of the __consumer_offsets internal topic in Kafka?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It stores committed consumer group offsets persistently so they survive broker restarts",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It stores the current ISR list for every topic-partition",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It stores producer transaction state for exactly-once semantics",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It stores the partition leader assignments managed by the controller",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "__consumer_offsets is a compacted internal topic with 50 partitions by default. Each consumer group writes its committed offsets (topic, partition, offset) here whenever commitSync() or commitAsync() is called. Compaction ensures only the latest committed offset per consumer-group/topic/partition triple is retained. Option B describes information held in the cluster metadata (ZooKeeper or KRaft metadata log). Option C is wrong; transaction state is stored in __transaction_state. Option D is wrong; leader assignments are part of cluster metadata managed by the controller.",
+    "bonusFact": "The group coordinator for a consumer group is the broker that is the leader for that group's __consumer_offsets partition."
+  },
+  {
+    "id": "apache-kafka-int-018",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "When using Kafka Connect in distributed mode, what is the purpose of the config.storage.topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "It stores connector and task configurations so all workers share a consistent view",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It stores the current offsets of source connectors to enable exactly-once delivery",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It stores the status (RUNNING, FAILED) of each connector and task",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It stores the schema of records produced by sink connectors",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Distributed Kafka Connect uses three internal topics: config.storage.topic holds connector and task configurations, offset.storage.topic holds source connector offsets, and status.storage.topic tracks connector/task lifecycle state. All workers subscribe to config.storage.topic so that configuration changes propagate to every worker without manual intervention. Option B describes the offset.storage.topic. Option C describes the status.storage.topic. Option D is incorrect; schemas are typically managed by the Schema Registry, not a Connect internal topic.",
+    "bonusFact": "config.storage.topic must have replication.factor >= 3 and cleanup.policy=compact in production."
+  },
+  {
+    "id": "apache-kafka-int-019",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What does the replica.lag.time.max.ms broker configuration control?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The maximum time a follower replica can be behind the leader before being removed from the ISR",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The maximum time the producer waits before retrying a failed produce request",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The interval at which followers send fetch requests to the leader",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The time-to-live for entries in the replica offset cache",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "replica.lag.time.max.ms (default 30 s) defines how long a follower replica may fail to fetch new messages from the leader before the leader removes it from the ISR. Once out of the ISR, the replica is considered lagging and will not count toward acks=all acknowledgment. When it catches up again, it is added back to the ISR. Option B describes retry.backoff.ms or delivery.timeout.ms on the producer side. Option C is not a configurable interval; followers fetch as fast as they can with no fixed interval. Option D is fabricated.",
+    "bonusFact": "Monitoring 'IsrShrinks' and 'IsrExpands' JMX metrics helps detect ISR instability early."
+  },
+  {
+    "id": "apache-kafka-int-020",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which Kafka feature allows a producer to atomically write to multiple partitions and topics so that consumers either see all or none of the writes?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Kafka transactions using a transactional.id and the beginTransaction/commitTransaction API",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Idempotent producers with enable.idempotence=true",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Setting acks=all on the producer with min.insync.replicas=2",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Using a single-partition topic and a custom partitioner",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka transactions allow a producer with a transactional.id to group writes across multiple partitions and topics into an atomic unit. Consumers configured with isolation.level=read_committed will only see records from committed transactions, effectively providing all-or-nothing visibility. Idempotence (option B) prevents duplicate records for a single producer session but does not span multiple partitions atomically. acks=all (option C) controls durability, not atomicity across topics. Option D is incorrect because using a single partition does not provide cross-topic atomicity.",
+    "bonusFact": "Kafka's exactly-once read-process-write pattern (EOS) in Streams uses transactions internally."
   }
 ]

@@ -8178,5 +8178,331 @@
     ],
     "explanation": "After a leader change, a follower needs to determine if it has any divergent records (records from a previous leader that were not replicated). It sends an OffsetForLeaderEpoch request to the new leader with its current leader epoch. The new leader responds with the end offset for that epoch. If the follower's log extends past this offset, it truncates back to align with the new leader. Option B describes a fetch request, not epoch lookup. Option C describes the ListOffsets request. Option D fabricates a controller-initiated process.",
     "bonusFact": "This replaced the high-watermark-based truncation approach."
+  },
+  {
+    "id": "apache-kafka-adv-051",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's time-based index (.timeindex) files and how do they support time-based lookups?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "They map timestamps to offsets within each log segment, enabling efficient offsetsForTimes() queries without scanning the entire log",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "They record the time each log segment was created for retention policy enforcement",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "They store the processing time of each consumer for lag calculation",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "They index messages by their creation date for calendar-based queries",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Each Kafka log segment has an associated .timeindex file that maps timestamps to offsets. When a consumer calls offsetsForTimes(), the broker uses these indexes to binary-search for the segment and offset corresponding to the requested timestamp without scanning all records. The entries are sparse (controlled by log.index.interval.bytes). Option B oversimplifies; the timeindex stores per-record timestamp mappings, not just segment creation times. Option C confuses broker-side indexing with consumer-side metrics. Option D fabricates calendar-based queries.",
+    "bonusFact": "offsetsForTimes() uses binary search on the time index."
+  },
+  {
+    "id": "apache-kafka-adv-052",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What happens when a Kafka Streams application processes records from a multi-partition input topic and encounters a deserialization error?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "The default handler (LogAndFailExceptionHandler) logs the error and shuts down the stream thread, but other threads continue processing other partitions",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The entire application crashes immediately across all instances",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The bad record is automatically skipped and processing continues",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The partition with the bad record is reassigned to another instance",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "By default, Kafka Streams uses LogAndFailExceptionHandler for deserialization errors, which logs the error and shuts down the affected stream thread. Other threads handling other partitions continue running. The application does not completely crash. You can configure LogAndContinueExceptionHandler to skip bad records, or implement a custom DeserializationExceptionHandler. Option B overstates the failure scope. Option C describes the non-default LogAndContinue handler. Option D is wrong because the partition is not automatically reassigned to another instance on deserialization errors.",
+    "bonusFact": "Custom exception handlers can route bad records to a DLQ."
+  },
+  {
+    "id": "apache-kafka-adv-053",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What advanced pattern does this Kafka Streams topology implement?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "KStream<String, String> events = builder.stream(\"events\");\nKStream<Windowed<String>, Long> sessionized = events\n  .groupByKey()\n  .windowedBy(SessionWindows.ofInactivityGapAndGrace(\n      Duration.ofMinutes(30), Duration.ofMinutes(5)))\n  .count()\n  .toStream();\nsessionized.to(\"sessions\",\n  Produced.with(WindowedSerdes.sessionWindowedSerdeFrom(String.class),\n    Serdes.Long()));"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Session windowing that groups events per key with a 30-minute inactivity gap, 5-minute grace for late arrivals, producing session-based counts",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Tumbling window aggregation with 30-minute windows and 5-minute overlap",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Sliding window join between events from the last 30 minutes",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Time-based rate limiting that allows 30 events per 5-minute window",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This code implements session windowing: records with the same key are grouped into sessions where a session ends after 30 minutes of inactivity. Adjacent sessions for the same key are merged when new records bridge the gap. The 5-minute grace period allows late-arriving records to be included. The result is a count of events per session, written with a windowed serde. Option B describes tumbling windows, which have fixed sizes. Option C describes a join, not an aggregation. Option D fabricates a rate limiting mechanism.",
+    "bonusFact": "Session windows dynamically merge when gaps are bridged."
+  },
+  {
+    "id": "apache-kafka-adv-054",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's broker-side request queue and how does it interact with the request handler pool?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Network threads place incoming requests on a shared queue; I/O threads dequeue and process them, decoupling network handling from disk I/O",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The request queue stores messages before they are written to the log, acting as a write buffer",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "The request queue prioritizes admin requests over produce/consume requests",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Each client connection has its own dedicated request queue for isolation",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka brokers use a multi-threaded architecture where network threads (num.network.threads) accept incoming requests and place them on a shared request queue. I/O threads (num.io.threads) pick requests from this queue and execute them (reading from or writing to logs). This decouples the network layer from disk I/O, preventing slow disk operations from blocking network threads. Option B confuses the request queue with a message buffer. Option C is wrong because the queue is generally FIFO without prioritization. Option D incorrectly describes per-connection queues.",
+    "bonusFact": "Monitor queued.requests metric to detect I/O thread saturation."
+  },
+  {
+    "id": "apache-kafka-adv-055",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of the produce request required acks timeline in Kafka and what are the latency implications?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "acks=0 returns immediately; acks=1 waits for leader write; acks=all waits for leader write plus ISR replication, each adding latency",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "All acks settings have the same latency because writes are asynchronous",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "acks=all is faster because it uses parallel writes to all replicas simultaneously",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "acks settings only affect throughput, not latency",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "With acks=0, the producer gets no acknowledgment and the request returns immediately (lowest latency, no durability). With acks=1, the request blocks until the leader writes to its local log (medium latency, leader durability). With acks=all, the request blocks until the leader writes and all ISR members replicate the data (highest latency, strongest durability). Each step adds network and I/O wait time. Option B is wrong because the acks setting directly determines how long the producer waits. Option C incorrectly claims acks=all is faster. Option D ignores the latency impact of waiting for acknowledgments.",
+    "bonusFact": "acks=all latency depends on the slowest ISR follower."
+  },
+  {
+    "id": "apache-kafka-adv-056",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "How does Kafka's quota management work at the broker level for multi-tenant clusters?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Quotas throttle clients by delaying responses when byte rate or request rate exceeds configured limits per user, client-id, or both",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Quotas reject excess requests with an error code, requiring clients to implement retry logic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Quotas are enforced by dropping excess messages silently",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Quotas only apply to produce requests, not consume or admin requests",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Kafka quotas work by introducing artificial delays in responses when a client exceeds its configured throughput limit. The broker measures the client's byte rate over a configurable window and, if it exceeds the quota, delays the response to bring the effective rate within limits. Quotas can be configured per user, per client-id, or per user/client-id combination. Option B is wrong because Kafka throttles, not rejects. Option C is incorrect because messages are never dropped due to quotas. Option D understates quota coverage; consumer fetch and request rate quotas also exist.",
+    "bonusFact": "Throttled clients see the produce-throttle-time-avg metric."
+  },
+  {
+    "id": "apache-kafka-adv-057",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "code-snippet",
+    "prompt": "What is the purpose of this custom Kafka Streams Processor implementation?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "public class DeduplicationProcessor\n    implements Processor<String, String, String, String> {\n  private KeyValueStore<String, Long> seen;\n  public void init(ProcessorContext<String, String> ctx) {\n    seen = ctx.getStateStore(\"seen-store\");\n    ctx.schedule(Duration.ofMinutes(10),\n      PunctuationType.WALL_CLOCK_TIME,\n      ts -> evictExpired(ts));\n  }\n  public void process(Record<String, String> record) {\n    if (seen.get(record.key()) == null) {\n      seen.put(record.key(), record.timestamp());\n      context().forward(record);\n    }\n  }\n}"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "Deduplicates records by key using a state store, forwarding only the first occurrence and evicting expired entries every 10 minutes",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Caches all records and replays them every 10 minutes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Rate-limits record processing to one per key per 10-minute window",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Batches records by key and forwards them in groups every 10 minutes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "This processor implements a deduplication pattern using the Processor API. It maintains a state store of seen keys. When a record arrives, it checks if the key has been seen before. If not, it stores the key with its timestamp and forwards the record downstream. A wall-clock-time punctuator runs every 10 minutes to evict expired entries from the state store, preventing unbounded growth. Option B describes replay, not deduplication. Option C mischaracterizes it as rate limiting. Option D describes batching, not deduplication.",
+    "bonusFact": null
+  },
+  {
+    "id": "apache-kafka-adv-058",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the difference between Kafka's log-end offset (LEO) and the last stable offset (LSO)?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "LEO is the offset of the next record to be written; LSO is the offset below which all transactional records are either committed or aborted",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "LEO is the consumer's committed offset; LSO is the producer's last sent offset",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "LEO tracks physical disk position; LSO tracks logical message position",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "They are the same value when transactions are not in use",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The LEO is the offset of the next record that will be appended to the log. The LSO is the offset below which all transactional records have been resolved (committed or aborted). Consumers with isolation.level=read_committed can only read up to the LSO. The gap between LSO and LEO represents records from open transactions that have not yet been committed or aborted. Option B confuses these with consumer and producer offsets. Option C fabricates a physical vs logical distinction. Option D is actually true in practice but oversimplifies the conceptual difference.",
+    "bonusFact": "Large LSO-LEO gaps indicate long-running transactions."
+  },
+  {
+    "id": "apache-kafka-adv-059",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the purpose of Kafka's connection creation rate quota and why was it introduced?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "To limit the rate of new TCP connections per broker/listener to protect against connection storm attacks or misconfigured clients",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To limit the total number of active connections across the entire cluster",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To control how quickly consumers can join consumer groups",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To restrict the number of topics a single client can connect to simultaneously",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The connection creation rate quota (KIP-612) limits how many new connections can be created per IP, per listener, and per broker-wide within a time window. This protects brokers from connection storms caused by misconfigured clients repeatedly opening and closing connections, or from DoS attacks. Excess connection attempts are throttled. Option B describes a total connection limit, not a creation rate limit. Option C confuses connections with consumer group membership. Option D fabricates a per-topic connection restriction.",
+    "bonusFact": "Configure with max.connection.creation.rate on each listener."
+  },
+  {
+    "id": "apache-kafka-adv-060",
+    "themeId": "apache-kafka",
+    "difficulty": "advanced",
+    "type": "text",
+    "prompt": "What is the impact of running Kafka on containers (e.g., Kubernetes) compared to bare metal, and what are the key considerations?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Container resource limits can interfere with page cache, JVM ergonomics, and disk I/O; proper storage class selection and memory/CPU limits are critical",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Containers provide better performance than bare metal because of resource isolation",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Kafka cannot run in containers because it requires direct hardware access",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Containers automatically optimize Kafka's configuration for the available resources",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Running Kafka in containers introduces several challenges: container memory limits may restrict the OS page cache that Kafka relies on heavily, JVM ergonomics may not correctly detect available resources behind cgroup limits, and network overlay performance may add latency. Persistent volume selection is critical since Kafka requires high I/O throughput. Proper resource requests/limits, local persistent volumes, and JVM flags like -XX:+UseContainerSupport are essential. Option B overstates container benefits. Option C is wrong since Kafka runs well in containers with proper configuration. Option D fabricates auto-optimization.",
+    "bonusFact": "Use local persistent volumes for best Kafka I/O performance."
   }
 ]

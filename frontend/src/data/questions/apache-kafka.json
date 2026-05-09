@@ -4260,5 +4260,328 @@
     ],
     "explanation": "Rack awareness (broker.rack configuration) instructs Kafka to place partition replicas on brokers in different racks or availability zones. This ensures that even if an entire rack loses power or network connectivity, at least one replica in each ISR remains available in another rack, preventing data loss or unavailability. Option B describes a producer optimisation but is the opposite concern\u2014rack awareness is about replica placement, not write path. Option C describes a valid related feature (follower fetching), but that is a separate optimisation. Option D is incorrect; the controller placement is unrelated to rack awareness.",
     "bonusFact": "In cloud deployments, each availability zone is typically mapped to a separate rack value."
+  },
+  {
+    "id": "apache-kafka-int-031",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the effect of setting num.partitions at the broker level versus setting it per topic?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "num.partitions is the default applied when a topic is auto-created; per-topic settings override it at creation time",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "num.partitions at broker level applies to all topics and cannot be overridden per topic",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "num.partitions only applies to internal topics like __consumer_offsets",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Changing num.partitions on the broker redistributes existing partitions across brokers automatically",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "num.partitions is a broker-wide default that Kafka uses when it auto-creates a topic (e.g., when a producer writes to a non-existent topic with auto.create.topics.enable=true). When creating topics explicitly via the Admin API, Kafka CLI, or terraform, you specify the exact partition count, which takes precedence over the broker default. Option B is wrong because explicit topic creation always overrides the default. Option C is wrong; num.partitions applies to user-defined topics, not just internal ones. Option D is wrong; changing the broker config has no retroactive effect on existing topics.",
+    "bonusFact": "You can only increase partition count after creation; decreasing partitions requires deleting and recreating the topic."
+  },
+  {
+    "id": "apache-kafka-int-032",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between delivery.timeout.ms and request.timeout.ms for a Kafka producer?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "delivery.timeout.ms is the total time budget for a send including retries; request.timeout.ms is the per-request broker response timeout",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "request.timeout.ms covers retries; delivery.timeout.ms is only for the initial attempt",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "They are aliases for the same setting and must be configured to the same value",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "delivery.timeout.ms applies to consumers; request.timeout.ms applies to producers",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "delivery.timeout.ms (default 120 s) is the upper bound on the total time from when send() is called until the record is either successfully delivered or the producer gives up\u2014including waiting in the RecordAccumulator, sending, and all retries. request.timeout.ms (default 30 s) is the timeout for a single RPC round-trip to the broker. If request.timeout.ms is exceeded the producer may retry, but all retries must complete within delivery.timeout.ms. Option B inverts the relationship. Option C is wrong; they control different scopes. Option D is wrong; both are producer-side settings.",
+    "bonusFact": "delivery.timeout.ms must be >= linger.ms + request.timeout.ms to avoid spurious delivery failures."
+  },
+  {
+    "id": "apache-kafka-int-033",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which consumer configuration controls how many bytes can be fetched per partition in a single request?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "max.partition.fetch.bytes",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "fetch.max.bytes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "max.poll.records",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "receive.buffer.bytes",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "max.partition.fetch.bytes (default 1 MB) caps the amount of data the server returns per partition in each fetch response. fetch.max.bytes (default 52 MB) is the aggregate limit across all partitions in a single fetch request. max.poll.records limits the number of records returned per poll() call but is unrelated to byte sizes. receive.buffer.bytes is the TCP receive buffer size. If a consumer is assigned many partitions, the actual data received can be up to max.partition.fetch.bytes \u00d7 number-of-partitions, potentially large.",
+    "bonusFact": "If a single record is larger than max.partition.fetch.bytes, it will still be fetched to avoid starvation."
+  },
+  {
+    "id": "apache-kafka-int-034",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "In KRaft mode (without ZooKeeper), what replaces the ZooKeeper-based controller election in Kafka 4.0?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "A Raft-based quorum of controller nodes that elect a leader using the KRaft consensus protocol",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "The active broker with the lowest broker ID automatically becomes the controller",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "An external etcd cluster manages controller election independently of Kafka brokers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Each broker independently acts as its own controller, eliminating the single-controller bottleneck",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "In KRaft mode (GA since Kafka 3.3, and ZooKeeper removed in Kafka 4.0), controller nodes form a Raft quorum. One controller is elected leader via the Raft consensus protocol, while the others act as followers. The active controller manages all cluster metadata stored in the __cluster_metadata internal topic. Option B is wrong; the lowest-ID heuristic was sometimes used informally, but controller election in KRaft is strictly Raft-based. Option C is wrong; Kafka's KRaft is fully self-contained and requires no external etcd. Option D is wrong; there is still a single active controller.",
+    "bonusFact": "KRaft dramatically reduces cluster startup time because metadata is local to controllers, not fetched from ZooKeeper."
+  },
+  {
+    "id": "apache-kafka-int-035",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the purpose of the producer's transactional.id configuration, and what happens if two producer instances share the same transactional.id?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "transactional.id enables transactions; if two instances share it, the older one is fenced by the broker with a ProducerFencedException",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "transactional.id is only a label for logging; duplicate IDs are silently ignored",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "If two instances share the same transactional.id, they collaborate as a distributed producer for higher throughput",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "transactional.id links the producer to a specific consumer group to enable read-process-write semantics",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "transactional.id uniquely identifies a transactional producer across restarts. When a new producer instance initialises with an existing transactional.id, the broker bumps the producer epoch and fences the older instance\u2014any subsequent sends from the old producer result in a ProducerFencedException. This prevents zombie producers from writing stale data. Option B is wrong; transactional.id is functional, not merely cosmetic. Option C is wrong; two producers cannot collaborate via a shared ID. Option D is partially right conceptually (EOS uses both) but is not the definition of transactional.id.",
+    "bonusFact": "Zombie fencing via producer epochs is the cornerstone of Kafka's exactly-once delivery guarantee."
+  },
+  {
+    "id": "apache-kafka-int-036",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "code-snippet",
+    "prompt": "What is the purpose of the rebalanceListener passed to subscribe() in the following code?",
+    "codeSnippet": {
+      "language": "java",
+      "code": "consumer.subscribe(List.of(\"orders\"), new ConsumerRebalanceListener() {\n    public void onPartitionsRevoked(Collection<TopicPartition> partitions) {\n        consumer.commitSync(currentOffsets);\n    }\n    public void onPartitionsAssigned(Collection<TopicPartition> partitions) {\n        // load state for newly assigned partitions\n    }\n});"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": "To commit offsets for revoked partitions before the rebalance completes, preventing re-processing on restart",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To pause consumption on all partitions while new partitions are being assigned",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To automatically seek to the beginning of newly assigned partitions",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "To register a custom partition assignment strategy with the group coordinator",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "onPartitionsRevoked() is called just before the partitions are taken away from the consumer. Committing offsets here ensures that the consumer (or a replacement) can resume from the correct position rather than reprocessing records. onPartitionsAssigned() is called after the new assignment is in place and is commonly used to load local state or seek to specific offsets. Option B is wrong; pausing is not automatic. Option C is wrong; the listener does not seek unless you explicitly call consumer.seekToBeginning(). Option D is wrong; assignor strategy is configured separately.",
+    "bonusFact": "With CooperativeStickyAssignor, onPartitionsRevoked() is called only for partitions being moved, not all of them."
+  },
+  {
+    "id": "apache-kafka-int-037",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is MirrorMaker 2 and how does it differ from the original MirrorMaker 1?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "MirrorMaker 2 is built on Kafka Connect and replicates topics, offsets, and ACLs; MirrorMaker 1 was a simple consumer-producer bridge with no offset translation",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "MirrorMaker 2 uses ZooKeeper directly for replication; MirrorMaker 1 used the Kafka consumer API",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "MirrorMaker 2 supports only active-passive replication; MirrorMaker 1 supported active-active",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "MirrorMaker 2 is a cloud-managed service; MirrorMaker 1 was self-hosted",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "MirrorMaker 2 (MM2) was introduced in Kafka 2.4 and is built on Kafka Connect's distributed framework. It provides three built-in connectors: MirrorSourceConnector (replicates records), MirrorCheckpointConnector (translates consumer group offsets), and MirrorHeartbeatConnector (monitors replication health). It supports both active-active and active-passive topologies and translates offsets between clusters. MirrorMaker 1 was a simple standalone process that consumed from a source cluster and produced to a target with no offset translation or ACL replication. Options B, C, and D are all incorrect.",
+    "bonusFact": "MM2 prefixes replicated topic names with the source cluster alias by default (e.g., us-east.orders)."
+  },
+  {
+    "id": "apache-kafka-int-038",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "Which metric should you monitor to detect that a consumer group is falling behind in processing Kafka messages?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Consumer lag (records-lag-max) \u2014 the difference between the log end offset and the committed offset",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "fetch-rate \u2014 the number of fetch requests per second issued by the consumer",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "bytes-consumed-rate \u2014 the total bytes consumed per second",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "commit-rate \u2014 the number of offset commits per second",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Consumer lag measures how many records are waiting in a partition that the consumer has not yet processed. It equals the log end offset minus the committed (or last-polled) offset. A growing lag signals that the consumer is slower than the producer, and remediation may involve adding consumers, tuning fetch settings, or scaling the application. fetch-rate (option B) shows activity but not backlog. bytes-consumed-rate (option C) shows throughput but not whether the consumer is keeping up. commit-rate (option D) shows commit frequency, not position relative to the end of the log.",
+    "bonusFact": "Confluent's kafka-consumer-groups.sh --describe command shows per-partition lag in real time."
+  },
+  {
+    "id": "apache-kafka-int-039",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the difference between Kafka's flatMap() and flatMapValues() stream operations?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "flatMap() can change both key and value and may trigger repartitioning; flatMapValues() only changes the value and preserves the key, avoiding repartitioning",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "flatMapValues() emits multiple records per input; flatMap() always emits exactly one output record",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "flatMap() is stateful; flatMapValues() is stateless",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "flatMapValues() supports windowing; flatMap() does not",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Both flatMap() and flatMapValues() can emit zero or more records per input record. The key difference is that flatMap() allows modifying the record key, which marks the downstream stream as needing repartitioning before any key-based operation (e.g., groupByKey). flatMapValues() preserves the original key, so Kafka Streams knows the stream is already partitioned correctly and no repartition topic is needed. Option B is wrong because both can emit multiple records. Options C and D are fabricated distinctions.",
+    "bonusFact": "Prefer flatMapValues() over flatMap() when keys do not change to avoid unnecessary internal repartition topics."
+  },
+  {
+    "id": "apache-kafka-int-040",
+    "themeId": "apache-kafka",
+    "difficulty": "intermediate",
+    "type": "text",
+    "prompt": "What is the role of the Kafka broker configuration num.recovery.threads.per.data.dir?",
+    "codeSnippet": null,
+    "options": [
+      {
+        "id": "a",
+        "text": "Sets the number of threads used to recover log segments on broker startup and flush logs on shutdown",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Sets the number of threads that replicate data from leader to follower replicas",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Sets the number of threads handling incoming network connections from clients",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Sets the number of threads compacting log segments in the background",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "num.recovery.threads.per.data.dir controls how many threads Kafka uses to recover log segments in each data directory during an unclean shutdown recovery, and to flush log segments during an orderly shutdown. Increasing it speeds up recovery after a crash, especially when there are many log segments to validate. Option B describes the replication fetch threads on the follower side (num.replica.fetchers). Option C describes network I/O threads (num.network.threads). Option D is wrong; log compaction is handled by the log.cleaner.threads configuration.",
+    "bonusFact": "Increasing num.recovery.threads.per.data.dir can significantly reduce broker startup time after an unclean shutdown."
   }
 ]
